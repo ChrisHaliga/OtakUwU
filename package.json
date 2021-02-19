@@ -1,0 +1,16 @@
+{
+  "name": "otakuwu",
+  "version": "1.0.0",
+  "description": "A one-stop-shop for finding and watching anime from many different streaming services.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.11.17",
+    "react": "^17.0.1"
+  }
+}
