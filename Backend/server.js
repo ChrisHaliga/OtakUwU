@@ -13,10 +13,19 @@ app.use( express.json());
 
 const uri = process.env.ATLAS_URI;
 mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true })
-  .then(()=> app.listen(port, () => {console.log(`Server is running on port: ${port}`)}))
+  // .then(()=> app.listen(port, () => {console.log(`Server is running on port: ${port}`)}))
   .catch((error) => console.log("Error: " + error.message));
 
 const connection = mongoose.connection;
 connection.once('open', () => {
   console.log("MongoDB database connection established successfully");
 })
+
+//first route
+const showRouter = require('./routes/shows');
+
+app.use('/shows', showRouter);
+
+app.listen(port, () => {
+  console.log(`Server is running on port: ${port}`)
+});
