@@ -17,11 +17,11 @@ const PlatformSchema = new Schema({
         unique: true,
     },
     icon: 
-{
-    type: String,
-    required: true,
-    unique: true,
-}
+    {
+        type: String,
+        required: true,
+        unique: true,
+    }
 
  },{timestamps: true});
 
