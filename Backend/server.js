@@ -23,8 +23,11 @@ connection.once('open', () => {
 
 //first route
 const showRouter = require('./routes/shows');
+const platformRouter = require('./routes/platform');
 
 app.use('/shows', showRouter);
+app.use('/platforms', platformRouter);
+
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`)
