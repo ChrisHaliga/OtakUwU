@@ -9,11 +9,7 @@ title: {
     required: true
 },
 
-links:[
-    {
-        platform: {type: Schema.Types.ObjectId, ref:'Platform', required: true}
-    }
-],
+links:[{type: Schema.Types.ObjectId, ref:'Platform', required: true}],
 
 icon: // This is the path to an image located somewhere in a folder in backend
 {
