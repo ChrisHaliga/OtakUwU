@@ -15,6 +15,12 @@ const PlatformSchema = new Schema({
         type: String,
         required: true,
         unique: true,
+    },
+    icon: 
+    {
+        type: String,
+        required: true,
+        unique: true,
     }
 
  },{timestamps: true});
