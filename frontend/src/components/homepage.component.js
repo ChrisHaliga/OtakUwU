@@ -6,22 +6,43 @@ import axios from "axios";
 import { Form, Button, FormGroup, FormControl, ControlLabel, Row } from "react-bootstrap";
 import Col from 'react-bootstrap/Col';
 
+import Show from './show.component';
+
+
    export default function Homepage() {
   
-   document.body.style.backgroundColor = "black"
-  let [Shows,setShows] = useState([])
-  const [search,setSearch] = useState("");
+    document.body.style.backgroundColor = "black"
+    const [all_platforms, setAllPlatforms]= useState([]);
+    let [Shows,setShows] = useState([])
+    const [search,setSearch] = useState("");
  
     useEffect(() => {
-    axios.get("http://localhost:3001/shows").then(response=>{
-      console.log(response.data)
-    setShows(response.data);
-     console.log(Shows)
+      
+      axios.get("http://localhost:3001/platforms").then(response=>{ 
+      setAllPlatforms(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    }, []);
+
+    useEffect(()=>{
+      console.log(all_platforms);
+      if(all_platforms){
+        axios.get("http://localhost:3001/shows").then(response=>{
+          console.log(response.data)
+          setShows(response.data.map(show=> (
+            <Show show={show} all_platforms={all_platforms}/>
+          )));
         })
         .catch((error) => {
-         console.log(error);
-      })
-  }, []);
+          console.log(error);
+        })
+      }
+    }, [all_platforms])
+
+
    const handleChange = (e) =>{
      e.preventDefault();
      setSearch(e.target.value);
@@ -59,33 +80,8 @@ import Col from 'react-bootstrap/Col';
 
 
           </div>
-    
-          <div >
-           {Shows.map(item=>{
+          {Shows}
 
-              return <div class="jumbotron mt-3 container h-100 d-flex"style={{backgroundColor: "#FF69B4" ,width:"70%"}}>
-              
-               <Row>
-
-              <Col><img src={item.icon} alt="Title" /></Col>
-              <Col md="auto">
-              <h2>{item.title}</h2>
-              <h4>Available On ...</h4>
-              <h4 style = {{color:"black"}}> {item.links.map(i=> 
-              <a href={i}>
-              <span>Platform</span>
-            </a>
-              
-              )} </h4>
-              </Col>
-             
-               </Row> 
-             </div>
-
-            })}
-
-
-          </div>
     </div>
     );
   }
