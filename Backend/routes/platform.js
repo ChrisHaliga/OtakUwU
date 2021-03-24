@@ -1,5 +1,6 @@
 const router = require('express').Router();
 let Platform = require('../models/platform.model');
+const mongoose = require('mongoose');
 
 //get all platforms http://localhost:3001/platforms/
 router.route('/').get((req, res) => {
@@ -24,16 +25,12 @@ router.route('/add').post((req, res) => {
     newPlatform.timestamp = Date.now;
     
     newPlatform.save()
-    .then(() => res.body.json('Platform added!'))
+    // .then(() => res.body.json('Platform added!'))
+    .then(() => res.json('Platform added!'))
+
     .catch(err => res.status(400).json('Error: ' + err));
 
 });
-
-router.route('/:websiteName').get((req, res) => {
-    Platform.findOne({websiteName: req.params.websiteName})
-      .then(platform => res.json(platform))
-      .catch(err => res.status(400).json('Error: ' + err));
-  });
 
 //get specific platform http://localhost:3001/platforms/{id}
 router.route('/:id').get((req, res) => {
@@ -41,26 +38,23 @@ router.route('/:id').get((req, res) => {
       .then(platform => res.json(platform))
       .catch(err => res.status(400).json('Error: ' + err));
   });
-
-//update specific platform http://localhost:3001/platforms/update/{id}
+// router.route('/:websiteName').get((req, res) => {
+//     Platform.findOne({websiteName: req.params.websiteName})
+//       .then(platform => res.json(platform))
+//       .catch(err => res.status(400).json('Error: ' + err));
+//   });
+  
+// update specific platform http://localhost:3001/platforms/update/{id}
 router.route('/update/:id').post((req, res) => {
-    Platform.findById(req.params.id)
-    .then(platform => {
-      platform.websiteName = req.body.websiteName;
-      platform.link = req.body.link;
-      platform.icon = req.body.icon;
-      platform.timestamp = Date.now;
-
-      platform.save()
-        .then(() => res.body.json('Platform updated!'))
-        .catch(err => res.status(400).json('Error: ' + err));
-    })
+    Platform.findByIdAndUpdate(req.params.id, {$set: req.body})
+    .then(() => res.json('Platform updated!'))
     .catch(err => res.status(400).json('Error: ' + err));
 });
+
 //delete specific platform http://localhost:3001/platforms/{id}
 router.route('/:id').delete((req, res) => {
     Platform.findByIdAndDelete(req.params.id)
-    .then(() => res.body.json('Platform deleted.'))
+    .then(() => res.json('Platform deleted! ' + req.params.id))
     .catch(err => res.status(400).json('Error: ' + err));
 });
 

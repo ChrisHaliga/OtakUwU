@@ -1,64 +1,81 @@
-const request = require("supertest");
-const app = require("../Backend/server");
 const chai = require('chai');
-const { expect } = require("chai");
+const expect = require('chai').expect;
+const request = require('supertest');
+const server = require('../Backend/server')
+const Platform = require('../Backend/models/platform.model');
 const mongoose = require('mongoose');
 
 var mockId = mongoose.Types.ObjectId();
 
 describe("/GET platform", function () {
+
     it("returns a 200 success", done => {
-    request(app)
+    request(server)
         .get('/platforms')
-        .expect(200, done);
-    });
-})
+        // .expect(200, done)
+        .then((res)=>{
+            expect(res.statusCode).to.equal(200);
+            // expect(res.body).to.include(insertedData)
+            done()
+        })
+        .catch((err) => done(err))
+    })
+});
 
 describe("/POST platform", function () {
     it("returns a 200 success", done => {
-    request(app)
+    request(server)
         .post('/platforms/add')
         .send(
             {
-                id: mockId,
-                websiteName: "testSite",
-                link: "testSite.com",
-                icon: "test_site_icon"
+                websiteName: "testPlatform2",
+                link: "testPlatform2.com",
+                icon: "test-platform-icon2"
             }
         )
         .expect(200)
-        .expect("Platform added", done);
-    });
-});
-
-
-
-describe("/GET platform by name", function () {
-    var isTestPlatform = function(res) {
-        expect(res.body).to.exist;
-        expect(res.body).to.have.property('websiteName','testSite');
-        expect(res.body).to.have.property('link','testSite.com');
-        expect(res.body).to.have.property('icon','test_site_icon');
-    };
-
-    it("returns a 200 success", done => {
-    request(app)
-    .get('/platforms/testSite')
-    .expect(function(res) {
-        res.body.id = res.body.id;
-        res.body.websiteName = res.body.websiteName;
-      })
-    .expect(isTestPlatform)
-    .expect(200, done);
+        .then((res)=>{
+            expect(res.body).to.include("Platform added");
+            Platform.find()
+            .then(function(platforms) {
+                platforms => platforms.filter(p => p.websiteName == "testPlatform2");
+                expect(platforms).to.not.be.empty;
+                expect(platforms[0].websiteName).to.equal("testPlatform2");
+            })
+            done()
+        })
+        .catch((err) => done(err))
     });
 });
 
 describe("/Delete platform", function () {
-    var websiteId = mockId;     
-    it("returns a 200 success", done => {
-    request(app)
-        .delete(`/platforms/${websiteId}`)
+    //post object
+    request(server)
+    .post('/platforms/add')
+    .send(
+        {
+            websiteName: "platformToDelete",
+            link: "platformToDelete.com",
+            icon: "platform-to-delete-icon"
+        }
+    )
+
+    var platformToDelete = new Platform();
+    Platform.find()
+        .then(function(platforms) 
+        {
+            platformToDelete = platforms.find(p => p.websiteName == "platformToDelete");
+            expect(platformToDelete.websiteName).to.be("platformToDelete");
+        })
+    it("returns 200 and Platform deleted + id", done => {
+        request(server)
+        .delete('/platforms/'+ platformToDelete.id)
         .expect(200)
-        .expect("Platform deleted.", done);
-    })  
+        .then(function(res) {
+            expect(res.body).to.include("Platform deleted!")
+            expect(res.body).to.include(platformToDelete.id)
+            done()
+        })
+        .catch((err) => done(err));
+    });  
 });
