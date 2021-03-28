@@ -2,7 +2,7 @@ require('dotenv').config({path: __dirname + '/.env'})
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const parser = require('body-parser');
+let scraper = require('./scraper/mal');
 
 
 const app = express();
@@ -28,6 +28,7 @@ const platformRouter = require('./routes/platform');
 app.use('/shows', showRouter);
 app.use('/platforms', platformRouter);
 
+//scraper.scrape();
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`)
