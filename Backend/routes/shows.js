@@ -1,8 +1,8 @@
 const router = require('express').Router();
-const fs = require('fs');
 let Show = require('../models/show.model');
 let {checkFunimation} = require('../scraper/checkFunimation');
 let crunchyroll = require('../scraper/crunchyroll')
+let {mhtmlScrape} = require('../scraper/general');
 
 router.route('/').get((req, res) => {
     Show.find()
@@ -51,7 +51,7 @@ router.route('/:id').delete((req, res) => {
 });
 
 router.route('/crunchyroll').post((req,res) => {
-    res.json(crunchyroll(req.body.html, req.body.phase, ["605e4280f80821d95ff291d9"]));
+    res.json(mhtmlScrape(req.body.html, req.body.phase, "crunchyroll"));
 })
 
 router.route('/funimation').post((req,res) => {
