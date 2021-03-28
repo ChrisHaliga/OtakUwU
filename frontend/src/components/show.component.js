@@ -6,9 +6,10 @@ import Col from 'react-bootstrap/Col';
 export default function show( {show, all_platforms} ) {
 
     return (   
-        <div class="jumbotron mt-3 container h-100 d-flex"style={{backgroundColor: "#FF69B4" ,width:"70%"}}>
+        <div class="jumbotron mt-3 container h-100 d-flex"style={{backgroundColor: "#FF69B4" ,width:"70%", padding:"20px", marginBottom:"10px"}}>
             <Row>
-                <Col><img src={show.icon} alt="Title" /></Col>
+                <Col><img src={(!show.icon || show.icon == "default" || !show.icon.includes("http"))? process.env.PUBLIC_URL +"/imgs/not_found.gif":show.icon} 
+                alt={`Cover art for ${show.title}`} width="100px" height ="140px" /></Col>
                 <Col md="auto">
                 <h2>{show.title}</h2>
                 <h4>Available On ...</h4>

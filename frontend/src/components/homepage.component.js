@@ -72,7 +72,7 @@ import Show from './show.component';
 
           <Form onChange = {handleChange} value = {search}>
           <Form.Control size="lg" type="text" placeholder="Search" id = "searchBar"  onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
-          style={{backgroundColor: "black", color:"#FF69B4",borderColor:"#FF69B4"}}/>
+          style={{backgroundColor: "black", color:"#FF69B4",borderColor:"#FF69B4", marginBottom:"50px"}}/>
 
           </Form>
 
