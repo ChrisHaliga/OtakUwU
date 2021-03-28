@@ -1,5 +1,5 @@
-let Platform = require('./models/platform.model');
-let Show = require('./models/show.model');
+let Platform = require('../models/platform.model');
+let Show = require('../models/show.model');
 const mongoose = require('mongoose');
 
 /*  To use this function, make sure the parameters are as follows:
