@@ -5,13 +5,14 @@
   "main": "Backend/server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --timeout 10000",
     "dev": "nodemon server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "axios": "^0.21.1",
     "cheerio": "^1.0.0-rc.5",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
@@ -23,6 +24,9 @@
     "request-promise": "^4.2.6"
   },
   "devDependencies": {
-    "nodemon": "^2.0.7"
+    "chai": "^4.3.4",
+    "mocha": "^8.3.2",
+    "nodemon": "^2.0.7",
+    "supertest": "^6.1.3"
   }
 }
