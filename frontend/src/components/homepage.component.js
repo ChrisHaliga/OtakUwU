@@ -30,15 +30,17 @@ import Show from './show.component';
     useEffect(()=>{
       console.log(all_platforms);
       if(all_platforms){
+        
         axios.get("http://localhost:3001/shows").then(response=>{
           console.log(response.data)
-          setShows(response.data.map(show=> (
+          setShows(response.data.data.map(show=> (
             <Show show={show} all_platforms={all_platforms}/>
           )));
         })
         .catch((error) => {
           console.log(error);
         })
+        console.log(Shows);
       }
     }, [all_platforms])
 
@@ -46,14 +48,16 @@ import Show from './show.component';
    const handleChange = (e) =>{
      e.preventDefault();
      setSearch(e.target.value);
+     axios.post("http://localhost:3001/shows", {search_str: search})
+
    } 
  
-   if(search.length > 0)
-   {
-      Shows = Shows.filter((i)=>{
-        return i.title.toUpperCase().match(search.toUpperCase())
-      })
-   }
+  //  if(search.length > 0)
+  //  {
+    // .then({
+    //   "search_str": "Hero"
+    // })
+  //  }
     return (
      <div >
         <div style= {{paddingBottom:"2%"}}>
