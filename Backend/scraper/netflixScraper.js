@@ -1,5 +1,7 @@
+let main = () => {
 const request = require('request');
 const cheerio = require('cheerio');
+const US = require('./updateServer.js');
 
 var url = 'https://www.netflix.com/browse/genre/7424?so=az';
 
@@ -9,7 +11,7 @@ var customHeaderRequest = request.defaults({
 
 customHeaderRequest.get(url, function(err, resp, body) {
     if (!err && resp.statusCode==200) {
-        //console.log('success');
+        //console.log('inside netflix scraper');
         var $ = cheerio.load(body);
         var titles = [];
         links = $('.nm-collections-title-name');
@@ -21,9 +23,20 @@ customHeaderRequest.get(url, function(err, resp, body) {
                 titles.push({title: current});
             }
         });
+        //console.log(titles);
+        //console.log(JSON.stringify(titles, null, 4));
+        const platform = {
+            websiteName:'Netflix', 
+            link:'https://www.netflix.com/',
+            icon: 'Netflix'
+        };
+        US.updateServer(titles, platform);
     }
     else {
         console.log('error');
         console.log(err);
     }
 });
+}
+
+module.exports.main = main;
