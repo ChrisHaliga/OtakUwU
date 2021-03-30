@@ -5,8 +5,12 @@ const mongoose = require('mongoose');
 let mal_scraper = require('./scraper/mal');
 // const {scraper} = require('./scraper/primeScraper');
 const parser = require('body-parser');
+<<<<<<< HEAD
 const paginate = require('express-paginate');
 
+=======
+let netflixScraper = require('./scraper/netflixScraper');
+>>>>>>> fee5cd4b066428cadc588b09ebc25add325385a9
 
 
 
@@ -26,6 +30,7 @@ const connection = mongoose.connection;
 connection.once('open', () => {
   console.log("MongoDB database connection established successfully");
   // scraper.primeScraper();
+  //netflixScraper.main();
 })
 
 //first route
