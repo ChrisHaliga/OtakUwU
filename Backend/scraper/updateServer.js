@@ -31,28 +31,28 @@ let updateServer = async (anime_list, target_platform) => {
             try {
                 var plat_id = platform._id;
                 let shows = await Show.find({links: plat_id});
-                if (shows.length > 0) {
-                    shows.forEach(current_show => {
-                       // console.log('inside delete loop');
-                        var contains = anime_list.some(({title}) => title === current_show.title);
-                        if (!contains) {
-                            //console.log('inside contains');
-                            if (current_show.links.length > 1) {
-                                Show.updateOne({_id: current_show._id}, {$pull: {links:plat_id}}).catch(
+                if (shows) {
+                    if (shows.length > 0) {
+                        shows.forEach(current_show => {
+                            // console.log('inside delete loop');
+                            var contains = anime_list.some(({title}) => title === current_show.title);
+                            if (!contains) {
+                                //console.log('inside contains');
+                                if (current_show.links.length > 1) {
+                                    Show.updateOne({_id: current_show._id}, {$pull: {links:plat_id}}).catch(
                                     err => console.log(`Error pulling platfrom from array: ${err}`)
-                                );
-                            }
-                            else {  //only has one link which will be deleted so delete show entirely 
-                                console.log('inside only 1 link');
-                                Show.findByIdAndDelete(current_show._id).catch(
+                                    );
+                                }
+                                else {  //only has one link which will be deleted so delete show entirely 
+                                    //console.log('inside only 1 link');
+                                    Show.findByIdAndDelete(current_show._id).catch(
                                    // res => console.log(`deleted document`),
                                     err => console.log(`Something went wrong: ${err}`)
-                                );
-                            }
-
-                            
-                        }
-                    });
+                                    );
+                                }
+                            }   
+                        });
+                    }
                 }
             } catch (error) {
                 console.log(`find all shows error --> ${error}`);
@@ -99,9 +99,9 @@ let updateServer = async (anime_list, target_platform) => {
                         }
                     }
                     else {
-                        console.log('if data has no links');
+                        //console.log('if data has no links');
                         try {
-                                let updatedShow1 = Show.updateOne({_id:show._id, }, {$set: {links:[platform._id]}});
+                                let updatedShow1 = await Show.updateOne({_id:show._id, }, {$set: {links:[platform._id]}});
                               //  console.log(`updateone show success--> ${updatedShow1}`);
                             } catch(error) {
                                 console.log(`updateOne show error--> ${error}`);
