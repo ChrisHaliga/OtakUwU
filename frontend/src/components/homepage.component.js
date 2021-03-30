@@ -8,6 +8,8 @@ import Col from 'react-bootstrap/Col';
 
 import Show from './show.component';
 
+import Pagination from './paginate';
+import './homepage.css';
 
    export default function Homepage() {
   
@@ -15,6 +17,9 @@ import Show from './show.component';
     const [all_platforms, setAllPlatforms]= useState([]);
     let [Shows,setShows] = useState([])
     const [search,setSearch] = useState("");
+
+    let [currentPage, setCurrentPage] = useState(1);
+    const[count,setCount] = useState(1);       //count of pages
  
     useEffect(() => {
       
@@ -36,6 +41,7 @@ import Show from './show.component';
           search_str: search
         }).then(response=>{
           console.log(response.data)
+          setCount(response.data.count);
           setShows(response.data.data.map(show=> (
             <Show show={show} all_platforms={all_platforms}/>
           )));
@@ -55,9 +61,30 @@ import Show from './show.component';
 
    } 
  
+    
+
+      const paginate = pageNumber => 
+      {
+      setSearch("");
+      setCurrentPage(pageNumber);
+      axios.post("http://localhost:3001/shows?page="+pageNumber+"&limit=10",
+          {
+            search_str: search
+          }).then(response=>{
+            console.log(response.data)
+            setShows(response.data.data.map(show=> (
+              <Show show={show} all_platforms={all_platforms}/>
+            )));
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+          console.log(Shows);
+      
+      };
  
     return (
-     <div >
+     <div class = "container">
         <div style= {{paddingBottom:"2%"}}>
 
         </div>
@@ -83,7 +110,21 @@ import Show from './show.component';
 
           </div>
           {Shows}
+       <div > 
+          <Row>
+            <Col></Col>
+             <Col><Pagination  paginate={paginate} number ={currentPage}  count = {count} />  </Col>
+             <Col></Col>
+         </Row>
 
+         <Row>
+            <Col></Col>
+             <Col xs={12} sm={4} md={2} ><h1 class = "Page">Page {currentPage}</h1>  </Col>
+             <Col></Col>
+         </Row>
+         
+     
+      </div>  
     </div>
     );
   }

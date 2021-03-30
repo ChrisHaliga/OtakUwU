@@ -24,7 +24,8 @@ router.post('/', async (req, res, next) => {
             res.json({
               object: 'list',
               has_more: paginate.hasNextPages(req)(pageCount),
-              data: results
+              data: results,
+              count:pageCount
             });
           } else {
             res.render('shows', {
