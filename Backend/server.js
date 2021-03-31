@@ -2,16 +2,12 @@ require('dotenv').config({path: __dirname + '/.env'})
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-let mal_scraper = require('./scraper/mal');
-const {scraper} = require('./scraper/primeScraper');
 const parser = require('body-parser');
-let netflixScraper = require('./scraper/netflixScraper');
-
+const { scrape } = require('./scraper/main')
 
 
 const app = express();
 const port = process.env.PORT || 5000;
-console.log('scraper ',scraper);
 app.use(cors());
 app.use( express.json());
 
@@ -23,8 +19,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedT
 const connection = mongoose.connection;
 connection.once('open', () => {
   console.log("MongoDB database connection established successfully");
-  // scraper.primeScraper();
-  //netflixScraper.main();
+  scrape();
 })
 
 //first route
