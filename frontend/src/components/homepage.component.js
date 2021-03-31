@@ -30,30 +30,32 @@ import Show from './show.component';
     useEffect(()=>{
       console.log(all_platforms);
       if(all_platforms){
-        axios.get("http://localhost:3001/shows").then(response=>{
+        
+        axios.post("http://localhost:3001/shows",
+        {
+          search_str: search
+        }).then(response=>{
           console.log(response.data)
-          setShows(response.data.map(show=> (
+          setShows(response.data.data.map(show=> (
             <Show show={show} all_platforms={all_platforms}/>
           )));
         })
         .catch((error) => {
           console.log(error);
         })
+        console.log(Shows);
       }
-    }, [all_platforms])
+    }, [all_platforms, search])
 
 
    const handleChange = (e) =>{
      e.preventDefault();
      setSearch(e.target.value);
+     console.log(search)
+
    } 
  
-   if(search.length > 0)
-   {
-      Shows = Shows.filter((i)=>{
-        return i.title.toUpperCase().match(search.toUpperCase())
-      })
-   }
+ 
     return (
      <div >
         <div style= {{paddingBottom:"2%"}}>
@@ -63,7 +65,7 @@ import Show from './show.component';
               <Col xs={12} sm={4} md={4}>
               <img src={otakuwu1} alt="Title" />
              </Col>
-          </Row>`
+          </Row>
 
             
            <div class= "row justify-content-md-center">         {/* Search Bar and Button */}

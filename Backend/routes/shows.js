@@ -3,11 +3,43 @@ let Show = require('../models/show.model');
 let {checkFunimation} = require('../scraper/checkFunimation');
 let crunchyroll = require('../scraper/crunchyroll')
 let {mhtmlScrape} = require('../scraper/general');
+const paginate = require('express-paginate');
 
-router.route('/').get((req, res) => {
-    Show.find()
-    .then(shows => res.json(shows))
-    .catch(err => res.status(400).json('Error: ' + err));
+router.post('/', async (req, res, next) => {
+
+    let query = req.body.search_str ? {title: {$regex: req.body.search_str}} : {}; 
+
+    try {
+        console.log(req.body)
+        const [ results, itemCount ] = await Promise.all([
+        Show.find(query)
+            
+        .limit(req.query.limit).skip(req.skip).lean().exec(),
+        Show.count({})
+        ]);
+        
+        const pageCount = Math.ceil(itemCount / req.query.limit);
+        
+        if (req.accepts('json')) {
+            res.json({
+              object: 'list',
+              has_more: paginate.hasNextPages(req)(pageCount),
+              data: results
+            });
+          } else {
+            res.render('shows', {
+              shows: results,
+              pageCount,
+              itemCount,
+              pages: paginate.getArrayPages(req)(3, pageCount, req.query.page)
+            });
+          }
+     
+    }
+    catch (err) {
+        next(err);
+      }
+
 });
 
 //add shows 
