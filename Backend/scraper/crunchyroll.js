@@ -1,4 +1,5 @@
 let {clean} = require("./general");
+const fs = require('fs');
 
 exports.scrape = (html, phase, links) => {
     let error = 0;
