@@ -2,14 +2,22 @@ require('dotenv').config({path: __dirname + '/.env'})
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const parser = require('body-parser');
-const { scrape } = require('./scraper/main')
+const { scrape } = require('./scraper/main') //overall scraper
+
+// mini scrapers
+// let mal_scraper = require('./scraper/mal');
+// const {scraper} = require('./scraper/primeScraper');
+// const netflixScraper = require('./scraper/netflixScraper');
+// const hboScraper = require('./scraper/hbo_studio-ghibli_scraper');
+const paginate = require('express-paginate');
+// const parser = require('body-parser');
 
 
 const app = express();
 const port = process.env.PORT || 5000;
 app.use(cors());
 app.use( express.json());
+app.use(paginate.middleware(10, 20));
 
 const uri = process.env.ATLAS_URI;
 mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true })

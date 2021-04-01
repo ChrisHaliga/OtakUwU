@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col';
 import './App.css';
 function App() {
   return (
-    <div  class= "mt-5 col-md-12 ">
+    <div  class= "container ">
       
       <Homepage  />
   
