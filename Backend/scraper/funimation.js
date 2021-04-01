@@ -33,7 +33,7 @@ let main = () => {
         const platform = {
             websiteName:'Funimation', 
             link:'https://www.funimation.com/',
-            icon: 'Funimation' //(figure out an icon to save here for the site)
+            icon: 'default' //(figure out an icon to save here for the site)
         };
         var testTitles = [titles[0], titles[1], titles[2], titles[3]]; //for testing purposes i only passed in 4
         US.updateServer(testTitles, platform);

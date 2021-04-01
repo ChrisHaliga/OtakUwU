@@ -2,17 +2,19 @@ require('dotenv').config({path: __dirname + '/.env'})
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-let mal_scraper = require('./scraper/mal');
+const { scrape } = require('./scraper/main') //overall scraper
+
+// mini scrapers
+// let mal_scraper = require('./scraper/mal');
 // const {scraper} = require('./scraper/primeScraper');
-const parser = require('body-parser');
-const netflixScraper = require('./scraper/netflixScraper');
-const hboScraper = require('./scraper/hbo_studio-ghibli_scraper');
+// const netflixScraper = require('./scraper/netflixScraper');
+// const hboScraper = require('./scraper/hbo_studio-ghibli_scraper');
 const paginate = require('express-paginate');
+// const parser = require('body-parser');
 
 
 const app = express();
 const port = process.env.PORT || 5000;
-// console.log('scraper ',scraper);
 app.use(cors());
 app.use( express.json());
 app.use(paginate.middleware(10, 20));
@@ -25,9 +27,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedT
 const connection = mongoose.connection;
 connection.once('open', () => {
   console.log("MongoDB database connection established successfully");
-  // scraper.primeScraper();
-  //netflixScraper.main();
-  //hboScraper.main(); 
+  // scrape();
 })
 
 //first route
