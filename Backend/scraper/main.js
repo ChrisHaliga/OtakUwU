@@ -5,6 +5,7 @@ const funimation = require("./funimation");
 const netflix = require("./netflixScraper");
 const prime = require("./primeScraper");
 const mal = require("./mal");
+const hbo = require("./hbo_studio-ghibli_scraper");
 
 
 let scrape = () => {
@@ -12,9 +13,10 @@ let scrape = () => {
         cur_time = Date.now()
         if(err || new Date(data) - cur_time >= 86100000){ //One day - 5 min
             
-            funimation.main();
+            // funimation.main();
             netflix.main();
-            prime.scraper(); 
+            prime.main(); 
+            hbo.main();
             mal.scrape();
             
             fs.writeFile('Backend/scraper/last-scraped.txt', cur_time, function (err) {
