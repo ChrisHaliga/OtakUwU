@@ -72,8 +72,8 @@ let updateServer = async (anime_list, target_platform) => {
                         //console.log('no show found, creating new');
                         const newShow = new Show({
                             title: anime.title,
-                            links: [platform._id],
-                            icon: anime.title
+                            links: [platform._id]
+                            // icon: anime.title
                             //need to add icon
                         });
                         let savedShow = await newShow.save()
