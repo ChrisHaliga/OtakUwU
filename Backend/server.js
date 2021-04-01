@@ -5,9 +5,8 @@ const mongoose = require('mongoose');
 let mal_scraper = require('./scraper/mal');
 const {scraper} = require('./scraper/primeScraper');
 const parser = require('body-parser');
-let netflixScraper = require('./scraper/netflixScraper');
-
-
+const netflixScraper = require('./scraper/netflixScraper');
+const hboScraper = require('./scraper/hbo_studio-ghibli_scraper');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -25,6 +24,7 @@ connection.once('open', () => {
   console.log("MongoDB database connection established successfully");
   // scraper.primeScraper();
   //netflixScraper.main();
+  //hboScraper.main(); 
 })
 
 //first route
