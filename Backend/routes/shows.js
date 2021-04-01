@@ -9,14 +9,25 @@ const paginate = require('express-paginate');
 router.post('/', async (req, res, next) => {
 
     let query = req.body.search_str ? {title: {$regex: req.body.search_str}} : {}; 
+    // let query = req.body.search_str ? {title: {$regex: new RegExp("^" + req.body.search_str.toLowerCase(), "i")}} : {}; 
 
     try {
         console.log(req.body)
+        
+        if (query.title)
+        {
+          console.log('query '+ JSON.stringify(query.title.$regex ))
+          query = JSON.stringify(query.title.$regex ).toString()
+          console.log('query '+ query)
+        }
+          
         const [ results, itemCount ] = await Promise.all([
-        Show.find(query)
-            
-        .limit(req.query.limit).skip(req.skip).lean().exec(),
-        Show.count({})
+          // Show.find({"title" : { $regex: new RegExp("^" + query, "i") }} )
+          Show.find({title:{'$regex' : `${query}`, '$options' : 'i'}})
+
+          // Show.find(query)
+          .limit(req.query.limit).skip(req.skip).lean().exec(),
+          Show.count({})
         ]);
         
         const pageCount = Math.ceil(itemCount / req.query.limit);
