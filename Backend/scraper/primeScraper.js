@@ -88,7 +88,7 @@ var primeScraper = (async () => {
 
         })
     })
-    await page.screenshot({ path: 'amazonpage1.png' });
+    // await page.screenshot({ path: 'amazonpage1.png' });
 
     await browser.close();
     }
