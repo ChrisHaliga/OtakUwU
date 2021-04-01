@@ -8,7 +8,7 @@ const paginate = require('express-paginate');
 
 router.post('/', async (req, res, next) => {
 
-    let query = req.body.search_str ? {title: {$regex: req.body.search_str}} : {}; 
+    let query = req.body.search_str ? {title: {$regex: new RegExp(req.body.search_str, "i")}} : {}; 
 
     try {
         console.log(req.body)

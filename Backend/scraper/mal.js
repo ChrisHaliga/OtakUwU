@@ -2,9 +2,8 @@ const request = require('request');
 const cheerio = require('cheerio');
 let Show = require('../models/show.model');
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+
+
 
 var customHeaderRequest = request.defaults({
     headers: {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36'}
@@ -16,22 +15,19 @@ let getimg = (shows)=> {
         return;
     }
     if(!shows[0].icon || !shows[0].icon.includes("http")){
-
-      async function delay(){
-        await sleep(500); // MAL blocks you if you access too many times in a certain time. starting with half a second.
         let title = shows[0].title;
-        let url = 'https://myanimelist.net/search/all?cat=all&q=' + (title.split(" ").join("%20"));
+        let url = 'https://myanimelist.net/search/all?q=' + (title.split(" ").join("%20")) + '&cat=all';
         customHeaderRequest.get(url, function(err, resp, body) {
             if (!err && resp.statusCode==200) {
                 const $ = cheerio.load(body);          
                 const icon = $('article').find("img").attr("data-src");
-                Show.updateOne({title:title},{icon:icon})
-                .then(succ => console.log(`${title} updated.`))
-                .catch(err => console.log(`Error occured updating '${shows[0].title}'${err}`));
+                if(icon){
+                  Show.updateOne({title:title},{icon:icon})
+                  .then(succ => console.log(`${title} updated.`))
+                  .catch(err => console.log(`Error occured updating '${shows[0].title}'${err}`));
+                }
             }
         });
-      }
-      delay();
     }
     
     getimg(shows.slice(1));
