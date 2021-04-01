@@ -27,13 +27,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedT
 const connection = mongoose.connection;
 connection.once('open', () => {
   console.log("MongoDB database connection established successfully");
-<<<<<<< HEAD
-  // scraper.main();
-  //netflixScraper.main();
-  //hboScraper.main(); 
-=======
   // scrape();
->>>>>>> master
 })
 
 //first route
