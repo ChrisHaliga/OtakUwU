@@ -14,8 +14,8 @@ let scrape = () => {
         if(err || new Date(data) - cur_time >= 86100000){ //One day - 5 min
             
             // funimation.main();
-            //netflix.main();
-            //prime.main(); 
+            netflix.main();
+            prime.main(); 
             hbo.main();
             //mal.scrape();
             

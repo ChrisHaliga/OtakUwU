@@ -6,7 +6,8 @@ const ShowSchema = new Schema({
 
 title: {
     type:String,
-    required: true
+    required: true,
+    unique: true
 },
 
 links:[{type: Schema.Types.ObjectId, ref:'Platform', required: true}],

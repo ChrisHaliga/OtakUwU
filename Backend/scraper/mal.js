@@ -1,3 +1,4 @@
+'https://www.anime-planet.com/anime/all?sort=title&order=asc&page=1'
 /* const request = require('request');
 const cheerio = require('cheerio');
 let Show = require('../models/show.model');
