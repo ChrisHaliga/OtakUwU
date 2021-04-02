@@ -15,23 +15,6 @@ router.post('/', async (req, res, next) => {
  
         const [ results, itemCount ] = await Promise.all([
           Show
-          // .aggregate([]),
-          // .aggregate( [
-          //   { '$match': { "title": query} }
-          //   // , 
-          //   // { $unwind : "$links" },
-          //   // { $group : { _id : "$_id", len : { $sum : 1 } } },
-          //   // { $sort : { len : 1 } },
-          //   // { $limit : req.query.limit },
-          //   // { $skip: req.skip }
-          // ] ),
-          // .aggregate([
-          //   {$match: { title: query} },
-          //     { $unwind : "$links" },
-          //     { $group : { _id : "$_id", len : { $sum : 1 } } },
-          //     { $sort : { len : -1 } },
-          //     { $limit: req.query.limit}
-          // ])
           .find(query)
           
           .sort( { title: 1 } )

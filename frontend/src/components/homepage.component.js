@@ -119,7 +119,7 @@ import './homepage.css';
 
          <Row>
             <Col></Col>
-             <Col xs={12} sm={4} md={2} ><h1 class = "Page">Page {currentPage}</h1>  </Col>
+             {/* <Col xs={12} sm={4} md={2} ><h1 class = "Page">Page {currentPage}</h1>  </Col> */}
              <Col></Col>
          </Row>
          
