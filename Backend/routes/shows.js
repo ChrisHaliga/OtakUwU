@@ -14,14 +14,19 @@ router.post('/', async (req, res, next) => {
         console.log(req.body)
  
         const [ results, itemCount ] = await Promise.all([
-          Show.find(query).sort( { title: 1 } )
-          .limit(req.query.limit).skip(req.skip).lean().exec(),
+          Show
+          .find(query)
+          
+          .sort( { title: 1 } )
+          .limit(req.query.limit).skip(req.skip)
+          .lean()
+          .exec(),
 
           Show.count({})
         ]);
         
         const pageCount = Math.ceil(itemCount / req.query.limit);
-        
+        console.log(results);
         if (req.accepts('json')) {
             res.json({
               object: 'list',
