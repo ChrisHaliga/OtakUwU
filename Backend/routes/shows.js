@@ -14,7 +14,7 @@ router.post('/', async (req, res, next) => {
         console.log(req.body)
         const [ results, itemCount ] = await Promise.all([
         Show.find(query)
-            
+        .sort( { title: 1 } ) //alphabetical title sorting
         .limit(req.query.limit).skip(req.skip).lean().exec(),
         Show.count({})
         ]);
