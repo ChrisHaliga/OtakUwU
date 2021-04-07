@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const { exists } = require('../models/show.model');
 let Show = require('../models/show.model');
 let {checkFunimation} = require('../scraper/checkFunimation');
 let crunchyroll = require('../scraper/crunchyroll')
@@ -97,7 +96,7 @@ router.route('/crunchyroll').post((req,res) => {
 })
 
 router.route('/funimation').post((req,res) => {
-    res.json(mhtmlScrape(req.body.html, req.body.phase, "funimation", req.body.page));
+    res.json(checkFunimation(req.body.mhtml));
 })
 
 
