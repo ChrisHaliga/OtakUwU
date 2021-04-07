@@ -29,16 +29,21 @@ const scrape = (($) =>
                     if (year_div != undefined)
                     {
                         var year = $(year_div).children().first().text();
-                        title = `${title} (${year})`;
+                        title = title + year;
+                        // title = `${title} (${year})`;
                     }
                 }
 
                 i++;
                 if (title != null)
                 {
-                    anime_titles.push({
-                        title: title.replace(/(\r\n|\n|\r|\t)/gm, "").trim(),
-                    });
+                    if (!anime_titles.includes(title))
+                    {
+                        anime_titles.push({
+                            title: title.replace(/(\r\n|\n|\r|\t)/gm, "").trim(),
+                        });
+                    }
+
                 }
                 
                 }
