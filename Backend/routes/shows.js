@@ -14,6 +14,7 @@ router.post('/', async (req, res, next) => {
         console.log(req.body)
  
         const [ results, itemCount ] = await Promise.all([
+
           Show
           .find(query)
           
@@ -23,6 +24,7 @@ router.post('/', async (req, res, next) => {
           .exec(),
 
           Show.count({})
+
         ]);
         
         const pageCount = Math.ceil(itemCount / req.query.limit);
