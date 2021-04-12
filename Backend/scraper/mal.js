@@ -21,11 +21,7 @@ let getimg = (shows)=> {
     }
     if(!shows[0].icon || !shows[0].icon.includes("http")){
         async function connect(){
-<<<<<<< HEAD
-          await sleep(5000);
-=======
           await sleep(30000);
->>>>>>> 681737dd3f2713563bb0ab0a41b376f203a26815
           let title = shows[0].title;
           let url = 'https://myanimelist.net/search/all?q=' + (title.split(" ").join("%20")) + '&cat=all';
           customHeaderRequest.get(url, function(err, resp, body) {
