@@ -26,7 +26,6 @@ let main = (async () => {
             }
         });
     }
-    await page.screenshot({ path: 'amazonpage1.png' });
     await browser.close();
     
     const platform = {

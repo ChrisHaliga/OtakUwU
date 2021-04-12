@@ -1,5 +1,5 @@
 'https://www.anime-planet.com/anime/all?sort=title&order=asc&page=1'
-/* const request = require('request');
+const request = require('request');
 const cheerio = require('cheerio');
 let Show = require('../models/show.model');
 
@@ -21,7 +21,11 @@ let getimg = (shows)=> {
     }
     if(!shows[0].icon || !shows[0].icon.includes("http")){
         async function connect(){
+<<<<<<< HEAD
           await sleep(5000);
+=======
+          await sleep(30000);
+>>>>>>> 681737dd3f2713563bb0ab0a41b376f203a26815
           let title = shows[0].title;
           let url = 'https://myanimelist.net/search/all?q=' + (title.split(" ").join("%20")) + '&cat=all';
           customHeaderRequest.get(url, function(err, resp, body) {
