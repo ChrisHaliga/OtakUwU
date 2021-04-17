@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const { exists } = require('../models/show.model');
 let Show = require('../models/show.model');
 let {checkFunimation} = require('../scraper/checkFunimation');
 let crunchyroll = require('../scraper/crunchyroll')
@@ -8,19 +7,27 @@ const paginate = require('express-paginate');
 
 router.post('/', async (req, res, next) => {
 
-    let query = req.body.search_str ? {title: {$regex: req.body.search_str}} : {}; 
+    let query = req.body.search_str ? {title: {$regex: new RegExp(req.body.search_str, "i")}} : {}; 
 
     try {
         console.log(req.body)
+ 
         const [ results, itemCount ] = await Promise.all([
-        Show.find(query)
-        .sort( { title: 1 } ) //alphabetical title sorting
-        .limit(req.query.limit).skip(req.skip).lean().exec(),
-        Show.count({})
+
+          Show
+          .find(query)
+          
+          .sort( { title: 1 } )
+          .limit(req.query.limit).skip(req.skip)
+          .lean()
+          .exec(),
+
+          Show.count({})
+
         ]);
         
         const pageCount = Math.ceil(itemCount / req.query.limit);
-        
+        console.log(results);
         if (req.accepts('json')) {
             res.json({
               object: 'list',
@@ -89,7 +96,7 @@ router.route('/crunchyroll').post((req,res) => {
 })
 
 router.route('/funimation').post((req,res) => {
-    res.json(mhtmlScrape(req.body.html, req.body.phase, "funimation", req.body.page));
+    res.json(checkFunimation(req.body.mhtml));
 })
 
 

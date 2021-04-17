@@ -10,7 +10,7 @@ function topFunction() {        //make button click go back to top of the page
 export default function Pagination ({ paginate,number,count}){
   const pageNumbers = [];
 
-  for (let i = number-5; i <= number+5; i++) {
+  for (let i = number-10; i <= number+10; i++) {
     if(i>0&&i<=count) //we get max number of pages from backend
     {
     pageNumbers.push(i);
