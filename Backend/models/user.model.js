@@ -24,6 +24,10 @@ const UserSchema = new Schema({
     profilePic: {
         type:String,
     },
+    
+    bio: {
+        type:String
+    },
 
     watchlists: [
         {
