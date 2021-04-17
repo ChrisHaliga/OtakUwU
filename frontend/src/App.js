@@ -1,19 +1,27 @@
-
 import React from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
-import { BrowserRouter as Router, Route} from "react-router-dom";
+import { BrowserRouter as Router,   Switch,  Route} from "react-router-dom";
 import Homepage from "./components/homepage.component";
-import Col from 'react-bootstrap/Col';
+import ProfileComponent from "./components/profile.component";
 import './App.css';
+
 function App() {
+
   return (
-    <div  class= "container ">
-      
-      <Homepage  />
-  
-    </div>
+        <Router>
+          <Switch>
+            <Route path ="/profile">
+              <ProfileComponent/>
+            </Route>
+            <Route path ="/">
+              <Homepage/>
+            </Route>
+          </Switch>
+      </Router>
   );
 }
+
+
 
 export default App;
 
