@@ -50,7 +50,7 @@ exports.scrape = () =>{
     })
     .catch(err => console.log(err));  
 
-} */
+}
    /* const $ = cheerio.load(body);
      links = $('.cardName');
     $(links).each(function(i, link){
