@@ -24,6 +24,10 @@ const UserSchema = new Schema({
     profilePic: {
         type:String,
     },
+    
+    bio: {
+        type:String
+    },
 
     watchlists: [
         {
@@ -33,7 +37,7 @@ const UserSchema = new Schema({
         }
     ],
 
-    linkedAccounts: [
+    linkedAccounts: [ //may not use this right away
         {
             type: new Schema({ //schema for linked account
                 site: { // 
