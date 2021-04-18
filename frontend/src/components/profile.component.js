@@ -12,7 +12,7 @@ import './profile.css'
 export default function ProfileComponent() {
     var username = "testuser";
     var profilePic = "gudetama.jpeg";
-    var bio = " Hi, My name is Aina. I love dairy free ice cream and chocolate. I am a baby. My comfort character is Izuku Midoriya. I have so much to learn about anime. My favorite genres are romance, shonen, and fantasy. But I want to watch all the types. Follow me on instagram to look at my anime journal spreads! ig: aina.mov";
+    var bio = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
     return (   
         <div class="profile-nav col-md-3">
             <div class="panel">
