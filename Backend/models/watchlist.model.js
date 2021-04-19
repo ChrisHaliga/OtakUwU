@@ -17,6 +17,9 @@ const WatchListSchema = new Schema({
         type:String,
         required: true
     },
+    picture: {
+        type:String        
+    },
     shows:[{type: Schema.Types.ObjectId, ref:'Show', required: true}],
     permissions: {     // object with lists of users with  admin,editor,viewer permissions
     admins: [User],
