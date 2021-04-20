@@ -2,13 +2,6 @@ import React from 'react';
 import './profile.css'
 
 
-// const newUser = new User({
-//     username,
-//     email,
-//     password,
-//     profilePic,
-//     bio
-// });
 export default function ProfileComponent( user ) {
     var username = "testuser";
     var profilePic = "gudetama.jpeg";
