@@ -1,16 +1,23 @@
 const router = require('express').Router();
-let Platform = require('../models/watchlist.model');
+let Watchlist = require('../models/watchlist.model');
 const mongoose = require('mongoose');
 
+//get all watchlists http://localhost:3001/watchlists/
+router.route('/').get((req, res) => {
+    Watchlist.find()
+    .then(watchlists => res.json(watchlists))
+    .catch(err => res.statusCode);
+    // .catch(err => res.status(400).json('Error: ' + err));
+    // res.render('Platforms');
+});
 
-//add watchlist 
+//add watchlist http://localhost:3001/watchlists/add/
 router.route('/add').post((req, res) => {
-    const id = req.body.id; 
     const title = req.body.title;
     const name = req.body.name;
 
-    const newShow = new WatchList({
-        id,
+
+    const newWatchlist = new WatchList({
         title,
         name,
     });
@@ -19,8 +26,8 @@ router.route('/add').post((req, res) => {
     newWatchlist.save()
     .then(() => res.json ('Watchlist added!'))
     .catch(err => res.status(400).json('Error: ' + err));
-
 });
+
 
 //get specific watchlist 
 router.route('/:id').get((req, res) => {
