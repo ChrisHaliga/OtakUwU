@@ -1,0 +1,23 @@
+.nav {
+    position: fixed;
+    width: 100%;
+    line-height: 60px;
+    background: rgba(0, 0, 0, 0.5);
+
+}
+.nav ul {
+    line-height: 60px;
+    list-style: none;
+    overflow: hidden;
+    color: #fff;
+    padding: 0;
+    text-align: right;
+    margin: 0;
+    padding-right: 40px;
+    transition: 1s;
+}
+
+.lists {
+    background: #000000;
+
+}
