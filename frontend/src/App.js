@@ -112,29 +112,33 @@ function App() {
       setSearch(e.target.value);
       console.log(searchString);
   }
+  const openSidebar = (e) =>{
+    e.preventDefault();
+    setSideBar(<Profile/>)
+  }
 
 return (
  
   // <Homepage/>
   <div>
     <nav class="navbar navbar-expand-lg nav">
-      <a class="navbar-brand" href="#">Otakuwu</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+      <h1 class="navbar-brand" href="#">Otakuwu</h1>
       <form class="form-inline my-2 my-lg-0">
         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" onChange={handleChange} value={searchString} onKeyPress={(e)=> { e.key === 'Enter' && e.preventDefault(); }}/>
       </form>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
+      <div id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto item">
+          <li class=" nav-item active">
             <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
           </li>
-          <li class="nav-item">
+          <li class=" nav-item">
             <a class="nav-link" href="#">Shows</a>
           </li>
-          <li class="nav-item">
+          <li class=" nav-item">
             <a class="nav-link" href="#">Lists</a>
+          </li>
+          <li class="nav-item wrapper">
+            <img src={process.env.PUBLIC_URL +`/icons/gudetama.jpeg`} class="image--cover" onClick={openSidebar} value={!Sidebar}></img>
           </li>
         </ul>
       </div>
@@ -150,7 +154,7 @@ return (
         {SecondaryList}
       </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-4">
       <div class="row">
         {Sidebar}
       </div>

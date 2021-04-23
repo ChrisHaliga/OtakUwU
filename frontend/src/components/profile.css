@@ -1,13 +1,13 @@
 .profile-nav, .profile-info{
     margin-top:30px;   
 }
-
 .profile-nav .user-heading {
     /* background: #ffdddd; */
     color: #000000;
-    background-color: #000000;
+    background-color: #ffffff;
     border-radius: 4px 4px 0 0;
-    padding: 30px;
+    padding: 20px;
+    width: min-content;
     border: 1px solid #000000;
     text-align: center;
 }
