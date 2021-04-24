@@ -1,4 +1,6 @@
+
 import React from 'react';
+import "bootstrap/dist/css/bootstrap.min.css";
 import './App.css';
 import { Component, useState, useEffect  } from 'react';
 import axios from "axios";
@@ -163,14 +165,8 @@ return (
 
 
 </div>
-
-
-  
-  
   );
-
 }
-
 
 export default App;
 
