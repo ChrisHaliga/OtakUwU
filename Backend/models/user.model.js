@@ -32,7 +32,7 @@ const UserSchema = new Schema({
     {
         type: String,
         unique: true,
-        default: null
+        sparse: true
     },
 
     watchlists: [
