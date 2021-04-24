@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import otakuwu1 from'./otakuwu1.png'; 
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
-import { Form, Button, FormGroup, FormControl, ControlLabel, Row } from "react-bootstrap";
-import Col from 'react-bootstrap/Col';
+import { Form, Col, Row } from "react-bootstrap";
 
 import Show from './show.component';
 
@@ -19,7 +18,7 @@ import './homepage.css';
     const [search,setSearch] = useState("");
 
     let [currentPage, setCurrentPage] = useState(1);
-    const[count,setCount] = useState(1);       //count of pages
+    const [count,setCount] = useState(1);       //count of pages
  
     useEffect(() => {
       
