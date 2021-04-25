@@ -1,14 +1,9 @@
 .main{
-    /* display: flex; */
     max-width: 550px;
-   background-color: black;
-   padding-left:0px;
-   margin-bottom: 40 px;
-   margin-top: 40 px;
-
- 
-   
-    
+    background-color: black;
+    padding-left:0px;
+    margin-bottom: 40 px;
+    margin-top: 40 px;
 }
 .image{
     margin-left:0;
@@ -17,7 +12,6 @@
     margin-left: 0;
     width:13rem;
     height:16.9rem;
-   
 }
 
 .info{
@@ -29,36 +23,29 @@
 .title{
     color:white;
     text-align: center;
-  
-   
 }
 .text{
     color:white;
     text-align: center;
- 
 } 
 .bottomElements{
     position: absolute;
     width: 90%;
     bottom: 5px;
-
-
 }
 .platforms
-{
-   
+{ 
     float: left; 
 }
 
 .add{
-  
-  float: right;
+    float: right;
 }
 
 .watch-card{
-   width:16rem;
-   height:27rem;
-   border: 1px solid;
+    width:16rem;
+    height:27rem;
+    border: 1px solid;
 }
 .watch-top{
     height:18%;
@@ -69,7 +56,6 @@
     text-align: center; 
 }
 .watch-showname{
-
     text-align: center;
 }
 .watch-form{
@@ -105,6 +91,5 @@
 .button{
     min-height: 2.5rem;
     min-width: 2.5rem;
-  
     border-radius: 50%; 
 }
