@@ -2,13 +2,9 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 
-const WatchListSchema = new Schema({
- 
-    id: {
-        type:Integer,
-        required: true,
-        unique: true
-    },
+
+const WatchlistSchema = new Schema({
+
     title: {
         type:String,
         required: true
@@ -28,5 +24,5 @@ const WatchListSchema = new Schema({
 
 
 
-    const WatchList = mongoose.model('Watchlist',WatchListSchema);
-    module.exports = WatchList;
+    const Watchlist = mongoose.model('Watchlist', WatchlistSchema);
+    module.exports = Watchlist;
