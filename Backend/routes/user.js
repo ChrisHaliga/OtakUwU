@@ -1,12 +1,12 @@
 const router = require('express').Router();
 let User = require('../models/user.model');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken')
+const secret = process.env.JWT_SECRET;
 
-/*router.get('/', (req, res) => {
-    res.send('hello');
-})*/
+//for testing purposes
 router.route('/').get((req, res) => {
-    console.log('inside get');
+    //console.log('inside get');
     User.find()
     .then(users => res.json(users))
     .catch(err => res.send(err));
@@ -16,7 +16,7 @@ router.route('/').get((req, res) => {
 
 //sign up
 router.route('/signup').post((req, res) => {
-    console.log('inside signup');
+    //console.log('inside signup');
     const username = req.body.username;
     const password = req.body.password;
     const email = req.body.email;
@@ -30,7 +30,7 @@ router.route('/signup').post((req, res) => {
             return res.status(422).json({error: "User already exists with that email"});
         }
         else {
-            console.log('inside else');
+            //console.log('inside else');
             User.findOne({username: username})
             .then((savedUser) => {
                 if (savedUser) {
@@ -73,7 +73,11 @@ router.route('/signin').post((req, res) => {
         bcrypt.compare(password, savedUser.password)
         .then(matched => {
             if (matched) {
-                res.json({message: "Successful login"})
+                //res.json({message: "Successful login"})
+                const token = jwt.sign({_id:savedUser._id, date: Date.now()}, secret); //make more unique
+                User.updateOne({_id: savedUser._id}, {token: token}).then(user => {
+                    res.json({token: token})
+                }).catch(err => console.log(err));
             }
             else {
                 return res.status(422).json({error: "Invalid password"});
@@ -82,33 +86,79 @@ router.route('/signin').post((req, res) => {
     }).catch(err=>console.log('Find by username error' + err));
 });
 
-//delete specific user
-router.route('/:id').delete((req, res) => {
-    console.log('inside delete');
-    User.findByIdAndDelete(req.params.id)
-    .then((deletedUser) => {
-        if (deletedUser) {
-            res.json('User deleted.');
+//sign out - check token, then delete token
+router.route('/signout').post((req, res) => {
+    token = req.body.token;
+    if (token) {
+    User.findOneAndUpdate({token: token}, {$set: {token: null}})
+    .then((foundUser) => {
+        if (foundUser) {
+            res.json('User signed out!')
         }
         else {
-            res.status(404).json('User not found');
+            return res.status(422).json({error: "User not found"});
         }
+        
     })
     .catch(err => res.status(400).json('Error: ' + err));
+    }
+    else {
+        return res.status(422).json({error: "User not logged in!"});
+    }
 });
 
-//get specific user 
-router.route('/:id').get((req, res) => {
-    User.findById(req.params.id)
-    .then(user => {
-        if (user) {
-            res.json(user);
+//update - check token
+router.route('/update').post((req, res) => {
+    token = req.body.token;
+    if (token) {
+    User.findOneAndUpdate({token: token}, {$set: req.body})
+    .then((foundUser) => {
+        if (foundUser) {
+            res.json('User updated!');
         }
         else {
-            res.status(404).json('User not found');
+            return res.status(422).json({error: "User not found"});
         }
+        
     })
     .catch(err => res.status(400).json('Error: ' + err));
+    }
+    else {
+        return res.status(422).json({error: "User not logged in!"});
+    }
+});
+
+//delete specific user - also check token
+router.route('/delete').delete((req, res) => {
+    console.log('inside delete');
+    token = req.body.token;
+    if (token) {
+        User.findOneAndDelete({token: token})
+        .then((deletedUser) => {
+            if (deletedUser) {
+                res.json('User deleted.');
+            }
+            else {
+                res.status(404).json('User not found');
+            }
+        }).catch(err => res.status(400).json('Error: ' + err));
+    }
+    else {
+        return res.status(422).json({error: "User not logged in!"});
+    }
+});
+
+//get specific user - by username
+router.route('/:username').get((req, res) => {
+    User.findOne({username: req.params.username})
+    .then((savedUser) => {
+        if (!savedUser) {
+            return res.status(422).json({error: "User not found"});
+        }
+        else {
+            res.json('User found');
+        }
+    }).catch(err=>console.log('Find by username error' + err));
 });
 
 module.exports = router
