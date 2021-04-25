@@ -1,12 +1,22 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Platform from './platform.component';
+import Playlist from './playlists.component';
 import "bootstrap/dist/css/bootstrap.min.css";
 import './show.css';
 import { Form, Button, FormGroup, FormControl, ControlLabel, Row,Popover ,OverlayTrigger} from "react-bootstrap";
 import Col from 'react-bootstrap/Col';
 
 import plus from './plus.png'; 
-export default function show( {show, all_platforms,isMiddle} ) {
+export default function Show( {show, all_platforms,isMiddle} ) {
+  let watchlist1 = ["l1","l2","l3","l3","l3","l3","l3"];
+  let Watchlist = [];
+    
+    const setList = (  
+    Watchlist.push(watchlist1.map(name=> (
+      <Playlist name ={name} />
+    ))));
+
+
     const popover = (
         <Popover >
           
@@ -24,25 +34,8 @@ export default function show( {show, all_platforms,isMiddle} ) {
           </div>
 
           <input class="watch-form form-control mb-3" type="text" placeholder="New List"></input>
-
-          <div class ="playlists">
-              <div class="row">
-                 <div class="col-3">
-                      <div>
-                      <button class="button" ></button>
-                      </div>
-                      
-                    
-
-                 </div>
-                 <div class = "col-9 mt-3">
-                <h6 class = "listname">PlayList1</h6>
-                 </div>
-
-              </div>
-        
-     
-          </div>
+          
+          {Watchlist}
         </div> 
         
         </Popover>

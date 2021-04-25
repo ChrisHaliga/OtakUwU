@@ -17,8 +17,8 @@ const UserSchema = new Schema({
 
     password: {
         type:String,
-        required: true,
-        unique: true
+        required: true
+        // unique: true
     },
 
     profilePic: {
@@ -27,6 +27,12 @@ const UserSchema = new Schema({
     
     bio: {
         type:String
+    },
+    token: 
+    {
+        type: String,
+        unique: true,
+        sparse: true
     },
 
     watchlists: [

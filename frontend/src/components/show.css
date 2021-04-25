@@ -59,6 +59,7 @@
    width:16rem;
    height:27rem;
    border: 1px solid;
+   overflow-y: scroll;
 }
 .watch-top{
     height:18%;
@@ -105,6 +106,6 @@
 .button{
     min-height: 2.5rem;
     min-width: 2.5rem;
-  
+    background-color: #FFB5E2;
     border-radius: 50%; 
 }
