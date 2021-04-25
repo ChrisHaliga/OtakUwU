@@ -15,6 +15,7 @@ function App() {
   const [token, setToken] = useState(null);
 
   const [PrimaryList, setPrimaryList] = useState([]);
+  const [PrimaryListTitle, setPrimaryListTitle] = useState(null);
   const [SecondaryList, setSecondaryList] = useState(null);
   const [Sidebar, setSideBar] = useState(null);
 
@@ -84,10 +85,13 @@ function App() {
   useEffect(() => {
     //take the newly updated shows and set primary list
     setPrimaryList(Shows)
+    setPrimaryListTitle("Search Results")
+
   }, [Shows]);
 
   useEffect(() => {
     setPrimaryList(Playlist)
+    setPrimaryListTitle(Playlist.title)
   }, [Playlist]);
 
   useEffect(() => {
@@ -120,51 +124,56 @@ function App() {
   }
 
 return (
- 
-  // <Homepage/>
-  <div>
-    <nav class="navbar navbar-expand-lg nav">
-      <h1 class="navbar-brand" href="#">Otakuwu</h1>
-      <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" onChange={handleChange} value={searchString} onKeyPress={(e)=> { e.key === 'Enter' && e.preventDefault(); }}/>
-      </form>
-      <div id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto item">
-          <li class=" nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-          </li>
-          <li class=" nav-item">
-            <a class="nav-link" href="#">Shows</a>
-          </li>
-          <li class=" nav-item">
-            <a class="nav-link" href="#">Lists</a>
-          </li>
-          <li class="nav-item wrapper">
-            <img src={process.env.PUBLIC_URL +`/icons/gudetama.jpeg`} class="image--cover" onClick={openSidebar} value={!Sidebar}></img>
-          </li>
-        </ul>
+   <html>
+     <header>
+      <nav>
+        <h1 class="navbar-brand" href="#">Otakuwu</h1>
+        <form class="form-inline my-2 my-lg-0">
+          <input class="form-control" type="search" placeholder="Whatcha lookin' for?" aria-label="Search" onChange={handleChange} value={searchString} onKeyPress={(e)=> { e.key === 'Enter' && e.preventDefault(); }}/>
+        </form>
+        <div>
+          <ul class="nav__links">
+            <li>
+              <a href="#">Shows</a>
+            </li>
+            <li>
+              <a href="#">Lists</a>
+            </li>
+            <li class="wrapper">
+              <img src={process.env.PUBLIC_URL +`/icons/gudetama.jpeg`} class="image--cover" onClick={openSidebar} value={!Sidebar}></img>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      </header>
+      <body class="content">
+        <div class="row">
+        <div class={`col-${ Sidebar? '8': '12'}`}>
+          <div class="row">
+            <h2 class="title">
+              {PrimaryListTitle}
+            </h2>
+          </div>
+          <div class="row">
+            <div class="primary_list">
+              {PrimaryList}
+            </div>
+          </div>
+          <div class="row">
+            {SecondaryList}
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="row">
+            {Sidebar}
+          </div>
+        </div>
       </div>
-    </nav>
+      </body>
+  
 
-  <div class="row">
-    <div class={`col-${ Sidebar? '8': '12'}`}>
-      <div class="row">
-        {Shows}
-        {PrimaryList}
-      </div>
-      <div class="row">
-        {SecondaryList}
-      </div>
-    </div>
-    <div class="col-4">
-      <div class="row">
-        {Sidebar}
-      </div>
-    </div>
-  </div>
 
-
-</div>
+</html>
   );
 }
 
