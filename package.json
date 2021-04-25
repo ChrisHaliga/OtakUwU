@@ -23,6 +23,7 @@
     "mongoose": "^5.11.17",
     "puppeteer": "^7.1.0",
     "react": "^17.0.1",
+    "react-router-dom": "^5.2.0",
     "request": "^2.88.2",
     "request-promise": "^4.2.6"
   },
