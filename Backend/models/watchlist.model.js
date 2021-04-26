@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 
 const WatchListSchema = new Schema({
- 
+
     title: {
         type:String,
         required: true
@@ -22,7 +22,7 @@ const WatchListSchema = new Schema({
     viewers:[{type: Schema.Types.ObjectId, ref:'User', required: true}]
     }
 
-   });
+    });
 
 
 
