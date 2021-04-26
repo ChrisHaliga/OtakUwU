@@ -107,5 +107,21 @@
     min-height: 2.5rem;
     min-width: 2.5rem;
     background-color: #FFB5E2;
-    border-radius: 50%; 
+    border-radius: 50%;
+    border-color:#FFB5E2;
+  
+}
+.button:hover{
+    background-color: magenta;
+}
+.form-button{
+  width: 50px;
+  height: 40px;
+  border-color: #FFB5E2;
+  color: white;
+  background-color: #FFB5E2;
+
+}
+.form-button:hover{
+    background-color: magenta;
 }

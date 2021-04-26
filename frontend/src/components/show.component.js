@@ -7,8 +7,8 @@ import { Form, Button, FormGroup, FormControl, ControlLabel, Row,Popover ,Overla
 import Col from 'react-bootstrap/Col';
 
 import plus from './plus.png'; 
-export default function Show( {show, all_platforms,isMiddle} ) {
-  let watchlist1 = ["l1","l2","l3","l3","l3","l3","l3"];
+export default function show( {show, all_platforms,isMiddle} ) {
+  let watchlist1 = ["l1","l2","l3","l3","l3","play"];
   let Watchlist = [];
     
     const setList = (  
@@ -32,16 +32,17 @@ export default function Show( {show, all_platforms,isMiddle} ) {
            <h6 class= "show-title">Add "{show.title}" to ...</h6>
 
           </div>
-
-          <input class="watch-form form-control mb-3" type="text" placeholder="New List"></input>
-          
+          <div class ="row">
+          <input class="watch-form form-control mb-3 mr-2" type="text" placeholder="New List"></input>
+          <button class="form-button" ><h6>Add</h6></button>
+          </div>
           {Watchlist}
         </div> 
         
         </Popover>
       );
       
-      const Example = () => (
+      const AddButton = () => (
         <OverlayTrigger trigger="click" placement="right" overlay={popover} >
           <Button variant="success" style = {{backgroundColor:"black",borderColor:"black"}}><img src={plus}  style = {{ width:"2rem",height:"2rem"}} /></Button>
         </OverlayTrigger>
@@ -76,7 +77,7 @@ export default function Show( {show, all_platforms,isMiddle} ) {
                                       
                                     </div>
                                     <div class = "add col-3" >
-                                    <Example /> 
+                                    <AddButton/> 
                                     </div>
 
                                     </div> 
