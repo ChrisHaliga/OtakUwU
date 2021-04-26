@@ -5,12 +5,13 @@ const Schema = mongoose.Schema;
 const WatchlistSchema = new Schema({
 
     title: {
-        type:String,
-        required: true
+        type:String, required: true
+    },
+    public:{
+        type: Boolean, required: false
     },
     shows:[{type: Schema.Types.ObjectId, ref:'Show', required: true}],
     permissions: {     // object with lists of users with  admin,editor,viewer permissions
-    admins: [{type: Schema.Types.ObjectId, ref:'User', required: true}],
     editors:[{type: Schema.Types.ObjectId, ref:'User', required: true}],
     viewers:[{type: Schema.Types.ObjectId, ref:'User', required: true}]
    }
