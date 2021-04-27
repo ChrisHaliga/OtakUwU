@@ -35,12 +35,20 @@ connection.once('open', () => {
 //first route
 const showRouter = require('./routes/shows');
 const platformRouter = require('./routes/platform');
+const watchlistRouter = require('./routes/watchlist');
 // const watchlistRouter = require('./routes/watchlist');
+
+// const userRouter = require('./routes/user');
+
 
 
 app.use('/shows', showRouter);
 app.use('/platforms', platformRouter);
+app.use('/watchlists', watchlistRouter);
+
+// app.use('/users', userRouter);
 // app.use('/watchlists', watchlistRouter);
+
 
 const server = app.listen(port, () => {
   console.log(`Server is running on port: ${port}`)
