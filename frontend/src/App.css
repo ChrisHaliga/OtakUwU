@@ -9,6 +9,7 @@ nav{
     position: fixed;
     width: 100%;
     background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
 }
 
 .navbar-brand {
@@ -42,7 +43,9 @@ li, a, button {
     color: violet;
     text-decoration: none;
 }
-
+.primary_list_title {
+    color: #000000;
+}
 button {
     padding: 9px 25px;
     background-color: rgb(216, 192, 216, 1);

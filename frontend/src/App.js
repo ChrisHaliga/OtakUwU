@@ -1,4 +1,3 @@
-
 import React from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import './App.css';
@@ -18,6 +17,7 @@ function App() {
   const [PrimaryListTitle, setPrimaryListTitle] = useState(null);
   const [SecondaryList, setSecondaryList] = useState(null);
   const [Sidebar, setSideBar] = useState(null);
+  const [isMiddle, setMiddle] = useState(false);
 
   const [all_platforms, setAllPlatforms]= useState([]);
   const [Shows, setShows] = useState([]);
@@ -68,7 +68,11 @@ function App() {
         console.log(response.data)
         setCount(response.data.count);
         setShows(response.data.data.map(show=> (
-          <Show show={show} currentShow={CurrentShow} all_platforms={all_platforms}/>
+          // <div  
+          // onMouseOver={() => setMiddle({ isMiddle: true })} onMouseOut={() => setMiddle({ isMiddle: false })}
+          // >
+          <Show chooseShow={chooseShow} show={show} isMiddle={isMiddle} all_platforms={all_platforms}/>
+          // </div>
         )));
         // setPrimaryList(Shows);
       })
@@ -123,6 +127,14 @@ function App() {
     setSideBar(<Profile/>)
   }
 
+  const chooseShow = (title) => {
+    setMiddle(title);
+  }
+//   this.setState(prevState => ({
+//     isMiddle: !prevState.isMiddle
+// }));
+
+
 return (
    <html>
      <header>
@@ -150,7 +162,7 @@ return (
         <div class="row">
         <div class={`col-${ Sidebar? '8': '12'}`}>
           <div class="row">
-            <h2 class="title">
+            <h2 class="primary_list_title">
               {PrimaryListTitle}
             </h2>
           </div>
