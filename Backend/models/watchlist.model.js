@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 
 const WatchListSchema = new Schema({
- 
+
     title: {
         type:String,
         required: true
@@ -22,9 +22,9 @@ const WatchListSchema = new Schema({
     viewers:[{type: Schema.Types.ObjectId, ref:'User', required: true}]
     }
 
-   });
+    });
 
 
 
-    const WatchList = mongoose.model('Watchlist',WatchListSchema);
-    module.exports = WatchList;
+    const Watchlist = mongoose.model('Watchlist', WatchlistSchema);
+    module.exports = Watchlist;
