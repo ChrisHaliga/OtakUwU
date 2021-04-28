@@ -69,9 +69,9 @@ function App() {
         console.log(response.data)
         setCount(response.data.count);
         setShows(response.data.data.map(show=> (
-          // <div > onMouseOver={(e) => chooseShow(e, show.title)}
+          <div>
           <Show chooseShow={chooseShow}  show={show} isMiddle={middleShow} all_platforms={all_platforms}/>
-          // </div>
+          </div>
         )));
         // setPrimaryList(Shows);
       })
