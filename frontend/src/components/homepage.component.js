@@ -1,5 +1,4 @@
-import React, { Component,useState, useRef, useEffect  } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect  } from 'react';
 import otakuwu1 from'./otakuwu1.png'; 
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
@@ -12,13 +11,16 @@ import './homepage.css';
 
    export default function Homepage() {
   
-    document.body.style.backgroundColor = "black"
+    document.body.style.backgroundColor = "pink"
     const [all_platforms, setAllPlatforms]= useState([]);
     let [Shows,setShows] = useState([])
     const [search,setSearch] = useState("");
 
     let [currentPage, setCurrentPage] = useState(1);
-    const [count,setCount] = useState(1);       //count of pages
+
+    const[count,setCount] = useState(1);       //count of pages
+
+    const [isMiddle,setMiddle] = useState("false");
  
     useEffect(() => {
       
@@ -42,7 +44,7 @@ import './homepage.css';
           console.log(response.data)
           setCount(response.data.count);
           setShows(response.data.data.map(show=> (
-            <Show show={show} all_platforms={all_platforms}/>
+            <Show show={show} all_platforms={all_platforms} isMiddle = {isMiddle}/>
           )));
         })
         .catch((error) => {
@@ -71,8 +73,9 @@ import './homepage.css';
             search_str: search
           }).then(response=>{
             console.log(response.data)
+            console.log(isMiddle)
             setShows(response.data.data.map(show=> (
-              <Show show={show} all_platforms={all_platforms}/>
+              <Show show={show} all_platforms={all_platforms} isMiddle  />
             )));
           })
           .catch((error) => {
@@ -121,6 +124,11 @@ import './homepage.css';
              {/* <Col xs={12} sm={4} md={2} ><h1 class = "Page">Page {currentPage}</h1>  </Col> */}
              <Col></Col>
          </Row>
+         
+        
+        
+
+
          
      
       </div>  

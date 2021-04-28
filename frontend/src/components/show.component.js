@@ -1,54 +1,125 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import Platform from './platform.component';
 import "bootstrap/dist/css/bootstrap.min.css";
+import './show.css';
+import {Button, Popover, OverlayTrigger} from "react-bootstrap";
 
-import { Form, Button, FormGroup, FormControl, ControlLabel, Row,Popover ,OverlayTrigger} from "react-bootstrap";
-import Col from 'react-bootstrap/Col';
+import plus from './plus.png';
 
-import plus from './plus.png'; 
-import heart from './whiteheart.jpeg'; 
-export default function show( {show, all_platforms} ) {
-    const popover = (
-        <Popover >
-          <Popover.Title as="h3">WatchList</Popover.Title>
-          <Popover.Content>
-            And here's some <strong>amazing</strong> content. It's very engaging.
-            right?
-          </Popover.Content>
-        </Popover>
-      );
-      
-      const Example = () => (
-        <OverlayTrigger trigger="click" placement="right" overlay={popover} >
-          <Button variant="success" style = {{backgroundColor:"black",borderColor:"black"}}><img src={plus} alt="my image" style = {{ width:"2rem",height:"2rem"}} /></Button>
-        </OverlayTrigger>
-      );
-    return (   
-        <div id = "d1" class="card mb-3  mt-3 container" style={{width:"35rem",height:"17rem",backgroundColor:"black",paddingLeft:"0px"}}> 
-        <div class="row no-gutters">
-            <div class="col-4 ">
-            <img class = "ml-0" src={(!show.icon || show.icon == "default" || !show.icon.includes("http"))? process.env.PUBLIC_URL +"/imgs/not_found.gif":show.icon} 
-                alt={`Cover art for ${show.title}`}  style = {{ width:"13rem",height:"16.9rem",marginLeft:"0px"}} />
-            </div>
-              <div class="col-md-8">
-                <div class="card-body">
-              <h5 class="card-title" style={{color:"white",textAlign:'center'}}>{show.title}</h5> 
-                  <p class="card-text" style={{color:"white",textAlign:'center'}}> This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                  <div class = "ml-3" style = {{position: "absolute", bottom: "10px"}}>
-                    {
-                            all_platforms.filter(platform => 
-                                show.links.includes(platform._id)
-                            ).map(platform => <Platform platform={platform}/>)
-                    }
-                     
-                 </div>
-                 <div class = "ml-3" style = {{position: "absolute", bottom: "10px",right:"40px"}}>
-                 <Example /> 
-                 </div>
-                </div>
+//react functional components are stateless so they don't re render
+//unless a stateful parent component passes a prop to them
+
+export default function Show( {chooseShow, show, all_platforms, isMiddle} ) {
+  // var chooseThisShow = () =>{
+  //   console.log("chose " + show.title);
+  //   //changing this value does not change how the show looks even though this show is marked as middle
+  // };
+  const [active, setActive] = useState(false);
+  useEffect(() => {
+    //take the search results and set primary list
+    setActive(isMiddle == show.title);
+    console.log("middle set"+ isMiddle);
+  }, [isMiddle]);
+
+  const popover = (
+    <Popover>
+  
+      <div class="card watch-card scroll">
+  
+        <div class="watch-top">
+          <div class="watch-component-title mt-3">
+            <h5>WatchLists</h5>
+          </div>
+        </div>
+  
+        <div class="watch-showname mt-2">
+          <h6 class="show-title">Add "{show.title}" to ...</h6>
+  
+        </div>
+  
+        <input class="watch-form form-control mb-3" type="text" placeholder="New List"></input>
+  
+        <div class="playlists">
+          <div class="row">
+            <div class="col-3">
+              <div>
+                <button class="button"></button>
               </div>
-         </div>
-        
-        </div> 
-    )
+  
+  
+  
+            </div>
+            <div class="col-9 mt-3">
+              <h6 class="listname">PlayList1</h6>
+            </div>
+  
+          </div>
+  
+  
+        </div>
+      </div>
+  
+    </Popover>
+  );
+  
+  const Example = () => (
+  <OverlayTrigger trigger="click" placement="right" overlay={popover}>
+  
+    <Button variant="success" style={{backgroundColor:"black",borderColor:"black"}}><img src={plus} style={{ width:"2rem",height:"2rem"}} /></Button>
+  </OverlayTrigger>
+  );
+if(isMiddle == show.title)
+  {
+  return (
+  <div class=" main card container mt-3 mb-3 ">
+    <div class="row ">
+      <div class="col-4 image ">
+        <img class="icon " src={(!show.icon || show.icon=="default" || !show.icon.includes("http"))? process.env.PUBLIC_URL +"/imgs/not_found.gif":show.icon} alt={`Cover art for ${show.title}`} />
+      </div>
+
+      <div class="col-8 ">
+
+        <div class="card-body info">
+          <h5 class="card-title title">{show.title}</h5>
+          <p class="card-text text"> This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+
+          <div class="row bottomElements ">
+
+            <div class="platforms col-9">
+              {
+              all_platforms.filter(platform =>
+              show.links.includes(platform._id)
+              ).map(platform =>
+              <Platform platform={platform} />)
+              }
+
+            </div>
+            <div class="add col-3">
+              <Example />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  )
+  }
+  else
+  {
+  return(
+  <div class="container mb-3">
+    <div class="col-4 image " >
+        <img class="icon " src={(!show.icon || show.icon=="default" || !show.icon.includes("http"))? process.env.PUBLIC_URL +"/imgs/not_found.gif":show.icon} alt={`Cover art for ${show.title}`} 
+          onMouseOver={()=> chooseShow(show)} 
+        />
+      </div>
+  </div>
+  )
 }
+}
+
+
+
+// backgroundColor:"black"
+//style={{width:"35rem",height:"17rem",backgroundColor:"black",paddingLeft:"0px"}}
+

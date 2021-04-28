@@ -1,4 +1,3 @@
-
 import React from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import './App.css';
@@ -15,8 +14,11 @@ function App() {
   const [token, setToken] = useState(null);
 
   const [PrimaryList, setPrimaryList] = useState([]);
+  const [PrimaryListTitle, setPrimaryListTitle] = useState("");
+  const [SecondaryListTitle, setSecondaryListTitle] = useState("");
   const [SecondaryList, setSecondaryList] = useState(null);
   const [Sidebar, setSideBar] = useState(null);
+  const [MiddleShow, setMiddleShow] = useState("");
 
   const [all_platforms, setAllPlatforms]= useState([]);
   const [Shows, setShows] = useState([]);
@@ -66,10 +68,7 @@ function App() {
       }).then(response=>{
         console.log(response.data)
         setCount(response.data.count);
-        setShows(response.data.data.map(show=> (
-          <Show show={show} currentShow={CurrentShow} all_platforms={all_platforms}/>
-        )));
-        // setPrimaryList(Shows);
+        setShows(response.data.data);
       })
       .catch((error) => {
         console.log(error);
@@ -78,16 +77,26 @@ function App() {
     }
   }, [all_platforms, searchString])
 
+
   //setting the Primary list in 3 ways
 
   //1. by search results
   useEffect(() => {
     //take the newly updated shows and set primary list
-    setPrimaryList(Shows)
-  }, [Shows]);
+    setPrimaryList(Shows.map(show =>
+      (
+        <div>
+        <Show chooseShow={chooseShow} show={show} isMiddle={MiddleShow} all_platforms={all_platforms}/>
+        </div>
+      ))
+    )
+    setPrimaryListTitle("Search Results")
+
+  }, [Shows, MiddleShow]);
 
   useEffect(() => {
     setPrimaryList(Playlist)
+    setPrimaryListTitle(Playlist.title)
   }, [Playlist]);
 
   useEffect(() => {
@@ -107,6 +116,7 @@ function App() {
     setSecondaryList(
       <Playlist watchlist="secondary lists"/>
     );
+    setSecondaryListTitle("watchlists");
   }, [Playlists]);
 
   const handleChange = (e) =>{
@@ -114,57 +124,78 @@ function App() {
       setSearch(e.target.value);
       console.log(searchString);
   }
-  const openSidebar = (e) =>{
+  const openSidebar = (e) => {
     e.preventDefault();
     setSideBar(<Profile/>)
   }
+  const chooseShow = (show) => {
+    console.log(show.title + " show chosen");
+    setMiddleShow(show.title);
+
+  }
+  
+//   this.setState(prevState => ({
+//     isMiddle: !prevState.isMiddle
+// }));
+
 
 return (
- 
-  // <Homepage/>
-  <div>
-    <nav class="navbar navbar-expand-lg nav">
-      <h1 class="navbar-brand" href="#">Otakuwu</h1>
-      <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" onChange={handleChange} value={searchString} onKeyPress={(e)=> { e.key === 'Enter' && e.preventDefault(); }}/>
-      </form>
-      <div id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto item">
-          <li class=" nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-          </li>
-          <li class=" nav-item">
-            <a class="nav-link" href="#">Shows</a>
-          </li>
-          <li class=" nav-item">
-            <a class="nav-link" href="#">Lists</a>
-          </li>
-          <li class="nav-item wrapper">
-            <img src={process.env.PUBLIC_URL +`/icons/gudetama.jpeg`} class="image--cover" onClick={openSidebar} value={!Sidebar}></img>
-          </li>
-        </ul>
+   <html>
+     <header>
+      <nav>
+        <h1 class="navbar-brand" href="#">Otakuwu</h1>
+        <form class="form-inline my-2 my-lg-0">
+          <input class="form-control" type="search" placeholder="Whatcha lookin' for?" aria-label="Search" onChange={handleChange} value={searchString} onKeyPress={(e)=> { e.key === 'Enter' && e.preventDefault(); }}/>
+        </form>
+        <div>
+          <ul class="nav__links">
+            <li>
+              <a href="#">Shows</a>
+            </li>
+            <li>
+              <a href="#">Lists</a>
+            </li>
+            <li class="wrapper">
+              <img src={process.env.PUBLIC_URL +`/icons/gudetama.jpeg`} class="image--cover" onClick={openSidebar} value={!Sidebar}></img>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      </header>
+      <body class="content">
+        <div class="row">
+        <div class={`col-${ Sidebar? '8': '12'}`}>
+          <div class="row">
+            <h2 class="primary_list_title">
+              {PrimaryListTitle}
+            </h2>
+          </div>
+          <div class="row">
+            <div class="primary_list">
+              {PrimaryList}
+            </div>
+          </div>
+          <div class="row">
+            <h2 class="primary_list_title">
+              {SecondaryListTitle}
+            </h2>
+          </div>
+          <div class="row">
+            {SecondaryList}
+          </div>
+        </div>
+        
+        <div class="col-4">
+          <div class="row">
+            {Sidebar}
+          </div>
+        </div>
       </div>
-    </nav>
+      </body>
+  
 
-  <div class="row">
-    <div class={`col-${ Sidebar? '8': '12'}`}>
-      <div class="row">
-        {Shows}
-        {PrimaryList}
-      </div>
-      <div class="row">
-        {SecondaryList}
-      </div>
-    </div>
-    <div class="col-4">
-      <div class="row">
-        {Sidebar}
-      </div>
-    </div>
-  </div>
 
-
-</div>
+</html>
   );
 }
 
