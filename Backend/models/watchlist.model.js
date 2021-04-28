@@ -1,22 +1,23 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-
-const WatchlistSchema = new Schema({
-
+const WatchListSchema = new Schema({
+  
     title: {
         type:String, required: true
     },
     public:{
         type: Boolean, required: false
     },
+    picture: {
+        type:String        
+    },
     shows:[{type: Schema.Types.ObjectId, ref:'Show', required: true}],
     permissions: {     // object with lists of users with  admin,editor,viewer permissions
     editors:[{type: Schema.Types.ObjectId, ref:'User', required: true}],
     viewers:[{type: Schema.Types.ObjectId, ref:'User', required: true}]
    }
+    });
 
-   });
-
-    const Watchlist = mongoose.model('Watchlist',WatchlistSchema);
+    const Watchlist = mongoose.model('Watchlist', WatchlistSchema);
     module.exports = Watchlist;

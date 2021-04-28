@@ -17,8 +17,8 @@ const UserSchema = new Schema({
 
     password: {
         type:String,
-        required: true,
-        unique: true
+        required: true
+        // unique: true
     },
 
     profilePic: {
@@ -27,6 +27,19 @@ const UserSchema = new Schema({
     
     bio: {
         type:String
+    },
+    token: 
+    {
+        type: String,
+        unique: true,
+        sparse: true
+    },
+
+    token: 
+    {
+        type: String,
+        unique: true,
+        sparse: true
     },
 
     watchlists: [
@@ -60,5 +73,5 @@ const UserSchema = new Schema({
     ]
 });
 
-const User = mongoose.model('user', UserSchema);
+const User = mongoose.model('User', UserSchema);
 module.exports = User;
