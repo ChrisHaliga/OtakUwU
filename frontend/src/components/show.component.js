@@ -1,8 +1,8 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import Platform from './platform.component';
 import "bootstrap/dist/css/bootstrap.min.css";
 import './show.css';
-import {Button, Popover ,OverlayTrigger} from "react-bootstrap";
+import {Button, Popover, OverlayTrigger} from "react-bootstrap";
 
 import plus from './plus.png';
 
@@ -14,6 +14,12 @@ export default function Show( {chooseShow, show, all_platforms, isMiddle} ) {
   //   console.log("chose " + show.title);
   //   //changing this value does not change how the show looks even though this show is marked as middle
   // };
+  const [active, setActive] = useState(false);
+  useEffect(() => {
+    //take the search results and set primary list
+    setActive(isMiddle == show.title);
+    console.log("middle set"+ isMiddle);
+  }, [isMiddle]);
 
   const popover = (
     <Popover>
@@ -102,7 +108,6 @@ if(isMiddle == show.title)
   {
   return(
   <div class="container mb-3">
-    {/* onMouseOver={() => this.setState({ isMiddle: true })} onMouseOut={() => this.setState({ isMiddle: false })} */}
     <div class="col-4 image " >
         <img class="icon " src={(!show.icon || show.icon=="default" || !show.icon.includes("http"))? process.env.PUBLIC_URL +"/imgs/not_found.gif":show.icon} alt={`Cover art for ${show.title}`} 
           onMouseOver={()=> chooseShow(show)} 

@@ -18,7 +18,7 @@ function App() {
   const [SecondaryListTitle, setSecondaryListTitle] = useState("");
   const [SecondaryList, setSecondaryList] = useState(null);
   const [Sidebar, setSideBar] = useState(null);
-  const [middleShow, setMiddle] = useState("");
+  const [MiddleShow, setMiddleShow] = useState("");
 
   const [all_platforms, setAllPlatforms]= useState([]);
   const [Shows, setShows] = useState([]);
@@ -68,12 +68,7 @@ function App() {
       }).then(response=>{
         console.log(response.data)
         setCount(response.data.count);
-        setShows(response.data.data.map(show=> (
-          <div>
-          <Show chooseShow={chooseShow}  show={show} isMiddle={middleShow} all_platforms={all_platforms}/>
-          </div>
-        )));
-        // setPrimaryList(Shows);
+        setShows(response.data.data);
       })
       .catch((error) => {
         console.log(error);
@@ -82,15 +77,22 @@ function App() {
     }
   }, [all_platforms, searchString])
 
+
   //setting the Primary list in 3 ways
 
   //1. by search results
   useEffect(() => {
     //take the newly updated shows and set primary list
-    setPrimaryList(Shows)
+    setPrimaryList(Shows.map(show =>
+      (
+        <div>
+        <Show chooseShow={chooseShow} show={show} isMiddle={MiddleShow} all_platforms={all_platforms}/>
+        </div>
+      ))
+    )
     setPrimaryListTitle("Search Results")
 
-  }, [Shows]);
+  }, [Shows, MiddleShow]);
 
   useEffect(() => {
     setPrimaryList(Playlist)
@@ -128,8 +130,8 @@ function App() {
   }
   const chooseShow = (show) => {
     console.log(show.title + " show chosen");
-    setMiddle({middleShow : show.title});
-    console.log("middle show " + middleShow);
+    setMiddleShow(show.title);
+
   }
   
 //   this.setState(prevState => ({
