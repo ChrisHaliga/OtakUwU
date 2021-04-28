@@ -14,10 +14,11 @@ function App() {
   const [token, setToken] = useState(null);
 
   const [PrimaryList, setPrimaryList] = useState([]);
-  const [PrimaryListTitle, setPrimaryListTitle] = useState(null);
+  const [PrimaryListTitle, setPrimaryListTitle] = useState("");
+  const [SecondaryListTitle, setSecondaryListTitle] = useState("");
   const [SecondaryList, setSecondaryList] = useState(null);
   const [Sidebar, setSideBar] = useState(null);
-  const [isMiddle, setMiddle] = useState(false);
+  const [middleShow, setMiddle] = useState("");
 
   const [all_platforms, setAllPlatforms]= useState([]);
   const [Shows, setShows] = useState([]);
@@ -68,10 +69,8 @@ function App() {
         console.log(response.data)
         setCount(response.data.count);
         setShows(response.data.data.map(show=> (
-          // <div  
-          // onMouseOver={() => setMiddle({ isMiddle: true })} onMouseOut={() => setMiddle({ isMiddle: false })}
-          // >
-          <Show chooseShow={chooseShow} show={show} isMiddle={isMiddle} all_platforms={all_platforms}/>
+          // <div > onMouseOver={(e) => chooseShow(e, show.title)}
+          <Show chooseShow={chooseShow}  show={show} isMiddle={middleShow} all_platforms={all_platforms}/>
           // </div>
         )));
         // setPrimaryList(Shows);
@@ -115,6 +114,7 @@ function App() {
     setSecondaryList(
       <Playlist watchlist="secondary lists"/>
     );
+    setSecondaryListTitle("watchlists");
   }, [Playlists]);
 
   const handleChange = (e) =>{
@@ -122,14 +122,16 @@ function App() {
       setSearch(e.target.value);
       console.log(searchString);
   }
-  const openSidebar = (e) =>{
+  const openSidebar = (e) => {
     e.preventDefault();
     setSideBar(<Profile/>)
   }
-
-  const chooseShow = (title) => {
-    setMiddle(title);
+  const chooseShow = (show) => {
+    console.log(show.title + " show chosen");
+    setMiddle({middleShow : show.title});
+    console.log("middle show " + middleShow);
   }
+  
 //   this.setState(prevState => ({
 //     isMiddle: !prevState.isMiddle
 // }));
@@ -172,9 +174,15 @@ return (
             </div>
           </div>
           <div class="row">
+            <h2 class="primary_list_title">
+              {SecondaryListTitle}
+            </h2>
+          </div>
+          <div class="row">
             {SecondaryList}
           </div>
         </div>
+        
         <div class="col-4">
           <div class="row">
             {Sidebar}
