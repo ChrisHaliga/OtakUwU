@@ -24,6 +24,21 @@ import './homepage.css';
     const [isMiddle,setMiddle] = useState("false");
     const [count,setCount] = useState(1);       //count of pages
  
+    const [lists, setLists]= useState([""]);
+    useEffect(() => {
+      
+      axios.get("http://localhost:3001/watchlists").then(response=>{ 
+      setLists(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    }, []);
+
+
+
+
     useEffect(() => {
       
       axios.get("http://localhost:3001/platforms").then(response=>{ 
@@ -46,7 +61,7 @@ import './homepage.css';
           console.log(response.data)
           setCount(response.data.count);
           setShows(response.data.data.map(show=> (
-            <Show show={show} all_platforms={all_platforms} isMiddle = {isMiddle}/>
+            <Show show={show} all_platforms={all_platforms} isMiddle = {isMiddle} />
           )));
         })
         .catch((error) => {
@@ -54,7 +69,7 @@ import './homepage.css';
         })
         console.log(Shows);
       }
-    }, [all_platforms, search])
+    }, [all_platforms, search,isMiddle])
 
 
    const handleChange = (e) =>{

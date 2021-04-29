@@ -77,6 +77,8 @@
     margin-left: 20px;
     width: 65%;
     border-color: #FFB5E2;
+    background-color: #FFB5E2;
+   
 }
 .show-title{
     color:#FFB5E2;
@@ -113,6 +115,7 @@
 }
 .button:hover{
     background-color: magenta;
+    transition: 0.3s;
 }
 .form-button{
   width: 50px;
@@ -124,4 +127,5 @@
 }
 .form-button:hover{
     background-color: magenta;
+    transition: 0.3s;
 }

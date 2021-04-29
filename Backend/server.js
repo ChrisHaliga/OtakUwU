@@ -38,7 +38,7 @@ const platformRouter = require('./routes/platform');
 const watchlistRouter = require('./routes/watchlist');
 // const watchlistRouter = require('./routes/watchlist');
 
-// const userRouter = require('./routes/user');
+const userRouter = require('./routes/user');
 
 
 
@@ -46,7 +46,7 @@ app.use('/shows', showRouter);
 app.use('/platforms', platformRouter);
 app.use('/watchlists', watchlistRouter);
 
-// app.use('/users', userRouter);
+app.use('/users', userRouter);
 // app.use('/watchlists', watchlistRouter);
 
 

@@ -1,22 +1,38 @@
-import React, { useEffect } from 'react'
+import React, { useEffect,useState} from 'react'
 import Platform from './platform.component';
 import Playlist from './playlists.component';
 import "bootstrap/dist/css/bootstrap.min.css";
 import './show.css';
+import axios from "axios";
 import { Form, Button, FormGroup, FormControl, ControlLabel, Row,Popover ,OverlayTrigger} from "react-bootstrap";
 import Col from 'react-bootstrap/Col';
 
 import plus from './plus.png'; 
-export default function show( {show, all_platforms,isMiddle} ) {
-  let watchlist1 = ["l1","l2","l3","l3","l3","play"];
-  let Watchlist = [];
-    
-    const setList = (  
-    Watchlist.push(watchlist1.map(name=> (
-      <Playlist name ={name} />
-    ))));
+export default function Show( {show, all_platforms,isMiddle} ) {
+  const [lists, setLists]= useState([]);
+  const [name, setName]= useState(" ");
+    // get all watchlists
+    useEffect(() => {
+      
+      axios.get("http://localhost:3001/watchlists").then(response=>{ 
+      setLists(response.data);
+      setLists(response.data.map(list=> (
+        <Playlist list ={list} show={show}/>
+      )));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
-
+    },[]);
+  
+    const handleChange = (event) =>{
+      event.preventDefault();
+      console.log(event.target.value);
+      console.log(name)
+ 
+    };
+     //Watchlist Popover
     const popover = (
         <Popover >
           
@@ -33,10 +49,10 @@ export default function show( {show, all_platforms,isMiddle} ) {
 
           </div>
           <div class ="row">
-          <input class="watch-form form-control mb-3 mr-2" type="text" placeholder="New List"></input>
+          <input class="watch-form form-control mb-3 mr-2" type="text" placeholder="New List"onChange = {handleChange} ></input>
           <button class="form-button" ><h6>Add</h6></button>
           </div>
-          {Watchlist}
+          {lists}
         </div> 
         
         </Popover>
@@ -47,6 +63,9 @@ export default function show( {show, all_platforms,isMiddle} ) {
           <Button variant="success" style = {{backgroundColor:"black",borderColor:"black"}}><img src={plus}  style = {{ width:"2rem",height:"2rem"}} /></Button>
         </OverlayTrigger>
       );
+
+
+      //Show card 
       if(isMiddle!="true")
       {
     return (   
@@ -111,8 +130,5 @@ else
 }
 }
 
-  
-   
-// backgroundColor:"black"
-//style={{width:"35rem",height:"17rem",backgroundColor:"black",paddingLeft:"0px"}}
 
+//onChange = {handleChange} 
