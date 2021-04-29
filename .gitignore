@@ -493,6 +493,3 @@ MigrationBackup/
 .ionide/
 
 # End of https://www.toptal.com/developers/gitignore/api/node,react,visualstudiocode,visualstudio
-Backend/.env
-package-lock.json
-package.json
