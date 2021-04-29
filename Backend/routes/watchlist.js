@@ -1,17 +1,19 @@
 const router = require('express').Router();
 let Watchlist = require('../models/watchlist.model');
+let Show = require('../models/show.model');
+let User = require('../models/user.model');
+const {v4:uuidv4} = require( "uuid");
 const mongoose = require('mongoose');
-const { route } = require('./shows');
 const { useReducer } = require('react');
 
-//get all watchlists http://localhost:3001/watchlists/
+//get all watchlists 
 router.route('/').get((req, res) => {
     Watchlist.find()
     .then(watchlists => res.json(watchlists))
     .catch(err => res.statusCode);
 });
 
-//add watchlist http://localhost:3001/watchlists/add/
+//add watchlist 
 router.route('/add').post((req, res) => {
     const title = req.body.title;
 
@@ -24,7 +26,8 @@ router.route('/add').post((req, res) => {
                 title
             });
             newWatchlist.timestamp = Date.now;
-        
+            newWatchlist.id = uuidv4()
+
             newWatchlist.save()
             .then(() => res.json ('Watchlist added!'))
             .catch(err => res.status(400).json('Error: ' + err));
@@ -56,38 +59,70 @@ router.route('/update/:id').post((req, res) => {
 
 //add a show to the watchlist
 router.route('/addShow').post((req, res) => {
-
     User.findOne({token: req.body.token})
-    
-    .then(user=>{
+     .then(user=>{
         if(user) 
-        {
-            show.findOne({title:req.body.show_title})
-            .then(show=>{
-                Watchlist.findOneAndDelete({title:req.body.watchlist_title, admins: {$in:[user._id]}}, {$push:{shows:show._id}})
-                .then(res.json.send("Show added"))
-                .catch(err=> res.json(err));
+         {
+            Show.findOne({title:req.body.show_title})
+            .then(show => {
+                Watchlist.findOne({id:req.body.id})
+                .then(watchlist => {
+                        if(watchlist)
+                        {
+                            if(watchlist.shows)
+                            {
+                                if(!watchlist.shows.includes(show._id))
+                                {
+                                    Watchlist.findOneAndUpdate({id:req.body.id, editors: {$in:[user._id]}}, {$push:{shows:show._id}})
+                                    .then(res.json("Show added"))
+                                    .catch(err=> res.json(err));
+                                }
+                                else 
+                                {
+                                    res.json.send()
+                                }
+                            }
+                        }
+                    })
+                .catch(err => res.json(err));
             })
             .catch(err=> res.json(err));
-        }
-    })
+         }
+     })
     .catch(err=>res.json(err))
 })
 
 //delete a show from the watchlist
-router.route('/removeShow').delete((req, res) => {
+router.route('/removeShow').post((req, res) => {
     User.findOne({token: req.body.token})
-    
     .then(user=>{
         if(user) 
         {
-            show.findOne({title:req.body.show_title})
-            .then(show=>{
-                Watchlist.findOneAndUpdate({title:req.body.watchlist_title, admins: {$in:[user._id]}}, {$push:{shows:show._id}})
-                .then(res.json.send("Show deleted"))
-                .catch(err=> res.json(err));
-            })
-            .catch(err=> res.json(err));
+
+        Show.findOne({title:req.body.show_title})
+        .then(show => {
+            Watchlist.findOne({id:req.body.id})
+            .then(watchlist => {
+                    if(watchlist)
+                    {
+                        if(watchlist.shows)
+                        {
+                            if(watchlist.shows.includes(show._id))
+                            {
+                                Watchlist.findOneAndUpdate({id:req.body.id}, {$pull:{shows:show._id}})
+                                .then(res.json("Show removed"))
+                                .catch(err=> res.json(err));
+                            }
+                            else 
+                            {
+                                res.json.send()
+                            }
+                        }
+                    }
+                })
+            .catch(err => res.json(err));
+        })
+        .catch(err=> res.json(err));
         }
     })
     .catch(err=>res.json(err))
