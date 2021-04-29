@@ -8,10 +8,14 @@ import { Form, Col, Row } from "react-bootstrap";
 import Playlist from './components/playlist.component';
 import Profile from './components/profile.component';
 import Homepage from './components/homepage.component';
+import Login from './components/login.component';
 
+const LS_KEY = 'data.ls';
 
 function App() {
+  
   const [token, setToken] = useState(null);
+  const [user, setUser] = useState({});
 
   const [PrimaryList, setPrimaryList] = useState([]);
   const [PrimaryListTitle, setPrimaryListTitle] = useState("");
@@ -36,25 +40,39 @@ function App() {
   const [count, setCount] = useState(1);  //count of pages
 
   useEffect(() => {
-    //TODO: Validate Token, then load user's data
-    // setPlaylists(user's lists) 
 
-    setPlaylists(
-      //axios call to get multiple playlists
-      //this is just an example of one
-      <Playlist watchlist="first one"/>
-    )
-    //if clicked on user profile set sidebar
-    // setSideBar(
-    //   <Profile/>
-    // )
-    
     axios.get("http://localhost:3001/platforms").then(response=>{ 
     setAllPlatforms(response.data);
     })
     .catch((error) => {
       console.log(error);
     });
+
+    const ls = JSON.parse(localStorage.getItem(LS_KEY))
+    if(ls) { //signed in
+      signin(ls.token, ls.username)
+      
+      setPlaylists(
+        //axios call to get multiple playlists
+        //this is just an example of one
+        <Playlist watchlist="first one"/>
+      )
+      
+    }else{ //not signed in
+      axios.get("http://localhost:3001/shows/recentlyadded").then(response=>{ 
+        setSecondaryList(
+          response.map(show =>
+            (
+              <div>
+                <Show chooseShow={chooseShow} show={show} isMiddle={MiddleShow} all_platforms={all_platforms}/>
+              </div>
+            ))
+        )
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }
 
   }, []);
 
@@ -119,6 +137,21 @@ function App() {
     setSecondaryListTitle("watchlists");
   }, [Playlists]);
 
+
+  const signin = (token, username) => {
+    setToken(token);
+    setUser({... user, username:username});
+    setSideBar(null);
+    localStorage.setItem(LS_KEY, JSON.stringify({token:token, username:username}));
+  }
+
+  const signout = () => {
+    setToken(null);
+    setUser({});
+    setSideBar(null);
+    localStorage.setItem(LS_KEY, null);
+  }
+  
   const handleChange = (e) =>{
       e.preventDefault();
       setSearch(e.target.value);
@@ -126,13 +159,14 @@ function App() {
   }
   const openSidebar = (e) => {
     e.preventDefault();
-    setSideBar(<Profile/>)
+    user.username?setSideBar(<Profile signout = {signout} user={user}/>):setSideBar(<Login signin = {signin}/>)
   }
   const chooseShow = (show) => {
     console.log(show.title + " show chosen");
     setMiddleShow(show.title);
-
   }
+
+  
   
 //   this.setState(prevState => ({
 //     isMiddle: !prevState.isMiddle

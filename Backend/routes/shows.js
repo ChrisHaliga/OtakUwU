@@ -91,6 +91,12 @@ router.route('/:id').delete((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
+router.route('/recentlyadded').get((req, res) => {
+  Show.find().reverse().limit(20)
+  .then(shows => res.json(shows))
+  .catch(err => res.status(500).json('Error: ' + err));
+});
+
 router.route('/crunchyroll').post((req,res) => {
     res.json(mhtmlScrapeAnime(req.body.html, req.body.phase, 0, "crunchyroll"));
 })
