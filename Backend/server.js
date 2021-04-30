@@ -7,11 +7,7 @@ let mal_scraper = require('./scraper/mal');
 const parser = require('body-parser');
 const paginate = require('express-paginate');
 
-
 let netflixScraper = require('./scraper/netflixScraper');
-
-
-
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -35,12 +31,8 @@ connection.once('open', () => {
 //first route
 const showRouter = require('./routes/shows');
 const platformRouter = require('./routes/platform');
-const watchlistRouter = require('./routes/watchlist');
-// const watchlistRouter = require('./routes/watchlist');
-
 const userRouter = require('./routes/user');
-
-
+const watchlistRouter = require('./routes/watchlist')
 
 app.use('/shows', showRouter);
 app.use('/platforms', platformRouter);
