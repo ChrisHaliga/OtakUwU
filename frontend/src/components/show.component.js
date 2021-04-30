@@ -27,10 +27,10 @@ export default function Show( {show, all_platforms,isMiddle} ) {
     },[]);
 
     const handleChange = (event) =>{
+      console.log("a");
       if(event.key === 'Enter'){
       event.preventDefault();
       console.log(event.target.value);
-      // console.log(name)
       setName(event.target.value);
       }
  
@@ -53,7 +53,11 @@ export default function Show( {show, all_platforms,isMiddle} ) {
 
           </div>
           <div class ="row">
-          <input class="watch-form form-control mb-3 mr-2" type="text" placeholder="New List" onKeyPress={(e) => { handleChange(e)}} ></input>
+          <input class="watch-form form-control mb-3 mr-2" type="text" placeholder="New List" onChange = {(e)=>{handleChange(e)}} ></input>  
+          {/* <Form onChange = {handleChange} class = "watch-form">
+          <Form.Control size="md" type="text" placeholder="New"   onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
+          style={{ marginBottom:"3"}}/>
+          </Form> */}
           <button class="form-button" ><h6>Add</h6></button>
           </div>
           {lists}
@@ -135,4 +139,4 @@ else
 }
 
 
-//onChange = {handleChange} 
+//onChange = {handleChange}   //onKeyPress={(e) => { handleChange(e) }} 
