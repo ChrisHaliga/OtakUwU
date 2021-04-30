@@ -4,7 +4,7 @@ import otakuwu1 from'./otakuwu1.png';
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { Form, Button, FormGroup, FormControl, ControlLabel, Row ,Card ,ListGroup,ListGroupItem,Figure} from "react-bootstrap";
-// import { Form, Col, Row } from "react-bootstrap";
+/// import { Form, Col, Row } from "react-bootstrap";
 import Col from 'react-bootstrap/Col';
 
 import Show from './show.component';
