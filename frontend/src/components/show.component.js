@@ -1,5 +1,6 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect,useState} from 'react'
 import Platform from './platform.component';
+import Playlist from './playlists.component';
 import "bootstrap/dist/css/bootstrap.min.css";
 import './show.css';
 import {Button, Popover, OverlayTrigger} from "react-bootstrap";
@@ -117,9 +118,3 @@ if(isMiddle == show.title)
   )
 }
 }
-
-
-
-// backgroundColor:"black"
-//style={{width:"35rem",height:"17rem",backgroundColor:"black",paddingLeft:"0px"}}
-

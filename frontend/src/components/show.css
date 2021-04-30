@@ -43,9 +43,10 @@
 }
 
 .watch-card{
-    width:16rem;
-    height:27rem;
-    border: 1px solid;
+   width:16rem;
+   height:27rem;
+   border: 1px solid;
+   overflow-y: scroll;
 }
 .watch-top{
     height:18%;
@@ -62,6 +63,8 @@
     margin-left: 20px;
     width: 65%;
     border-color: #FFB5E2;
+    background-color: #FFB5E2;
+   
 }
 .show-title{
     color:#FFB5E2;
