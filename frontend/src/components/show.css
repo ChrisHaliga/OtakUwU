@@ -10,8 +10,8 @@
 }
 .icon{
     margin-left: 0;
-    width:9.5rem;
-    height:12.5rem;
+    width:13rem;
+    height:16.9rem;
 }
 
 .info{
@@ -95,4 +95,23 @@
     min-height: 2.5rem;
     min-width: 2.5rem;
     border-radius: 50%; 
+    background-color: #FFB5E2;
+    border-radius: 50%;
+    border-color:#FFB5E2;
+}
+.button:hover{
+    background-color: magenta;
+    transition: 0.3s;
+}
+.form-button{
+  width: 50px;
+  height: 40px;
+  border-color: #FFB5E2;
+  color: white;
+  background-color: #FFB5E2;
+
+}
+.form-button:hover{
+    background-color: magenta;
+    transition: 0.3s;
 }
