@@ -78,7 +78,7 @@ let updateServer = async (anime_list, target_platform) => {
                         });
                         let savedShow = await newShow.save()
                         show = savedShow;
-                        //console.log('after saving show');
+                        console.log(`${anime.title} saved from ${target_platform.websiteName}`);
                     } catch (error) {
                         console.log(`save show error--> ${error}`);
                     }

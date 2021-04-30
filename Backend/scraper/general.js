@@ -149,7 +149,7 @@ exports.mhtmlScrapeContent = (html, phase, page, platform) => {
             }
                 
             
-            let save = (list, j_init) => {
+            /* let save = (list, j_init) => {
                 if(list.length < 1) return; //Finish
 
                 Show.find({ $query: {}, $orderby: {title : -1} })
@@ -170,9 +170,9 @@ exports.mhtmlScrapeContent = (html, phase, page, platform) => {
                 .catch(err=>console.log(err));
             }
 
-            save(my_list, 0); //Start
+            save(my_list, 0); //Start */
             
-            fs.writeFile(`Backend/scraper/lists/info_${page}.list`, my_list.map(l =>`${l.title}:\n\t${l.description}\n\t${l.icon}\n`).join('\n'), function (err) {
+            fs.writeFile(`Backend/scraper/lists/info/info_${page}.list`, `${my_list.map(l =>`${l.title}>:|:<${l.description}>:|:<${l.icon}`).join('|||||')}]`, function (err) {
                 if (err) error = err;
                 /* fs.unlink(`Backend/scraper/info_${page}.tmp`,function(err){
                     if(err) error =err;
@@ -182,4 +182,62 @@ exports.mhtmlScrapeContent = (html, phase, page, platform) => {
         });
     }
     return({"response":"", "error": error});
+}
+
+exports.updateDatabase = ()=>{
+    let list = [];
+    fs.readdir('Backend/scraper/lists/info/', (err, files) => {
+        console.log(files)
+        if(!err){
+            let i = 0
+            function doFile(files_left){
+                if(!files_left.length)
+                    return;
+                console.log(files_left[0]);
+                fs.readFile(`Backend/scraper/lists/info/${files_left[0]}`, "utf-8", (err, data) => {
+                    if(!err){
+                        let issues = false;
+                        data = data.split("|||||")
+                        let i = 0;
+                        data = data.map(show => {
+                            show = data[i].split(">:|:<");
+                            if(show.length != 3){
+                                issues = true;
+                                return null;
+                            }
+
+                            let set = {"description": show[1]}
+                            if(show[2] != "https://cdn.anime-planet.com/images/anime/default/default-anime-spring.png")
+                                set = {"description": show[1], "icon": show[2]};
+
+                            return {updateOne: {
+                                "filter" : { "title" : show[0] },
+                                "update" : { $set : set }
+                            }}
+                        }).filter(show => {return show != null});
+                        
+                        Show.bulkWrite(data)
+                        .then(ret => {
+                            if(ret)
+                                console.log(`Bulk Wrote ${files_left[0]} to database.`);
+                            if(!issues){
+                                fs.unlink(`Backend/scraper/lists/info/${files_left[0]}`,function(err){
+                                    if(err) console.log(`\nError occured attempting to delete ${files_left[0]}\n`);
+                                });
+                            }
+                        })
+                        .catch(err=> {console.log("Error bulk updating shows.");issues = true;})
+                        .finally(() => {doFile(files_left.slice(1))})
+                    }
+                    else
+                        console.log(`Scraping Error: Issue reading file ${files[i]}.`)
+                })
+            }
+            doFile(files);
+        }
+        else
+            console.log("Scraping Error: Issue reading directory.")
+    })
+    
+
 }
