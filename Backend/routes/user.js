@@ -20,6 +20,7 @@ router.route('/signup').post((req, res) => {
     const username = req.body.username;
     const password = req.body.password;
     const email = req.body.email;
+    console.log(username, password, email);
     //res.send(req.body.username);
     if (!username || !email || !password) {
         return res.status(422).json({error: "please add all fields"});
@@ -42,11 +43,14 @@ router.route('/signup').post((req, res) => {
                         const newUser = new User({
                             username,
                             email, 
-                            password: hashedPassword
+                            password: hashedPassword,
                         })
                         newUser.save()
                         .then(user => {
-                            res.json({message: "saved successfully"})
+                            const token = jwt.sign({_id:user._id, date: Date.now()}, secret); //make more unique
+                            User.updateOne({_id: user_id}, {token: token}).then(sameuser => {
+                                res.json({token: token})
+                            }).catch(err => console.log(err));
                         }).catch(err => {
                             console.log(err);
                         })
@@ -73,9 +77,11 @@ router.route('/signin').post((req, res) => {
         bcrypt.compare(password, savedUser.password)
         .then(matched => {
             if (matched) {
+                console.log("matched")
                 //res.json({message: "Successful login"})
                 const token = jwt.sign({_id:savedUser._id, date: Date.now()}, secret); //make more unique
                 User.updateOne({_id: savedUser._id}, {token: token}).then(user => {
+                    console.log("sending token");
                     res.json({token: token})
                 }).catch(err => console.log(err));
             }

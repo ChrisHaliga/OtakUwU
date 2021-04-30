@@ -1,0 +1,66 @@
+html {
+    scroll-padding-top: 25px; 
+}
+nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 10%;
+    position: fixed;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.navbar-brand {
+    color: #fff;
+    cursor: pointer;
+}
+
+.wrapper {
+    padding: 10px;
+}
+
+li, a, button {
+    color: #ffffff;
+}
+.image--cover {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center right;
+}
+
+.nav__links li {
+    display: inline-block;
+    padding: 0px 20px;
+}
+.nav__links li a {
+    transition: all 0.3s ease 0s;
+}
+.nav__links li a:hover {
+    color: violet;
+    text-decoration: none;
+}
+.primary_list_title {
+    color: #000000;
+}
+button {
+    padding: 9px 25px;
+    background-color: rgb(216, 192, 216, 1);
+    border:  none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+}
+
+button:hover {
+    background-color: rgb(216, 192, 216, 0.5);
+
+}
+
+.content {
+    padding-top: 150px;
+    padding-left: 50px;
+}

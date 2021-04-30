@@ -1,3 +1,4 @@
+const { interfaces } = require('mocha');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -12,12 +13,9 @@ title: {
 
 links:[{type: Schema.Types.ObjectId, ref:'Platform', required: true}],
 
-icon: // This is the path to an image located somewhere in a folder in backend
-{
-    type: String,
-    required: true,
-    unique: true,
-}
+description:{type:String},
+
+icon: {type: String}, // Not required because we may not find one. Not Unique because two platforms may use different names for the same anime.
 
 });
 

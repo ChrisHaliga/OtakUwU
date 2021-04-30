@@ -2,7 +2,7 @@ const router = require('express').Router();
 let Show = require('../models/show.model');
 let {checkFunimation} = require('../scraper/checkFunimation');
 let crunchyroll = require('../scraper/crunchyroll')
-let {mhtmlScrape} = require('../scraper/general');
+let {mhtmlScrapeAnime, mhtmlScrapeContent} = require('../scraper/general');
 const paginate = require('express-paginate');
 
 router.post('/', async (req, res, next) => {
@@ -91,13 +91,22 @@ router.route('/:id').delete((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
+router.route('/recentlyadded').post((req, res) => {
+  Show.find().limit(10).sort({$natural:-1})
+  .then(shows => res.json(shows))
+  .catch(err => res.status(500).json('Error: ' + err));
+});
+
 router.route('/crunchyroll').post((req,res) => {
-    res.json(mhtmlScrape(req.body.html, req.body.phase, "crunchyroll"));
+    res.json(mhtmlScrapeAnime(req.body.html, req.body.phase, 0, "crunchyroll"));
 })
 
 router.route('/funimation').post((req,res) => {
-    res.json(checkFunimation(req.body.mhtml));
+  res.json(mhtmlScrapeAnime(req.body.html, req.body.phase, req.body.page, "funimation"));
 })
 
+router.route('/anime-planet').post((req,res) => {
+  res.json(mhtmlScrapeContent(req.body.html, req.body.phase, req.body.page, "anime-planet"));
+})
 
 module.exports = router;
