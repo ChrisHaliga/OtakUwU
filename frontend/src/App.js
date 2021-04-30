@@ -95,7 +95,6 @@ function App() {
         console.log(error);
       });
     }
-
   }, []);
 
   useEffect(()=>{
@@ -107,7 +106,6 @@ function App() {
       }).then(response=>{
         //setCount(response.data.count);
         generateHTML(setPrimaryList, PrimaryList, `Results for '${searchString}'`, response.data.data);
-    
       })
       .catch((error) => {
         console.log(error);
