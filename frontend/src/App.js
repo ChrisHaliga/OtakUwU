@@ -17,10 +17,8 @@ function App() {
   const [token, setToken] = useState(null);
   const [user, setUser] = useState({});
 
-  const [PrimaryList, setPrimaryList] = useState([]);
-  const [PrimaryListTitle, setPrimaryListTitle] = useState("");
-  const [SecondaryListTitle, setSecondaryListTitle] = useState("");
-  const [SecondaryList, setSecondaryList] = useState(null);
+  const [PrimaryList, setPrimaryList] = useState({}); //{title:'shows', componentType, data:[], html:[]}
+  const [SecondaryList, setSecondaryList] = useState({});
   const [Sidebar, setSideBar] = useState(null);
   const [MiddleShow, setMiddleShow] = useState("");
 
@@ -39,10 +37,41 @@ function App() {
   const [currentPage, setCurrentPage] = useState(1);
   const [count, setCount] = useState(1);  //count of pages
 
+  function listType(title){
+    if(title.includes("Results for") || title == "Recently Added") return "Shows"
+    //else if(List.title == "")
+    return(title);
+  }
+  function generateHTML(setList, List, title = null, data = null){
+    if(!data) data = List.data;
+    if(!title) title = List.title;
+    if(!data || !title){
+      console.log("ERROR: Misuse of generateHTML - Missing data or type/title.")
+      return null;
+    }
+    let type = listType(title);
+  
+    setList({title:title, data:data, html:data.map(entry => {
+      if(type == "Shows"){
+          return(
+            <div>
+              <Show chooseShow={chooseShow} show={entry} isMiddle={MiddleShow} all_platforms={all_platforms}/>
+            </div>
+          )
+      }/* else if(List.title == "Watchlist"){
+        (
+          <div>
+            <Watchlist chooseWatchlist={chooseWatchlist} watchlist={entry} isMiddle={MiddleWatchlist} all_platforms={all_platforms}/>
+          </div>
+        )
+      } */
+    })})
+  }
+
   useEffect(() => {
 
     axios.get("http://localhost:3001/platforms").then(response=>{ 
-    setAllPlatforms(response.data);
+      setAllPlatforms(response.data);
     })
     .catch((error) => {
       console.log(error);
@@ -52,22 +81,15 @@ function App() {
     if(ls) { //signed in
       signin(ls.token, ls.username)
       
-      setPlaylists(
+      /* setPlaylists(
         //axios call to get multiple playlists
         //this is just an example of one
         <Playlist watchlist="first one"/>
-      )
+      ) */
       
     }else{ //not signed in
-      axios.get("http://localhost:3001/shows/recentlyadded").then(response=>{ 
-        setSecondaryList(
-          response.map(show =>
-            (
-              <div>
-                <Show chooseShow={chooseShow} show={show} isMiddle={MiddleShow} all_platforms={all_platforms}/>
-              </div>
-            ))
-        )
+      axios.post("http://localhost:3001/shows/recentlyadded").then(response=>{
+        generateHTML(setSecondaryList, SecondaryList, "Recently Added", response.data)
       })
       .catch((error) => {
         console.log(error);
@@ -77,16 +99,15 @@ function App() {
   }, []);
 
   useEffect(()=>{
-    console.log(all_platforms);
-    setCurrentPage(1);
+    //setCurrentPage(1);
     if(all_platforms){
       axios.post("http://localhost:3001/shows",
       {
         search_str: searchString
       }).then(response=>{
-        console.log(response.data)
-        setCount(response.data.count);
-        setShows(response.data.data);
+        //setCount(response.data.count);
+        generateHTML(setPrimaryList, PrimaryList, `Results for '${searchString}'`, response.data.data);
+    
       })
       .catch((error) => {
         console.log(error);
@@ -101,20 +122,16 @@ function App() {
   //1. by search results
   useEffect(() => {
     //take the newly updated shows and set primary list
-    setPrimaryList(Shows.map(show =>
-      (
-        <div>
-        <Show chooseShow={chooseShow} show={show} isMiddle={MiddleShow} all_platforms={all_platforms}/>
-        </div>
-      ))
-    )
-    setPrimaryListTitle("Search Results")
+    if(PrimaryList.title && listType(PrimaryList.title) == "Shows")
+      generateHTML(setPrimaryList, PrimaryList);
+    
+    if(SecondaryList.title && listType(SecondaryList.title) == "Shows")
+      generateHTML(setSecondaryList, SecondaryList);
 
-  }, [Shows, MiddleShow]);
+      }, [Shows, MiddleShow]);
 
   useEffect(() => {
-    setPrimaryList(Playlist)
-    setPrimaryListTitle(Playlist.title)
+    //setPrimaryList(title:`${watchlist.name}`, data:Playlist)?
   }, [Playlist]);
 
   useEffect(() => {
@@ -131,10 +148,12 @@ function App() {
   //set secondary list
   useEffect(() => {
     //take the search results and set primary list
-    setSecondaryList(
-      <Playlist watchlist="secondary lists"/>
-    );
-    setSecondaryListTitle("watchlists");
+    if(token){
+      setSecondaryList({title:"Watchlists", html:
+        <Playlist watchlist="secondary lists"/>
+      });
+    }
+    
   }, [Playlists]);
 
 
@@ -159,7 +178,10 @@ function App() {
   }
   const openSidebar = (e) => {
     e.preventDefault();
-    user.username?setSideBar(<Profile signout = {signout} user={user}/>):setSideBar(<Login signin = {signin}/>)
+    if(Sidebar) 
+      setSideBar(null);
+    else
+      user.username?setSideBar(<Profile signout = {signout} user={user}/>):setSideBar(<Login signin = {signin}/>)
   }
   const chooseShow = (show) => {
     console.log(show.title + " show chosen");
@@ -201,21 +223,21 @@ return (
         <div class={`col-${ Sidebar? '8': '12'}`}>
           <div class="row">
             <h2 class="primary_list_title">
-              {PrimaryListTitle}
+              {PrimaryList.title}
             </h2>
           </div>
           <div class="row">
             <div class="primary_list">
-              {PrimaryList}
+              {PrimaryList.html}
             </div>
           </div>
           <div class="row">
             <h2 class="primary_list_title">
-              {SecondaryListTitle}
+              {SecondaryList.title}
             </h2>
           </div>
           <div class="row">
-            {SecondaryList}
+            {SecondaryList.html}
           </div>
         </div>
         
