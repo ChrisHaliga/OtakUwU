@@ -1,12 +1,10 @@
 const schedule = require('node-schedule');
 const fs = require('fs');
 
-const funimation = require("./funimation");
 const netflix = require("./netflixScraper");
-const prime = require("./primeScraper");
-const mal = require("./mal");
+//const prime = require("./primeScraper");
 const hbo = require("./hbo_studio-ghibli_scraper");
-
+const {updateDatabase} = require('./general'); 
 
 let scrape = () => {
     fs.readFile('Backend/scraper/last-scraped.txt', 'utf8', (err, data) => {
@@ -14,9 +12,9 @@ let scrape = () => {
         if(err || new Date(data) - cur_time >= 86100000){ //One day - 5 min
             
             netflix.main();
-            prime.main(); 
-            hbo.main();
-            // mal.scrape();
+            //prime.main(); 
+            //hbo.main();
+            updateDatabase();
             
             fs.writeFile('Backend/scraper/last-scraped.txt', cur_time, function (err) {
                 if (err) 
