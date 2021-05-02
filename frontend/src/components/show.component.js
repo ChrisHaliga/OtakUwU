@@ -72,7 +72,7 @@ export default function Show({ chooseShow, show, all_platforms, isMiddle }) {
       <Form.Control size="md" type="text" placeholder="New"   onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
       style={{ marginBottom:"3"}}/>
       </Form> */}
-          <button class="form-button" ><h6>Add</h6></button>
+          <button class="form-button" ><h6></h6></button>
         </div>
         {lists}
       </div>

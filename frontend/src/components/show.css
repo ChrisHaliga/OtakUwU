@@ -92,11 +92,10 @@
     border-color: #f18ecb;
 } */
 .button{
-    min-height: 2.5rem;
+    min-height: 3rem;
     min-width: 2.5rem;
     border-radius: 50%; 
     background-color: #FFB5E2;
-    border-radius: 50%;
     border-color:#FFB5E2;
 }
 .button:hover{
@@ -104,9 +103,10 @@
     transition: 0.3s;
 }
 .form-button{
-  width: 50px;
+  width: 40px;
   height: 40px;
   border-color: #FFB5E2;
+  border-radius: 0%;
   color: white;
   background-color: #FFB5E2;
 
