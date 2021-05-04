@@ -10,7 +10,7 @@ import plus from './plus.png';
 //react functional components are stateless so they don't re render
 //unless a stateful parent component passes a prop to them
 
-export default function Show({ chooseShow, show, all_platforms, isMiddle }) {
+export default function Show({ chooseShow, token, user, show, all_platforms, isMiddle }) {
   // var chooseThisShow = () =>{
   //   console.log("chose " + show.title);
   //   //changing this value does not change how the show looks even though this show is marked as middle
@@ -29,6 +29,17 @@ export default function Show({ chooseShow, show, all_platforms, isMiddle }) {
   useEffect(() => {
 
     axios.get("http://localhost:3001/watchlists").then(response => {
+        setLists(response.data);
+       setLists(response.data.map(list => (
+         <Playlist list={list} show={show} />
+       )));
+     })
+       .catch((error) => {
+         console.log(error);
+    });
+    //method to get watchlists for specific user - still some bugs so commented out
+      /*axios.get(`http://localhost:3001/watchlists/${user.username}`).then(response => {
+          console.log(response.data);
       setLists(response.data);
       setLists(response.data.map(list => (
         <Playlist list={list} show={show} />
@@ -36,7 +47,7 @@ export default function Show({ chooseShow, show, all_platforms, isMiddle }) {
     })
       .catch((error) => {
         console.log(error);
-      });
+      });*/
 
   }, []);
 
@@ -80,8 +91,16 @@ export default function Show({ chooseShow, show, all_platforms, isMiddle }) {
     </Popover>
   );
 
+    const popover2 = (
+    <Popover >
+      <div>
+        <h3>Login to add shows to your watchlists!</h3>
+      </div>
+    </Popover>
+  );
+
   const AddButton = () => (
-    <OverlayTrigger trigger="click" placement="right" overlay={popover} >
+    <OverlayTrigger trigger="click" placement="right" overlay={token ? popover:popover2} >
       <Button variant="success" style={{ backgroundColor: "black", borderColor: "black" }}><img src={plus} style={{ width: "2rem", height: "2rem" }} /></Button>
     </OverlayTrigger>
   );

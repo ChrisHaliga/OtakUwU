@@ -55,7 +55,7 @@ function App() {
       if(type == "Shows"){
           return(
             <div>
-              <Show chooseShow={chooseShow} show={entry} isMiddle={MiddleShow} all_platforms={all_platforms}/>
+              <Show chooseShow={chooseShow} token={token} user={user} show={entry} isMiddle={MiddleShow} all_platforms={all_platforms}/>
             </div>
           )
       }/* else if(List.title == "Watchlist"){
