@@ -3,11 +3,9 @@ const cheerio = require("cheerio");
 const fs = require('fs');
 const US = require('./updateServer.js');
 
-<<<<<<< HEAD
 var primeScraper = (async () => {
 
-    const amazonPrimeLink = "https://www.amazon.com/s?i=movies-tv&bbn=2958763011&rh=n%3A2958763011%2Cp_n_format_browse-bin%3A2650306011%2Cp_85%3A2470955011%2Cp_n_availability%3A8219609011&dc&qid=1616718146&rnid=8219608011&ref=sr_pg_1"
-=======
+
 const scrape = (($) => 
 {
     // scrape
@@ -56,7 +54,7 @@ const scrape = (($) =>
             link:'https://www.amazon.com/gp/video/storefront/',
             icon: 'AmazonPrimeVideo'
         };
->>>>>>> 3f64d745bde2ab5ebe061c99cab7fcf9048dde33
+
 
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
