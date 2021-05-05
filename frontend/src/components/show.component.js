@@ -98,7 +98,7 @@ export default function Show({ chooseShow, token, list, show, all_platforms, isM
 
             <div class="card-body info">
               <h5 class="card-title title" >{show.title}</h5>
-              <p class="card-text text" > {show.description?show.description:"This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer"}</p>
+              <p class="card-text text" >{show.description?show.description:"No Description"}</p>
 
               <div class="row bottomElements ">
 
