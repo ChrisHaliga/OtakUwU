@@ -55,7 +55,7 @@ function App() {
       if(type == "Shows"){
           return(
             <div>
-              <Show chooseShow={chooseShow} token={token} user={user} show={entry} isMiddle={MiddleShow} all_platforms={all_platforms}/>
+              <Show chooseShow={chooseShow} token={token} list={Playlists} show={entry} isMiddle={MiddleShow} all_platforms={all_platforms}/>
             </div>
           )
       }/* else if(List.title == "Watchlist"){
@@ -153,6 +153,18 @@ function App() {
     }
     
   }, [Playlists]);
+
+  useEffect(() => {
+    //take the search results and set primary list
+    axios.get(`http://localhost:3001/watchlists/${user.username}`).then(response => {
+      setPlaylists(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+    
+  }, [user]);
+
 
 
   const signin = (token, username) => {
