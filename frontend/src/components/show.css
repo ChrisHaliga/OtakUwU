@@ -102,6 +102,17 @@
     background-color: magenta;
     transition: 0.3s;
 }
+.remove-button{
+    min-height: 3rem;
+    min-width: 2.5rem;
+    border-radius: 50%; 
+    background-color: #4b48f0;
+    border-color:#4b48f0;;
+}
+.remove-button:hover{
+    background-color: red;
+    transition: 0.3s;
+}
 .form-button{
   width: 40px;
   height: 40px;

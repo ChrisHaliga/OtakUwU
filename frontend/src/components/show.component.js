@@ -31,7 +31,7 @@ export default function Show({ chooseShow, token, user, show, all_platforms, isM
     axios.get("http://localhost:3001/watchlists").then(response => {
         setLists(response.data);
        setLists(response.data.map(list => (
-         <Playlist list={list} show={show} />
+         <Playlist list={list} show={show} user = {user} />
        )));
      })
        .catch((error) => {
@@ -51,12 +51,24 @@ export default function Show({ chooseShow, token, user, show, all_platforms, isM
 
   }, []);
 
-  const handleChange = (event) => {
-    console.log("a");
+  const handleKeyPress= (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
       console.log(event.target.value);
-      setName(event.target.value);
+      var str = event.target.value;
+      axios.post("http://localhost:3001/watchlists/add",
+        {
+          title: str,
+        }).then(response=>{
+         console.log(response)
+          
+        }) 
+        .catch((error) => {
+          console.log(error);
+        })
+
+      // setName(event.target.value);
+      //
     }
 
   };
@@ -78,7 +90,7 @@ export default function Show({ chooseShow, token, user, show, all_platforms, isM
 
         </div>
         <div class="row">
-          <input class="watch-form form-control mb-3 mr-2" type="text" placeholder="New List" onChange={(e) => { handleChange(e) }} ></input>
+          <input class="watch-form form-control mb-3 mr-2" type="text" placeholder="New List" onKeyPress={ handleKeyPress} ></input>
           {/* <Form onChange = {handleChange} class = "watch-form">
       <Form.Control size="md" type="text" placeholder="New"   onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
       style={{ marginBottom:"3"}}/>
