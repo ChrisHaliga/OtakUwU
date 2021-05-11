@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const parser = require('body-parser');
 const paginate = require('express-paginate');
 const {scrape} = require('./scraper/main');
+const {recoverInfo, updateDatabase} = require('./scraper/general');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -41,6 +42,7 @@ const server = app.listen(port, () => {
   console.log(`Server is running on port: ${port}`)
 });
 
-scrape();
-
+//scrape();
+//recoverInfo(467);
+updateDatabase();
 module.exports = server;
