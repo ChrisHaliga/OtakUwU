@@ -1,6 +1,7 @@
 const fs = require('fs');
 let Show = require('../models/show.model');
 const { exit } = require('process');
+const { bestMatch } = require('../fuzzySearch');
 
 const crunchyroll = {
     websiteName:"crunchyroll", 
@@ -106,7 +107,46 @@ exports.mhtmlScrapeAnime = (html, phase, page, platform) => {
     return({"response":"", "error": error});
 }
 
-exports.mhtmlScrapeContent = (html, phase, page, platform) => {
+const generateInfoPage = (page) => {
+    fs.readFile(`Backend/scraper/html/info_${page}.html`, "utf-8", (err, data) => {
+        if(!data) return;
+        animes = data.split(`</li><li data-type="anime'data-id=`).slice(1); //cuts out the garbage before the anime
+        
+        my_list = []; //Where the finished list will go
+
+        for(anime of animes){
+
+            let name = description = image = anime;
+            if(name.includes(`<h5 class='theme-font'>`)){
+                name = name.split(`<h5 class='theme-font'>`)[1].split(`</`)[0];
+                if(description.includes(`</li></ul><p>`)){
+                    description = description.split(`</li></ul><p>`)[1].split(`</`)[0];
+                    if(description.includes("https://www.anime-planet.com/") || description.includes("This entry currently doesn't have a synopsis. Check back soon!") || description.length > 1000)
+                        description = "No Description";
+                }    
+                else
+                    description = "No Description";
+                if(image.includes(`'data-src="`))
+                    image = "https://www.anime-planet.com" + image.split(`'data-src="`)[1].split(`'`)[0];
+                else
+                    image = null;
+                my_list.push({"title":name, "description": description, "icon":image});
+            }
+            else
+                console.log(`Error: Name Token on Page: ${page}`);                              
+        }
+        
+        fs.writeFile(`Backend/scraper/lists/info/info_${page}.list`, `${my_list.map(l =>`${l.title}>:|:<${l.description}>:|:<${l.icon}`).join('|||||')}]`, function (err) {
+            if (err) error = err;
+        });
+    });
+}
+exports.recoverInfo = (top) =>{
+    for(let i = 0; i <= top; i++)
+        generateInfoPage(i);
+}
+
+exports.mhtmlScrapeContent = (html, phase, page) => {
     let error = 0;
     html = clean(html.replace(/=(\r\n|\n|\r)/gm, ""));
 
@@ -121,123 +161,101 @@ exports.mhtmlScrapeContent = (html, phase, page, platform) => {
         });
     }
     if(phase == "finish"){
-        fs.readFile(`Backend/scraper/html/info_${page}.html`, "utf-8", (err, data) => {
-            animes = data.split(`</li><li data-type="anime'data-id=`).slice(1); //cuts out the garbage before the anime
-            
-            my_list = []; //Where the finished list will go
-
-            for(anime of animes){
-
-                let name = description = image = anime;
-                if(name.includes(`<h5 class='theme-font'>`)){
-                    name = name.split(`<h5 class='theme-font'>`)[1].split(`</`)[0];
-                    if(description.includes(`</li></ul><p>`)){
-                        description = description.split(`</li></ul><p>`)[1].split(`</`)[0];
-                        if(description.includes("https://www.anime-planet.com/") || description.includes("This entry currently doesn't have a synopsis. Check back soon!") || description.length > 1000)
-                            description = "No Description";
-                    }    
-                    else
-                        description = "No Description";
-                    if(image.includes(`'data-src="`))
-                        image = "https://www.anime-planet.com" + image.split(`'data-src="`)[1].split(`'`)[0];
-                    else
-                        image = null;
-                    my_list.push({"title":name, "description": description, "icon":image});
-                }
-                else
-                    console.log(`Error: Name Token on Page: ${page}`);                              
-            }
-                
-            
-            /* let save = (list, j_init) => {
-                if(list.length < 1) return; //Finish
-
-                Show.find({ $query: {}, $orderby: {title : -1} })
-                .then(shows => {
-                    if(shows){
-                        for(let i = 0; i < list.length; i++){
-                            for(let j = j_init; j < shows.length; j++){
-                                if(list[i].title.includes(shows[j].title)){
-                                    Show.findByIdAndUpdate(shows[j]._id, {$set:{description:list[i].description, icon:list[i].icon}})
-                                    .then(() => {console.log(`Updated ${shows[j].title}'s description and icon.`); save(list.slice(i), j);})
-                                    .catch(err=>console.log(err));
-                                }
-                                if(list[i].title.localeCompare(shows[j].title) < 0) break;
-                            }
-                        }
-                    }
-                })
-                .catch(err=>console.log(err));
-            }
-
-            save(my_list, 0); //Start */
-            
-            fs.writeFile(`Backend/scraper/lists/info/info_${page}.list`, `${my_list.map(l =>`${l.title}>:|:<${l.description}>:|:<${l.icon}`).join('|||||')}]`, function (err) {
-                if (err) error = err;
-                /* fs.unlink(`Backend/scraper/info_${page}.tmp`,function(err){
-                    if(err) error =err;
-                    console.log("done.");
-                }); */
-            });
-        });
+        generateInfoPage(page);
     }
     return({"response":"", "error": error});
 }
 
 exports.updateDatabase = ()=>{
-    let list = [];
-    fs.readdir('Backend/scraper/lists/info/', (err, files) => {
-        console.log(files)
-        if(!err){
-            let i = 0
-            function doFile(files_left){
-                if(!files_left.length)
-                    return;
-                console.log(files_left[0]);
-                fs.readFile(`Backend/scraper/lists/info/${files_left[0]}`, "utf-8", (err, data) => {
-                    if(!err){
-                        let issues = false;
-                        data = data.split("|||||")
-                        let i = 0;
-                        data = data.map(show => {
-                            show = data[i].split(">:|:<");
-                            if(show.length != 3){
-                                issues = true;
-                                return null;
-                            }
-
-                            let set = {"description": show[1]}
-                            if(show[2] != "https://cdn.anime-planet.com/images/anime/default/default-anime-spring.png")
-                                set = {"description": show[1], "icon": show[2]};
-
-                            return {updateOne: {
-                                "filter" : { "title" : show[0] },
-                                "update" : { $set : set }
-                            }}
-                        }).filter(show => {return show != null});
-                        
-                        Show.bulkWrite(data)
-                        .then(ret => {
-                            if(ret)
-                                console.log(`Bulk Wrote ${files_left[0]} to database.`);
-                            if(!issues){
-                                fs.unlink(`Backend/scraper/lists/info/${files_left[0]}`,function(err){
-                                    if(err) console.log(`\nError occured attempting to delete ${files_left[0]}\n`);
-                                });
-                            }
-                        })
-                        .catch(err=> {console.log("Error bulk updating shows.");issues = true;})
-                        .finally(() => {doFile(files_left.slice(1))})
-                    }
-                    else
-                        console.log(`Scraping Error: Issue reading file ${files[i]}.`)
-                })
-            }
-            doFile(files);
-        }
-        else
-            console.log("Scraping Error: Issue reading directory.")
-    })
+    Show.find()
+    .then(shows =>{
+        let show_index = 0;
+        fs.readdir('Backend/scraper/lists/info/', (err, files) => {
+            if(!err){
+                let i = 0
+                function doFile(files_left){
+                    if(!files_left.length || show_index >= shows.length)
+                        return;
+                    console.log(files_left[0]);
+                    fs.readFile(`Backend/scraper/lists/info/${files_left[0]}`, "utf-8", (err, data) => {
+                        if(!err){
+                            let issues = false;
+                            let ap_shows = data.split("|||||").map(show => {
+                                show = show.split(">:|:<");
+                                if(show.length != 3){
+                                    issues = true;
+                                    return null;
+                                }
+                                /*let set = {"description": show[1]}
+                                if(show[2] != "https://cdn.anime-planet.com/images/anime/default/default-anime-spring.png")
+                                    set = {"description": show[1], "icon": show[2]};
     
+                                return {updateOne: {
+                                    "filter" : { "title" : show[0] },
+                                    "update" : { $set : set }
+                                }}*/
+                                let ret = {};
+                                if(show.length >= 0) ret.title = show[0];
+                                if(show.length >= 1) ret.description = show[1]?show[1]:"No Description.";
+                                if(show.length >= 2) ret.icon = show[2]?show[2]:null;
+                                return ret;
+                            }).filter(show => {return show != null && show.title != null});
+                            if(ap_shows && ap_shows.length > 0){
+                                /* let last_relevant_index
+                                for(let i = show_index; i< shows.length; i++){
 
+                                    if(shows[i].title.localeCompare(ap_shows[ap_shows.length-1].title) >= 0){
+                                        last_relevant_index = i;
+                                        break;
+                                    }
+                                }
+                                
+                                let our_catelogue = shows.slice(show_index, last_relevant_index).map(s => s.title); */
+                                let our_catelogue = shows.map(s => s.title);
+                                let their_catelogue = ap_shows.map(s => s.title);
+                                //show_index = last_relevant_index;
+                                
+                                finalized_show = bestMatch(our_catelogue, their_catelogue).map(m =>{
+                                    if(m.match < 0 || m.match > ap_shows.length || ap_shows[m.match] == undefined) return null; 
+                                    
+                                    return {updateOne: {
+                                        "filter" : { "title" : m.original },
+                                        "update" : { $set : {
+                                            "description": ap_shows[m.match].description,
+                                            "icon": ap_shows[m.match].icon,
+                                            "match_percent":m.match_percent
+                                        }}
+                                    }}
+                                }).filter(s => s != null);
+
+                                
+                                for(s of finalized_show){
+                                    console.log("~Attempting to Update: " + s.updateOne.filter.title)
+                                }
+
+                                Show.bulkWrite(finalized_show)
+                                .then(ret => {
+                                    if(ret)
+                                        console.log(`Bulk Wrote ${files_left[0]} to database.`);
+                                    if(!issues){
+                                        fs.unlink(`Backend/scraper/lists/info/${files_left[0]}`,function(err){
+                                            if(err) console.log(`\nError occured attempting to delete ${files_left[0]}\n`);
+                                        }); 
+                                    }
+                                })
+                                .catch(err=> {console.log("Error bulk updating shows.");issues = true;})
+                                .finally(() => {doFile(files_left.slice(1))})
+                            }
+                        }
+                        else
+                            console.log(`Scraping Error: Issue reading file ${files[i]}.`)
+                    })
+                }
+                doFile(files);
+            }
+            else
+                console.log("Scraping Error: Issue reading directory.")
+        })
+    })
+    .catch(err => console.log(err))
 }
