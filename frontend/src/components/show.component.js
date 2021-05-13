@@ -61,7 +61,7 @@ export default function Show({ chooseShow, token, list, show, all_platforms, isM
           <button class="form-button" ><h6>Add</h6></button>
         </div>
         {list? list.map(l => (
-         <Playlist list={l} show={show} />
+         <Playlist list={l} show={show} token={token}/>
         )):''}
       </div>
 
