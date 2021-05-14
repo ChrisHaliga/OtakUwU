@@ -11,8 +11,8 @@ let scrape = () => {
         cur_time = Date.now()
         if(err || new Date(data) - cur_time >= 86100000){ //One day - 5 min
             
-            // netflix.main();
-            // prime.main(); 
+            netflix.main();
+            prime.main(); 
             //hbo.main();
             updateDatabase();
             
