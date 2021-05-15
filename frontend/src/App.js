@@ -38,8 +38,7 @@ function App() {
   const [count, setCount] = useState(1);  //count of pages
 
   function listType(title){
-    if(title.includes("Results for") || title == "Recently Added" || title.includes("Shows in")) return "Shows"
-    //else if(List.title == "")
+    if(title.includes("Results for") || title == "Recently Added" || title.includes("Shows in") || title.includes("Top Anime")) return "Shows"
     return(title);
   }
   function generateHTML(setList, List, title = null, data = null){
@@ -50,7 +49,6 @@ function App() {
       return null;
     }
     let type = listType(title);
-  
     setList({title:title, data:data, html:data.map(entry => {
       if(type == "Shows"){
           return(
@@ -98,8 +96,7 @@ function App() {
       {
         search_str: searchString
       }).then(response=>{
-        //setCount(response.data.count);
-        generateHTML(setPrimaryList, PrimaryList, `Results for '${searchString}'`, response.data.data);
+        generateHTML(setPrimaryList, PrimaryList, (searchString == '') ? 'Top Anime' : `Results for '${searchString}'` , response.data.data);
       })
       .catch((error) => {
         console.log(error);
@@ -120,7 +117,7 @@ function App() {
     if(SecondaryList.title && listType(SecondaryList.title) == "Shows")
       generateHTML(setSecondaryList, SecondaryList);
 
-      }, [Shows, MiddleShow]);
+  }, [Shows, MiddleShow]);
 
   useEffect(() => {
     //setPrimaryList(title:`${watchlist.name}`, data:Playlist)?
