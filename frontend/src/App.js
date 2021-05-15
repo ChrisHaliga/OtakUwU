@@ -5,7 +5,7 @@ import { Component, useState, useEffect  } from 'react';
 import axios from "axios";
 import Show from './components/show.component';
 import { Form, Col, Row } from "react-bootstrap";
-import Playlist from './components/watchlist.component';
+import Watchlist from './components/watchlist.component';
 import Profile from './components/profile.component';
 import Homepage from './components/homepage.component';
 import Login from './components/login.component';
