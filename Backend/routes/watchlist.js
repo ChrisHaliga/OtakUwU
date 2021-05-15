@@ -47,11 +47,14 @@ router.route('/:username').get((req, res) => {
         .then(user=>{
             if(user)
             {
-                    Watchlist.find({"permissions.editors": user._id})
-                    .then(watchlists => res.json(setCoverShow(watchlists.filter(
-                        w => w.includes(shows) //filter out things that don't have shows
-                    ))))
-                    .catch(err => console.log(err));
+                Watchlist.find({"permissions.editors": user._id})
+                .populate({path: "shows", model: Show}).
+                exec(function (err, watchlists) {
+                if (err) {res.json({Error: err})}
+                else {
+                    res.json(watchlists)
+                    }
+                })
             }
             else {
                 return res.status(400).json({error: "User not logged in"});

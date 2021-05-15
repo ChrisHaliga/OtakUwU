@@ -6,7 +6,7 @@ const med_value = ["i", "you", "your", "me", "my", "we", "us", "our", "she", "he
 
 function getKeywords(s){
   let ret = s.toString().toLowerCase().replace(/[\s-~\|\+]+/g, " ")
-  .replace(/['’]s\b|s['’]\b|[:!\.,\?\*]+| season [0-9]+$| the final season$|^season [0-9]+ of |^a |^an |^the /g, "").split(" ");
+  .replace(/['’]s\b|s['’]\b|[-:!\.,\?\*]+| season [0-9]+$| the final season$|^season [0-9]+ of |^a |^an |^the /g, "").split(" ");
 
   return ret;
 }

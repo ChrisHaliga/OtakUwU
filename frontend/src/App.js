@@ -38,7 +38,7 @@ function App() {
   const [count, setCount] = useState(1);  //count of pages
 
   function listType(title){
-    if(title.includes("Results for") || title == "Recently Added") return "Shows"
+    if(title.includes("Results for") || title == "Recently Added" || title.includes("Shows in")) return "Shows"
     //else if(List.title == "")
     return(title);
   }
@@ -55,13 +55,13 @@ function App() {
       if(type == "Shows"){
           return(
             <div>
-              <Show chooseShow={chooseShow} token={token} list={Playlists} show={entry} isMiddle={MiddleShow} all_platforms={all_platforms}/>
+              <Show chooseShow={chooseShow} key={entry} token={token} list={Playlists} show={entry} isMiddle={MiddleShow} all_platforms={all_platforms}/>
             </div>
           )
       } else if(type == "Watchlist"){
         return(
           <div>
-            <Playlist watchlist={entry}/>
+            <Playlist chooseWatchlist={chooseWatchlist} watchlist={entry}/>
           </div>
         )
       } 
@@ -136,9 +136,13 @@ function App() {
     setPrimaryList(Friends)
   }, [Friends]);
   //2. by user selecting a playlist
+
+
   useEffect(() => {
-    //take the search results and set primary list
-    setPrimaryList(CurrentPlaylist);//AXIOS call for playlist by id
+    if (CurrentPlaylist) {
+      generateHTML(setPrimaryList, PrimaryList, `Shows in '${CurrentPlaylist.title}'`, CurrentPlaylist.shows);
+    }
+  
   }, [CurrentPlaylist]);
 
   //3. by selecting friends?
@@ -196,6 +200,11 @@ function App() {
     setMiddleShow(show.title);
   }
 
+  const chooseWatchlist = (watchlist) => {
+    console.log(watchlist.title + " watchlist chosen");
+    setCurrentPlaylist(watchlist);
+  }
+
   
   
 //   this.setState(prevState => ({
@@ -234,10 +243,10 @@ return (
               {PrimaryList.title}
             </h2>
           </div>
-          <div class="row">
-            <div class="primary_list">
+          <div class="row primary_list">
+            
               {PrimaryList.html}
-            </div>
+            
           </div>
           <div class="row">
             <h2 class="primary_list_title">

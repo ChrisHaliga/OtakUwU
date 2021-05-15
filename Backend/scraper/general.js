@@ -13,8 +13,8 @@ const crunchyroll = {
 const funimation = {
     websiteName:"funimation", 
     _id:"605e4280f80821d95ff291d9", 
-    start_delim:`class="text-link ellipsis">`, 
-    end_delim:`</a>`
+    start_delim:`data-title=3D&quot;`, 
+    end_delim:`&quot; data-versions=3D&quot;`
 }
 
 function clean(str) {
@@ -24,6 +24,34 @@ function clean(str) {
     .split("=E2=80=A6").join("...").split("=E2=80=94").join("-").split("=E2=80=9C").join("\"").split("=E2=80=9D").join("\"");
     
     return str.substring(str[0]==" "?1:0, str[-1]==" "?-1:str.length);
+}
+
+let save = (list, platform) => {
+    if(list.length < 1) return; //Finish
+
+    const title = list[0];
+
+    Show.findOne({"title":title})
+    .then(show => {
+        if(!show){
+            console.log(`creating new show for ${title}.`);
+            
+            const newShow = new Show ({title, "links":[platform._id], icon:"default"});
+            newShow.save()
+            .then(() => save(list.slice(1), platform))
+            .catch(err => console.log(err));
+
+        }else if(!show.links || !show.links.includes(platform._id)){
+            console.log(`Adding ${platform.websiteName} to ${title}.`);
+
+            Show.findByIdAndUpdate(show._id, {$push:{"links":platform._id}})
+            .then(save(list.slice(1), platform))
+            .catch(err=>console.log(err));
+        }else{
+            save(list.slice(1), platform);
+        }
+    })
+    .catch(err=>console.log(err));
 }
 
 exports.mhtmlScrapeAnime = (html, phase, page, platform) => {
@@ -46,12 +74,12 @@ exports.mhtmlScrapeAnime = (html, phase, page, platform) => {
             data = data.replace(/=(\r\n|\n|\r)/gm, "").split("\"").join("&quot;")
             animes = data.split(platform.start_delim).slice(1); //cuts out the garbage_0 makes an array of anime with end_delims and garbage
             
-            /* fs.writeFile(`Backend/scraper/${platform.websiteName}.html`, data, function (err) {
+            fs.writeFile(`Backend/scraper/html/${platform.websiteName}.html`, data, function (err) {
                 if (err) 
                     error = err;
                 else
                     console.log(err);
-            }); */
+            });
             
             my_list = []; //Where the finished list will go
 
@@ -62,49 +90,33 @@ exports.mhtmlScrapeAnime = (html, phase, page, platform) => {
                 else 
                     console.log("an error occured");
             }
-                
 
-            let save = (list) => {
-                if(list.length < 1) return; //Finish
-
-                const title = list[0];
-
-                Show.findOne({"title":title})
-                .then(show => {
-                    if(!show){
-                        console.log(`creating new show for ${title}.`);
-                        
-                        const newShow = new Show ({title, links:[platform._id], icon:"default"});
-                        newShow.save()
-                        .then(() => save(list.slice(1)))
-                        .catch(err => console.log(err));
-
-                    }else if(!show.links.includes(links[0])){
-                        console.log(`Adding ${platform.websiteName} to ${title}.`);
-
-                        Show.findByIdAndUpdate(show._id, {$push:{links:platform._id}})
-                        .then(save(list.slice(1)))
-                        .catch(err=>console.log(err));
-                    }else{
-                        save(list.slice(1));
-                    }
-                })
-                .catch(err=>console.log(err));
-            }
-
-            save(my_list); //Start
+            console.log(`Saving ${platform.websiteName} ${page}`)
+            save(my_list, platform); //Start
             
             fs.writeFile(`Backend/scraper/lists/${platform.websiteName}${page>1?`_${page}`:""}.list`, my_list.join('\n'), function (err) {
                 if (err) error = err;
-                console.log('finalizing');
+                console.log('\tfinalizing');
                 fs.unlink(`Backend/scraper/lists/${platform.websiteName}${page>1?`_${page}`:""}.tmp`,function(err){
                     if(err) error =err;
-                    console.log("done.");
+                    console.log("\tdone.");
                 });
             });
         });
     }
     return({"response":"", "error": error});
+}
+
+exports.saveFromList = ()=>{
+    for(platform of [crunchyroll, funimation]){
+        fs.readFile(`Backend/scraper/lists/${platform.websiteName}.list`, "utf-8", (err, data) => {
+            if(!err){
+                save(data.split("\n"), platform);
+            }
+            else
+                console.log(err)
+        });
+    }
 }
 
 const generateInfoPage = (page) => {
