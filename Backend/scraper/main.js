@@ -13,7 +13,7 @@ let scrape = () => {
             
             netflix.main();
             //prime.main(); 
-            //hbo.main();
+            hbo.main();
             updateDatabase();
             
             fs.writeFile('Backend/scraper/last-scraped.txt', cur_time, function (err) {
