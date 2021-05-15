@@ -1,9 +1,11 @@
 import React from 'react';
 
-export default function Playlist( {watchlist} ) {
+export default function Playlist( {watchlist, chooseWatchlist} ) {
+
+
     return (   
-        <div>
+        <button onClick={() => chooseWatchlist(watchlist)}>
            {watchlist.title} 
-        </div>
+        </button>
     )
 }
