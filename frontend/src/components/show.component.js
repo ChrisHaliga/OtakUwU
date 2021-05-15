@@ -10,7 +10,7 @@ import plus from './plus.png';
 //react functional components are stateless so they don't re render
 //unless a stateful parent component passes a prop to them
 
-export default function Show({ chooseShow, token, user, show, all_platforms, isMiddle }) {
+export default function Show({ chooseShow, token, list, show, all_platforms, isMiddle }) {
   // var chooseThisShow = () =>{
   //   console.log("chose " + show.title);
   //   //changing this value does not change how the show looks even though this show is marked as middle
@@ -25,33 +25,22 @@ export default function Show({ chooseShow, token, user, show, all_platforms, isM
   const [lists, setLists] = useState([]);
   const [name, setName] = useState(" ");
   // get all watchlists
+  // useEffect(() => {
+      
+  //   axios.get("http://localhost:3001/watchlists").then(response=>{ 
+  //   setLists(response.data);
+  //   setLists(response.data.map(list=> (
+  //     <Playlist list ={list} show={show}/>
+  //   )));
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
 
-  useEffect(() => {
-
-    axios.get("http://localhost:3001/watchlists").then(response => {
-        setLists(response.data);
-       setLists(response.data.map(list => (
-         <Playlist list={list} show={show} user = {user} />
-       )));
-     })
-       .catch((error) => {
-         console.log(error);
-    });
-    //method to get watchlists for specific user - still some bugs so commented out
-      /*axios.get(`http://localhost:3001/watchlists/${user.username}`).then(response => {
-          console.log(response.data);
-      setLists(response.data);
-      setLists(response.data.map(list => (
-        <Playlist list={list} show={show} />
-      )));
-    })
-      .catch((error) => {
-        console.log(error);
-      });*/
-
-  }, []);
+  // },[]);
 
   const handleKeyPress= (event) => {
+
     if (event.key === 'Enter') {
       event.preventDefault();
       console.log(event.target.value);
@@ -59,6 +48,7 @@ export default function Show({ chooseShow, token, user, show, all_platforms, isM
       axios.post("http://localhost:3001/watchlists/add",
         {
           title: str,
+          token:token
         }).then(response=>{
          console.log(response)
           
@@ -97,7 +87,10 @@ export default function Show({ chooseShow, token, user, show, all_platforms, isM
       </Form> */}
           <button class="form-button" ><h6></h6></button>
         </div>
-        {lists}
+        {list? list.map(l => (
+         <Playlist list={l} show={show} />
+        )):''}
+        {/* {lists} */}
       </div>
 
     </Popover>

@@ -55,7 +55,7 @@ function App() {
       if(type == "Shows"){
           return(
             <div>
-              <Show chooseShow={chooseShow} token={token} user={user} show={entry} isMiddle={MiddleShow} all_platforms={all_platforms}/>
+              <Show chooseShow={chooseShow} token={token} list={Playlists} show={entry} isMiddle={MiddleShow} all_platforms={all_platforms}/>
             </div>
           )
       }/* else if(List.title == "Watchlist"){
@@ -126,7 +126,7 @@ function App() {
     if(SecondaryList.title && listType(SecondaryList.title) == "Shows")
       generateHTML(setSecondaryList, SecondaryList);
 
-      }, [Shows, MiddleShow]);
+      }, [Shows, MiddleShow,token]);
 
   useEffect(() => {
     //setPrimaryList(title:`${watchlist.name}`, data:Playlist)?
@@ -153,6 +153,19 @@ function App() {
     }
     
   }, [Playlists]);
+
+  useEffect(() => {
+    //take the search results and set primary list
+    axios.get(`http://localhost:3001/watchlists/${user.username}`).then(response => {
+      setPlaylists(response.data);
+      console.log(Playlists);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+    
+  }, [user]);
+
 
 
   const signin = (token, username) => {
@@ -182,7 +195,7 @@ function App() {
       user.username?setSideBar(<Profile signout = {signout} user={user}/>):setSideBar(<Login signin = {signin}/>)
   }
   const chooseShow = (show) => {
-    console.log(show.title + " show chosen");
+    console.log(show.title + " show chosen"+ show._id);
     setMiddleShow(show.title);
   }
 
