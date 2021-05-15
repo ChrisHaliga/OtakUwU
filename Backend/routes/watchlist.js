@@ -141,7 +141,7 @@ router.route('/addShow').post((req, res) => {
                             {
                                 if(!watchlist.shows.includes(show._id))
                                 {
-                                    Watchlist.findOneAndUpdate({id:req.body.id, editors: {$in:[user._id]}}, {$push:{shows:show._id}})
+                                    Watchlist.findOneAndUpdate({id:req.body.id, "permissions.editors": user._id}, {$push:{shows:show._id}})
                                     .then(res.json("Show added"))
                                     .catch(err=> res.json(err));
                                 }
@@ -186,7 +186,7 @@ router.route('/removeShow').post((req, res) => {
                         {
                             if(watchlist.shows.includes(show._id))
                             {
-                                Watchlist.findOneAndUpdate({id:req.body.id}, {$pull:{shows:show._id}})
+                                Watchlist.findOneAndUpdate({id:req.body.id, "permissions.editors": user._id}, {$pull:{shows:show._id}})
                                 .then(res.json("Show removed"))
                                 .catch(err=> res.json(err));
                             }

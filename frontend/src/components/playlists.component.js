@@ -2,7 +2,7 @@ import React from 'react'
 import './show.css';
 import { useEffect } from 'react';
 import axios from "axios";
-export default function Playlists( {list,show} ) {
+export default function Playlists( {list,show,token} ) {
 
     const addShow = () =>{
         console.log(list.title);
@@ -10,7 +10,8 @@ export default function Playlists( {list,show} ) {
         axios.post("http://localhost:3001/watchlists/addShow",
         {
           show_title: show.title,
-          watchlist_title: list.title
+          id: list.id,
+          token: token
         }).then(response=>{
          console.log(response)
           
