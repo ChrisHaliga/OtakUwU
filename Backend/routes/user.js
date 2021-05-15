@@ -20,7 +20,7 @@ router.route('/signup').post((req, res) => {
     const username = req.body.username;
     const password = req.body.password;
     const email = req.body.email;
-    console.log(username, password, email);
+    //console.log(username, password, email);
     //res.send(req.body.username);
     if (!username || !email || !password) {
         return res.status(422).json({error: "please add all fields"});
@@ -63,7 +63,6 @@ router.route('/signup').post((req, res) => {
 
 //sign in
 router.route('/signin').post((req, res) => {
-    console.log('inside sign in');
     const username = req.body.username;
     const password = req.body.password;
     if (!username || !password) {
@@ -77,11 +76,9 @@ router.route('/signin').post((req, res) => {
         bcrypt.compare(password, savedUser.password)
         .then(matched => {
             if (matched) {
-                console.log("matched")
-                //res.json({message: "Successful login"})
                 const token = jwt.sign({_id:savedUser._id, date: Date.now()}, secret); //make more unique
                 User.updateOne({_id: savedUser._id}, {token: token}).then(user => {
-                    console.log("sending token");
+                    //console.log("sending token");
                     res.json({token: token})
                 }).catch(err => console.log(err));
             }
@@ -136,7 +133,7 @@ router.route('/update').post((req, res) => {
 
 //delete specific user - also check token
 router.route('/delete').delete((req, res) => {
-    console.log('inside delete');
+    //console.log('inside delete');
     token = req.body.token;
     if (token) {
         User.findOneAndDelete({token: token})

@@ -8,12 +8,12 @@ let main = (async () => {
     await page.setViewport( { width: 1920, height: 100000 } );
     const url = 'https://play.hbomax.com/page/urn:hbo:page:studio-ghibli';
     await page.goto(url, {waitUntil: 'networkidle2'});
-    await page.waitForSelector('a.default.class2.class3');
+    await page.waitForSelector('a.default.class2.class4');
 
     var titles = [];
     const urls = await page.evaluate(
         () => Array.from(
-            document.querySelectorAll('a.default.class2.class3'),
+            document.querySelectorAll('a.default.class2.class4'),
             a => a.getAttribute('aria-label')
         )
     );

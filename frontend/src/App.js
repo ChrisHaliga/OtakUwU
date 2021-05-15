@@ -55,16 +55,16 @@ function App() {
       if(type == "Shows"){
           return(
             <div>
-              <Show chooseShow={chooseShow} show={entry} isMiddle={MiddleShow} all_platforms={all_platforms}/>
+              <Show chooseShow={chooseShow} token={token} list={Playlists} show={entry} isMiddle={MiddleShow} all_platforms={all_platforms}/>
             </div>
           )
-      }/* else if(List.title == "Watchlist"){
-        (
+      } else if(type == "Watchlist"){
+        return(
           <div>
-            <Watchlist chooseWatchlist={chooseWatchlist} watchlist={entry} isMiddle={MiddleWatchlist} all_platforms={all_platforms}/>
+            <Playlist watchlist={entry}/>
           </div>
         )
-      } */
+      } 
     })})
   }
 
@@ -147,12 +147,22 @@ function App() {
   useEffect(() => {
     //take the search results and set primary list
     if(token){
-      setSecondaryList({title:"Watchlists", html:
-        <Playlist watchlist="secondary lists"/>
-      });
+      generateHTML(setSecondaryList, SecondaryList, "Watchlist", Playlists)
     }
     
   }, [Playlists]);
+
+  useEffect(() => {
+    //take the search results and set primary list
+    axios.get(`http://localhost:3001/watchlists/${user.username}`).then(response => {
+      setPlaylists(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+    
+  }, [user]);
+
 
 
   const signin = (token, username) => {
