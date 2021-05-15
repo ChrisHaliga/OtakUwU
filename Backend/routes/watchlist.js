@@ -14,31 +14,6 @@ router.route('/').get((req, res) => {
     .catch(err => res.statusCode);
 });
 
-//list of watchlists
-//list of shows in each
-//recursive function
-let setCoverShow = (list, index = 0) => {
-    console.log(list);
-    console.log(list.length);
-    console.log(index);
-    if(list.length < index) return list; //Finish
-    
-    if (!list[index] || !list[index].shows || list[index].shows.length < 1) 
-    {
-        list[index] = {...list[index], coverShow: null} // {...list[index], } - copies everything from before
-        setCoverShow(list, ++index) //set list to list[index]
-    }
-    
-    Show.findById(list[index].shows[0]).then(
-        show => 
-        {
-            list[index] = {...list[index], coverShow: show.icon} // {...list[index], } - copies everything from before
-            setCoverShow(list, ++index) //set list to list[index]
-        }
-    ).catch(err => console.log(err));
-}
-
-
 router.route('/:username').get((req, res) => {
     const username = req.params.username;
     console.log('inside get by user ' + username);
