@@ -124,7 +124,7 @@ function App() {
 
   useEffect(() => {
     //setPrimaryList(title:`${watchlist.name}`, data:Playlist)?
-  }, [Playlist]);
+  }, [Watchlist]);
 
   useEffect(() => {
     setPrimaryList(Friends)
