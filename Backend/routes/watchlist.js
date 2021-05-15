@@ -5,6 +5,7 @@ let User = require('../models/user.model');
 const {v4:uuidv4} = require( "uuid");
 const mongoose = require('mongoose');
 const { useReducer } = require('react');
+const { errors } = require('puppeteer');
 
 //get all watchlists 
 router.route('/').get((req, res) => {
@@ -12,6 +13,31 @@ router.route('/').get((req, res) => {
     .then(watchlists => res.json(watchlists))
     .catch(err => res.statusCode);
 });
+
+//list of watchlists
+//list of shows in each
+//recursive function
+let setCoverShow = (list, index = 0) => {
+    console.log(list);
+    console.log(list.length);
+    console.log(index);
+    if(list.length < index) return list; //Finish
+    
+    if (!list[index] || !list[index].shows || list[index].shows.length < 1) 
+    {
+        list[index] = {...list[index], coverShow: null} // {...list[index], } - copies everything from before
+        setCoverShow(list, ++index) //set list to list[index]
+    }
+    
+    Show.findById(list[index].shows[0]).then(
+        show => 
+        {
+            list[index] = {...list[index], coverShow: show.icon} // {...list[index], } - copies everything from before
+            setCoverShow(list, ++index) //set list to list[index]
+        }
+    ).catch(err => console.log(err));
+}
+
 
 router.route('/:username').get((req, res) => {
     const username = req.params.username;
@@ -22,8 +48,10 @@ router.route('/:username').get((req, res) => {
             if(user)
             {
                     Watchlist.find({"permissions.editors": user._id})
-                    .then(watchlists => res.json(watchlists))
-                    .catch(err => res.statusCode);
+                    .then(watchlists => res.json(setCoverShow(watchlists.filter(
+                        w => w.includes(shows) //filter out things that don't have shows
+                    ))))
+                    .catch(err => console.log(err));
             }
             else {
                 return res.status(400).json({error: "User not logged in"});
