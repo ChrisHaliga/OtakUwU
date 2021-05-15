@@ -5,7 +5,7 @@ import { Component, useState, useEffect  } from 'react';
 import axios from "axios";
 import Show from './components/show.component';
 import { Form, Col, Row } from "react-bootstrap";
-import Playlist from './components/playlist.component';
+import Playlist from './components/watchlist.component';
 import Profile from './components/profile.component';
 import Homepage from './components/homepage.component';
 import Login from './components/login.component';
@@ -61,7 +61,7 @@ function App() {
       } else if(type == "Watchlist"){
         return(
           <div>
-            <Playlist chooseWatchlist={chooseWatchlist} watchlist={entry}/>
+            <Watchlist chooseWatchlist={chooseWatchlist} watchlist={entry}/>
           </div>
         )
       } 
@@ -80,12 +80,6 @@ function App() {
     const ls = JSON.parse(localStorage.getItem(LS_KEY))
     if(ls) { //signed in
       signin(ls.token, ls.username)
-      
-      /* setPlaylists(
-        //axios call to get multiple playlists
-        //this is just an example of one
-        <Playlist watchlist="first one"/>
-      ) */
       
     }else{ //not signed in
       axios.post("http://localhost:3001/shows/recentlyadded").then(response=>{

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-export default function Playlist({ watchlist, chooseWatchlist }) {
+export default function Watchlist({ watchlist, chooseWatchlist }) {
 
     let coverShow = watchlist.shows[0];
     return (
