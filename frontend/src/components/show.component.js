@@ -45,9 +45,11 @@ export default function Show({ chooseShow, token, list, show, all_platforms, isM
       event.preventDefault();
       console.log(event.target.value);
       var str = event.target.value;
+      console.log(str+" "+token);
       axios.post("http://localhost:3001/watchlists/add",
         {
-          title: str,
+          title: str
+          ,
           token:token
         }).then(response=>{
          console.log(response)
@@ -88,7 +90,7 @@ export default function Show({ chooseShow, token, list, show, all_platforms, isM
           <button class="form-button" ><h6></h6></button>
         </div>
         {list? list.map(l => (
-         <Playlist list={l} show={show} />
+         <Playlist list={l} show={show} token = {token} />
         )):''}
         {/* {lists} */}
       </div>
