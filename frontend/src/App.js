@@ -1,10 +1,9 @@
 import React from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import './App.css';
-import { Component, useState, useEffect  } from 'react';
+import { useState, useEffect  } from 'react';
 import axios from "axios";
 import Show from './components/show.component';
-import { Form, Col, Row } from "react-bootstrap";
 import Watchlist from './components/watchlist.component';
 import Profile from './components/profile.component';
 import Homepage from './components/homepage.component';
