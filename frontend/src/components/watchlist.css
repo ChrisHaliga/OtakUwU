@@ -1,0 +1,12 @@
+.watchlist_card {
+    margin: 1rem auto;
+    position: relative; 
+}
+
+.watchlist_card_title {
+    z-index: 2;
+    position: absolute;
+    /* right: 0;
+    bottom: 0;
+    left: 0; */
+  }

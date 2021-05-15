@@ -23,8 +23,8 @@ router.route('/:username').get((req, res) => {
             if(user)
             {
                 Watchlist.find({"permissions.editors": user._id})
-                .populate({path: "shows", model: Show}).
-                exec(function (err, watchlists) {
+                .populate({path: "shows", model: Show})
+                .exec(function (err, watchlists) {
                 if (err) {res.json({Error: err})}
                 else {
                     res.json(watchlists)
