@@ -42,7 +42,7 @@ function App() {
   const [count, setCount] = useState(1);  //count of pages
 
   function listType(title){
-    if(title.includes("Results for") || title == "Recently Added") return "Shows"
+    if(title.includes("Results for") || title == "Recently Added" || title.includes("Shows in")) return "Shows"
     //else if(List.title == "")
     return(title);
   }
@@ -84,7 +84,7 @@ function App() {
       } else if(type == "Watchlist"){
         return(
           <div>
-            <Playlist watchlist={entry}/>
+            <Playlist chooseWatchlist={chooseWatchlist} watchlist={entry}/>
           </div>
         )
       } 
@@ -168,9 +168,13 @@ function App() {
     //setPrimaryList(Friends)
   }, [Friends]);
   //2. by user selecting a playlist
+
+
   useEffect(() => {
-    //take the search results and set primary list
-    //setPrimaryList(CurrentPlaylist);//AXIOS call for playlist by id
+    if (CurrentPlaylist) {
+      generateHTML(setPrimaryList, PrimaryList, `Shows in '${CurrentPlaylist.title}'`, CurrentPlaylist.shows);
+    }
+  
   }, [CurrentPlaylist]);
 
   //3. by selecting friends?
@@ -235,6 +239,11 @@ function App() {
     }
     else
       setHoveredShow({title:show.title});
+  }
+
+  const chooseWatchlist = (watchlist) => {
+    console.log(watchlist.title + " watchlist chosen");
+    setCurrentPlaylist(watchlist);
   }
 
   
