@@ -1,10 +1,8 @@
 import React from 'react'
 import './show.css';
-import { useEffect } from 'react';
 import axios from "axios";
-// import { useReducer } from 'react';
 export default function Playlists( {list,show,token} ) {
-console.log(list);
+
     const addShow = () =>{
         console.log(show.title);
         console.log(show);
@@ -12,8 +10,9 @@ console.log(list);
         console.log(list.shows);
         axios.post("http://localhost:3001/watchlists/addShow",
         {
-          title: show.title,
-          id: list._id
+          show_title: show.title,
+          id: list.id,
+          token: token
         }).then(response=>{
          console.log(response)
           

@@ -40,21 +40,19 @@ router.route('/signup').post((req, res) => {
                 else {
                     bcrypt.hash(password, 12)
                     .then(hashedPassword => {
+                        const token = jwt.sign({_id:username, date: Date.now()}, secret);
                         const newUser = new User({
                             username,
                             email, 
                             password: hashedPassword,
+                            token
                         })
                         newUser.save()
-                        .then(user => {
-                            const token = jwt.sign({_id:user._id, date: Date.now()}, secret); //make more unique
-                            User.updateOne({_id: user_id}, {token: token}).then(sameuser => {
-                                res.json({token: token})
-                            }).catch(err => console.log(err));
-                        }).catch(err => {
-                            console.log(err);
-                        })
+                        .then(user => res.json({token: token}))
+                        .catch(err => console.log(err));
+                        
                     })
+                    .catch(err=>console.log('Error while hashing password'))
                 }
             }).catch(err=>console.log('Find by username error' + err));
         }

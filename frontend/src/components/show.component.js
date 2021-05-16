@@ -9,18 +9,7 @@ import plus from './plus.png';
 
 //react functional components are stateless so they don't re render
 //unless a stateful parent component passes a prop to them
-
-export default function Show({ chooseShow, token, list, show, all_platforms, isMiddle }) {
-  // var chooseThisShow = () =>{
-  //   console.log("chose " + show.title);
-  //   //changing this value does not change how the show looks even though this show is marked as middle
-  // };
-  const [active, setActive] = useState(false);
-  useEffect(() => {
-    //take the search results and set primary list
-    setActive(isMiddle == show.title);
-    console.log("middle set" + isMiddle);
-  }, [isMiddle]);
+export default function Show({myClass, parentID, hoverShow, listIndex, token, list, show, index, all_platforms }) {
 
   const [lists, setLists] = useState([]);
   const [name, setName] = useState(" ");
@@ -90,7 +79,7 @@ export default function Show({ chooseShow, token, list, show, all_platforms, isM
           <button class="form-button" ><h6></h6></button>
         </div>
         {list? list.map(l => (
-         <Playlist list={l} show={show} token = {token} />
+         <Playlist list={l} show={show} token={token}/>
         )):''}
         {/* {lists} */}
       </div>
@@ -112,15 +101,15 @@ export default function Show({ chooseShow, token, list, show, all_platforms, isM
     </OverlayTrigger>
   );
 
-  if (isMiddle == show.title) {
+  if (listIndex == index) {
     return (
-      <div class=" main card container mt-3 mb-3 " >
+      <div class={`main card container mt-1 mb-1 ${myClass}`} >
 
         <div class="row ">
 
           <div class="col-4 image ">
 
-            <img class="icon " src={(!show.icon || show.icon == "default" || !show.icon.includes("http")) ? process.env.PUBLIC_URL + "/imgs/not_found.gif" : show.icon}
+            <img class="icon" src={(!show.icon || show.icon == "default" || !show.icon.includes("http")) ? process.env.PUBLIC_URL + "/imgs/not_found.gif" : show.icon}
               alt={`Cover art for ${show.title}`} />
           </div>
 
@@ -163,10 +152,10 @@ export default function Show({ chooseShow, token, list, show, all_platforms, isM
   else {
 
     return (
-      <div class="container mb-3">
-        <div class="col-4 image " >
+      <div class={`container mb-1 ${myClass}`}>
+        <div class="col-2 image " >
           <img class="icon " src={(!show.icon || show.icon == "default" || !show.icon.includes("http")) ? process.env.PUBLIC_URL + "/imgs/not_found.gif" : show.icon} alt={`Cover art for ${show.title}`}
-            onMouseOver={() => chooseShow(show)}
+            onMouseOver={() => hoverShow(show, parentID, index)}
           />
         </div>
       </div>

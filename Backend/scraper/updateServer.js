@@ -98,16 +98,7 @@ let updateServer = async (anime_list, target_platform) => {
                             }
                         }
                     }
-                    else {
-                        //console.log('if data has no links');
-                        try {
-                                let updatedShow1 = await Show.updateOne({_id:show._id, }, {$set: {links:[platform._id]}});
-                              //  console.log(`updateone show success--> ${updatedShow1}`);
-                            } catch(error) {
-                                console.log(`updateOne show error--> ${error}`);
-                                return error; 
-                            }
-                    }
+                    
                 }
             } catch(error) {
                 console.log(`findOne show error--> ${error}`);

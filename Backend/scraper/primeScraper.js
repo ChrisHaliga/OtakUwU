@@ -2,9 +2,8 @@ const puppeteer = require('puppeteer');
 const cheerio = require("cheerio");
 const fs = require('fs');
 const US = require('./updateServer.js');
-
-var primeScraper = (async () => {
-
+var numericalRegex = '^(0|[1-9][0-9]*)$'
+const anime_titles = [];
 
 const scrape = (($) => 
 {
@@ -55,92 +54,72 @@ const scrape = (($) =>
             icon: 'AmazonPrimeVideo'
         };
 
-
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    const anime_titles = [];
-    await page.goto(amazonPrimeLink, {
-        waitUntil: 'domcontentloaded'
-    })
-    .then(() => {
-        console.log("success! ")
-    const content = page.content();
-    content
-        .then((success) => {
-            // console.log("another success! ")
-            const $ = cheerio.load(success)
-            // console.log(cheerio.text($('body')));
-                // Print the full HTML
-            // console.log(`Site HTML: ${$.html()}\n\n`)
-
-            // Get first search result
-            var search_res = $('.s-result-item').html();
-            console.log(`First search result: ${search_res}`)
-            if (search_res !== undefined)
-            {
-                var number_of_results = $('a .s-result-item').length;
-                console.log(number_of_results);
-
-                //for each search result
-                // var link = $('.s-result-item').children().last().html();
-                // console.log(link);
-                $('.s-result-item').each(
-                    function (i, element) {
-                        //get child link
-                        var title = $(this).find($('.a-size-medium')).html();
-                        
-                        // if name already exists in Amazon
-                        //technically not necessary
-                        if (anime_titles.includes(title))
-                        {
-                            // some animes have the same name but are different versions, so getting the date
-                            var year_div = $(this).find($('div .a-color-secondary'));
-                            if (year_div != undefined)
-                            {
-                                var year = $(year_div).children().first().text();
-                                title = `${title} (${year})`;
-                            }
-                        }
-                        // anime_titles[i] = title;
-                        console.log(title);
-                        i++;
-                        if (title != null)
-                        {
-                            anime_titles.push({
-                                title: title.replace(/(\r\n|\n|\r|\t)/gm, "").trim(),
-                            });
-                        }
-                        
-                        }
-                )
-
-                console.log(anime_titles.length);
-                const platform = {
-                    websiteName:'Amazon Prime Video', 
-                    link:'https://www.amazon.com/gp/video/storefront/',
-                    icon: 'AmazonPrimeVideo'
-                };
-       
-                anime_titles.forEach( title =>
-                    console.log(title)
-                )
-                US.updateServer(anime_titles, platform);
-
-                // fs.writeFile('anime_title.txt', anime_titles, function (err) {
-                // if (err) return console.log(err);
-                // console.log('titles > anime_title.txt');
-                // });
-            }
-            else {
-                    console.log("Unable to fetch results. Please try again!")
-            }
-
-        })
-    })
-    await page.screenshot({ path: 'amazonpage1.png' });
-
-    await browser.close();
+        US.updateServer(anime_titles, platform);
     }
-    )();
+    else {
+            console.log("Unable to fetch results. Please try again!")
+    }
 
-module.exports.scraper = primeScraper;
+})
+
+let primeScraper  = () => {
+
+    const firefoxOptions = {
+        product: 'firefox',
+        extraPrefsFirefox: {
+        // Enable additional Firefox logging from its protocol implementation
+        // 'remote.log.level': 'Trace',
+        },
+        // Make browser logs visible
+        dumpio: true,
+        };
+        
+    let scraper = (async () => {
+        const amazonPrimeLink = "https://www.amazon.com/s?k=anime&i=instant-video&bbn=2858778011&rh=p_n_theme_browse-bin%3A2650364011%2Cp_n_ways_to_watch%3A12007865011&dc&qid=1617156936&rnid=12007862011&ref=sr_nr_p_n_ways_to_watch_1"
+        var number_of_pages = 0;
+        var currentPage = 0;
+        try {
+            const browser = await puppeteer.launch(firefoxOptions);
+            const page = await browser.newPage();
+        
+            await page.goto(amazonPrimeLink, {
+                waitUntil: 'domcontentloaded'
+            }); //loads first page
+
+            //load html of first page into cheerio
+            content = await page.content();
+            $ = cheerio.load(content);
+
+            // get number of pages
+            var pages = $('.a-disabled').last().text();
+            if (pages.match(numericalRegex))
+                number_of_pages = pages;
+            console.log('number of pages ', number_of_pages);
+            do
+            {
+                console.log('current page: ', currentPage);
+                currentPage++;
+                await Promise.all([
+                    await page.waitForSelector('.a-last'), //.a-last = next button
+                    content = await page.content(),
+                    $ = cheerio.load(content),
+                    scrape($),
+                    // await page.waitForNavigation(),
+                    await page.click('.a-last')
+                ])
+                
+            } 
+            while (currentPage < number_of_pages); 
+            
+            await browser.close();
+        
+        } catch (error)
+        { 
+            console.log(error);
+        }
+    })
+
+scraper();
+}
+
+module.exports.main = primeScraper;

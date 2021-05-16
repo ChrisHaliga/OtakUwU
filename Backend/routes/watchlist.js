@@ -5,6 +5,7 @@ let User = require('../models/user.model');
 const {v4:uuidv4} = require( "uuid");
 const mongoose = require('mongoose');
 const { useReducer } = require('react');
+const { errors } = require('puppeteer');
 
 //get all watchlists 
 router.route('/').get((req, res) => {
@@ -21,9 +22,14 @@ router.route('/:username').get((req, res) => {
         .then(user=>{
             if(user)
             {
-                    Watchlist.find({"permissions.editors": user._id})
-                    .then(watchlists => res.json(watchlists))
-                    .catch(err => res.statusCode);
+                Watchlist.find({"permissions.editors": user._id})
+                .populate({path: "shows", model: Show})
+                .exec(function (err, watchlists) {
+                if (err) {res.json({Error: err})}
+                else {
+                    res.json(watchlists)
+                    }
+                })
             }
             else {
                 return res.status(400).json({error: "User not logged in"});
@@ -141,7 +147,7 @@ router.route('/addShow').post((req, res) => {
                             {
                                 if(!watchlist.shows.includes(show._id))
                                 {
-                                    Watchlist.findOneAndUpdate({id:req.body.id, editors: {$in:[user._id]}}, {$push:{shows:show._id}})
+                                    Watchlist.findOneAndUpdate({id:req.body.id, "permissions.editors": user._id}, {$push:{shows:show._id}})
                                     .then(res.json("Show added"))
                                     .catch(err=> res.json(err));
                                 }
@@ -186,7 +192,7 @@ router.route('/removeShow').post((req, res) => {
                         {
                             if(watchlist.shows.includes(show._id))
                             {
-                                Watchlist.findOneAndUpdate({id:req.body.id}, {$pull:{shows:show._id}})
+                                Watchlist.findOneAndUpdate({id:req.body.id, "permissions.editors": user._id}, {$pull:{shows:show._id}})
                                 .then(res.json("Show removed"))
                                 .catch(err=> res.json(err));
                             }
