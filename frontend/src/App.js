@@ -23,6 +23,8 @@ function App() {
   const [SecondaryList, setSecondaryList] = useState({ id: "secondarylist", listIndex: 3, displayType: "Cards3D" });
   const [Sidebar, setSideBar] = useState(null);
   const [hoveredShow, setHoveredShow] = useState({});
+  const [watchlistChanged, changeWatchlist] = useState(false);
+
 
 
   const [all_platforms, setAllPlatforms] = useState([]);
@@ -75,7 +77,7 @@ function App() {
         if (type == "Shows") {
           return (
             <div>
-              <Show myClass={`${List.id} ${List.displayType} card_${Math.abs(i - index) > middle ? "x" : (i - index)} ${direction}`} parentID={List.id} hoverShow={hoverShow} listIndex={index} token={token} list={Playlists} show={entry} index={i} all_platforms={all_platforms} />
+              <Show myClass={`${List.id} ${List.displayType} card_${Math.abs(i - index) > middle ? "x" : (i - index)} ${direction}`} parentID={List.id} hoverShow={hoverShow} listIndex={index} token={token} list={Playlists} show={entry} index={i} all_platforms={all_platforms} changeWatchlist={changeWatchlist}/>
             </div>
           )
         } else if (type == "Watchlist") {
@@ -117,12 +119,6 @@ function App() {
     const ls = JSON.parse(localStorage.getItem(LS_KEY))
     if (ls) { //signed in
       signin(ls.token, ls.username)
-
-      /* setPlaylists(
-        //axios call to get multiple playlists
-        //this is just an example of one
-        <Playlist watchlist="first one"/>
-      ) */
 
     } else { //not signed in
       putIn(setSecondaryList, SecondaryList, getRecentlyAdded);
@@ -166,7 +162,7 @@ function App() {
     if (SecondaryList.title && listType(SecondaryList.title) == "Shows")
       generateHTML(setSecondaryList, SecondaryList, si);
 
-  }, [Shows, hoveredShow]);
+  }, [Shows, hoveredShow,token]);
 
   useEffect(() => {
     //setPrimaryList(title:`${watchlist.name}`, data:Playlist)?
@@ -197,14 +193,14 @@ function App() {
   }, [Playlists]);
 
   useEffect(() => {
-    //take the search results and set primary list
     axios.get(`http://localhost:3001/watchlists/${user.username}`).then(response => {
       setPlaylists(response.data);
+      console.log(Playlists);
     })
       .catch((error) => {
         console.log(error);
       });
-  }, [user]);
+  }, [user, watchlistChanged]);
   const signin = (token, username) => {
     setToken(token);
     setUser({ ...user, username: username });

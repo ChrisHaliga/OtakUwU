@@ -9,18 +9,47 @@ import plus from './plus.png';
 
 //react functional components are stateless so they don't re render
 //unless a stateful parent component passes a prop to them
-export default function Show({myClass, parentID, hoverShow, listIndex, token, list, show, index, all_platforms }) {
+export default function Show({myClass, parentID, hoverShow, listIndex, token, list, show, index, all_platforms, changeWatchlist }) {
 
   const [lists, setLists] = useState([]);
   const [name, setName] = useState(" ");
   // get all watchlists
+  // useEffect(() => {
+      
+  //   axios.get("http://localhost:3001/watchlists").then(response=>{ 
+  //   setLists(response.data);
+  //   setLists(response.data.map(list=> (
+  //     <Playlist list ={list} show={show}/>
+  //   )));
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
 
-  const handleChange = (event) => {
-    console.log("a");
+  // },[]);
+
+  const handleKeyPress= (event) => {
+
     if (event.key === 'Enter') {
       event.preventDefault();
       console.log(event.target.value);
-      setName(event.target.value);
+      var str = event.target.value;
+      console.log(str+" "+token);
+      axios.post("http://localhost:3001/watchlists/add",
+        {
+          title: str
+          ,
+          token:token
+        }).then(response=>{
+         console.log(response)
+          
+        }) 
+        .catch((error) => {
+          console.log(error);
+        })
+
+      // setName(event.target.value);
+      //
     }
 
   };
@@ -42,16 +71,17 @@ export default function Show({myClass, parentID, hoverShow, listIndex, token, li
 
         </div>
         <div class="row">
-          <input class="watch-form form-control mb-3 mr-2" type="text" placeholder="New List" onChange={(e) => { handleChange(e) }} ></input>
+          <input class="watch-form form-control mb-3 mr-2" type="text" placeholder="New List" onKeyPress={ handleKeyPress} ></input>
           {/* <Form onChange = {handleChange} class = "watch-form">
       <Form.Control size="md" type="text" placeholder="New"   onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
       style={{ marginBottom:"3"}}/>
       </Form> */}
-          <button class="form-button" ><h6>Add</h6></button>
+          <button class="form-button" ><h6></h6></button>
         </div>
         {list? list.map(l => (
-         <Playlist list={l} show={show} token={token}/>
+         <Playlist list={l} show={show} token={token} changeWatchlist={changeWatchlist}/>
         )):''}
+        {/* {lists} */}
       </div>
 
     </Popover>
