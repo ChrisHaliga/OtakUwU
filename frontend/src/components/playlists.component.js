@@ -1,6 +1,5 @@
 import React from 'react'
 import './show.css';
-import { useEffect } from 'react';
 import axios from "axios";
 export default function Playlists( {list,show,token} ) {
 
