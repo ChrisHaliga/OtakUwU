@@ -34,6 +34,7 @@
   bottom: 5px;
 }
 .platforms {
+  display: inline;
   float: left;
 }
 
@@ -119,4 +120,42 @@
   display: -webkit-box;
   -webkit-line-clamp: 6; /* number of lines to show */
   -webkit-box-orient: vertical;
+}
+
+.Cards3D.card_x{
+  display: none;
+}
+
+.Cards3D.card_-3{
+  width: 4rem;
+  transform: perspective(1000px) rotateY(-75deg) translateX(-730px) translateZ(-25px);
+}
+
+.Cards3D.card_-2{
+  width: 4rem;
+  transform: perspective(1000px) rotateY(-60deg) translateX(-475px) translateZ(-50px);
+}
+
+.Cards3D.card_-1{
+  width: 4rem;
+  transform: perspective(1000px) rotateY(-30deg) translateX(-220px) translateZ(-75px);
+}
+
+.Cards3D.card_1{
+  width: 4rem;
+  transform: perspective(1000px) rotateY(30deg) translateX(15px) translateZ(-75px);
+}
+
+.Cards3D.card_2{
+  width: 4rem;
+  transform: perspective(1000px) rotateY(60deg) translateX(270px) translateZ(-50px);
+}
+
+.Cards3D.card_3{
+  width: 4rem;
+  transform: perspective(1000px) rotateY(75deg) translateX(525px) translateZ(-25px);
+}
+
+.Cards3D.card_-2, .Cards3D.card_-1, .Cards3D.card_0, .Cards3D.card_1, .Cards3D.card_2, .Cards3D.card_-3, .Cards3D.card_3{
+  display: block;
 }

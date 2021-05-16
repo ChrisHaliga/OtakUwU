@@ -1,7 +1,5 @@
 const router = require('express').Router();
 let Show = require('../models/show.model');
-let {checkFunimation} = require('../scraper/checkFunimation');
-let crunchyroll = require('../scraper/crunchyroll')
 let {mhtmlScrapeAnime, mhtmlScrapeContent} = require('../scraper/general');
 const paginate = require('express-paginate');
 

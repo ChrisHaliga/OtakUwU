@@ -12,7 +12,7 @@ const crunchyroll = {
 
 const funimation = {
     websiteName:"funimation", 
-    _id:"605e4280f80821d95ff291d9", 
+    _id:"6065157303bed66940806466", 
     start_delim:`data-title=3D&quot;`, 
     end_delim:`&quot; data-versions=3D&quot;`
 }

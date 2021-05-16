@@ -16,10 +16,14 @@ function App() {
   const [token, setToken] = useState(null);
   const [user, setUser] = useState({});
 
-  const [PrimaryList, setPrimaryList] = useState({}); //{title:'shows', componentType, data:[], html:[]}
-  const [SecondaryList, setSecondaryList] = useState({});
+  const [timer, setTimer] = useState(Date.now());
+
+  const [List_init, setList_init] = useState(false);
+  const [PrimaryList, setPrimaryList] = useState({ id: "primarylist", listIndex: 0, displayType: "Cards3D" }); //{id:"primaryList", title:'shows', componentType, data:[], html:[], listIndex}
+  const [SecondaryList, setSecondaryList] = useState({ id: "secondarylist", listIndex: 3, displayType: "Cards3D" });
   const [Sidebar, setSideBar] = useState(null);
-  const [MiddleShow, setMiddleShow] = useState("");
+  const [hoveredShow, setHoveredShow] = useState({});
+
 
   const [all_platforms, setAllPlatforms] = useState([]);
   const [Shows, setShows] = useState([]);
@@ -38,20 +42,40 @@ function App() {
     if (title.includes("Results for") || title == "Recently Added" || title.includes("Shows in") || title.includes("Top Anime")) return "Shows"
     return (title);
   }
-  function generateHTML(setList, List, title = null, data = null) {
+  function generateHTML(setList, List, index = 3, title = null, data = null, displayType = null) {
+    if (!PrimaryList || !SecondaryList) return;
     if (!data) data = List.data;
     if (!title) title = List.title;
+    if (!displayType) displayType = List.displayType
+
     if (!data || !title) {
       console.log("ERROR: Misuse of generateHTML - Missing data or type/title.")
       return null;
     }
     let type = listType(title);
+    let direction = index - List.listIndex > 0 ? "Right" : (index - List.listIndex < 0 ? "Left" : "")
+
+    let numCards = Math.min(7, data.length - (1 - data.length % 2));
+    let middle = (numCards - 1) / 2;
+    if (displayType == 'Cards3D') {
+      let i = 0
+      for (i = 0; i < middle - index; i++) {
+        data = [data[data.length - 1]].concat(data.slice(0, -1));
+      }
+      index += i;
+      for (i = 0; i < index + middle - (data.length - 1); i++) {
+        data = data.concat([data[0]]).slice(1);
+      }
+      index -= i;
+    }
+
+
     setList({
-      title: title, data: data, html: data.map(entry => {
+      id: List.id, title: title, data: data, listIndex: index, displayType: displayType, html: data.map((entry, i) => {
         if (type == "Shows") {
           return (
             <div>
-              <Show chooseShow={chooseShow} key={entry} token={token} list={Playlists} show={entry} isMiddle={MiddleShow} all_platforms={all_platforms} />
+              <Show myClass={`${List.id} ${List.displayType} card_${Math.abs(i - index) > middle ? "x" : (i - index)} ${direction}`} parentID={List.id} hoverShow={hoverShow} listIndex={index} token={token} list={Playlists} show={entry} index={i} all_platforms={all_platforms} />
             </div>
           )
         } else if (type == "Watchlist") {
@@ -63,6 +87,22 @@ function App() {
         }
       })
     })
+  }
+
+  function getRecentlyAdded(callback) {
+    axios.post("http://localhost:3001/shows/recentlyadded")
+      .then(response => {
+        callback(response.data, "Recently Added");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  function putIn(setList, List, content, content_params = null) {
+    content((data, title) => {
+      generateHTML(setList, List, 0, title, data);
+    }, content_params)
   }
 
   useEffect(() => {
@@ -78,15 +118,16 @@ function App() {
     if (ls) { //signed in
       signin(ls.token, ls.username)
 
+      /* setPlaylists(
+        //axios call to get multiple playlists
+        //this is just an example of one
+        <Playlist watchlist="first one"/>
+      ) */
+
     } else { //not signed in
-      axios.post("http://localhost:3001/shows/recentlyadded").then(response => {
-        generateHTML(setSecondaryList, SecondaryList, "Recently Added", response.data)
-      })
-        .catch((error) => {
-          console.log(error);
-        });
+      putIn(setSecondaryList, SecondaryList, getRecentlyAdded);
     }
-  }, []);
+  }, [List_init]);
 
   useEffect(() => {
     //setCurrentPage(1);
@@ -95,42 +136,51 @@ function App() {
         {
           search_str: searchString
         }).then(response => {
-          generateHTML(setPrimaryList, PrimaryList, (searchString == '') ? 'Top Anime' : `Results for '${searchString}'`, response.data.data);
+          generateHTML(setPrimaryList, PrimaryList, 0, (searchString == '') ? 'Top Anime' : `Results for '${searchString}'`, response.data.data);
         })
         .catch((error) => {
           console.log(error);
         })
       console.log(Shows);
     }
-  }, [all_platforms, searchString])
+  }, [List_init, all_platforms, searchString])
 
+  useEffect(() => {
+    if (List_init === false && PrimaryList && SecondaryList) setList_init(true);
+  }, [PrimaryList, SecondaryList])
 
   //setting the Primary list in 3 ways
 
   //1. by search results
   useEffect(() => {
+    let pi = PrimaryList.listIndex;
+    let si = SecondaryList.listIndex
+
+    if (PrimaryList.id == hoveredShow.listID) pi = hoveredShow.index;
+    else if (SecondaryList.id == hoveredShow.listID) si = hoveredShow.index;
+
     //take the newly updated shows and set primary list
     if (PrimaryList.title && listType(PrimaryList.title) == "Shows")
-      generateHTML(setPrimaryList, PrimaryList);
+      generateHTML(setPrimaryList, PrimaryList, pi);
 
     if (SecondaryList.title && listType(SecondaryList.title) == "Shows")
-      generateHTML(setSecondaryList, SecondaryList);
+      generateHTML(setSecondaryList, SecondaryList, si);
 
-  }, [Shows, MiddleShow]);
+  }, [Shows, hoveredShow]);
 
   useEffect(() => {
     //setPrimaryList(title:`${watchlist.name}`, data:Playlist)?
   }, [Watchlist]);
 
   useEffect(() => {
-    setPrimaryList(Friends)
+    //setPrimaryList(Friends)
   }, [Friends]);
   //2. by user selecting a playlist
 
 
   useEffect(() => {
     if (CurrentPlaylist) {
-      generateHTML(setPrimaryList, PrimaryList, `Shows in ${CurrentPlaylist.title}`, CurrentPlaylist.shows);
+      generateHTML(setPrimaryList, PrimaryList, 0, `Shows in ${CurrentPlaylist.title}`, CurrentPlaylist.shows);
     }
 
   }, [CurrentPlaylist]);
@@ -141,7 +191,7 @@ function App() {
   useEffect(() => {
     //take the search results and set primary list
     if (token) {
-      generateHTML(setSecondaryList, SecondaryList, "Watchlist", Playlists)
+      generateHTML(setSecondaryList, SecondaryList, 0, "Watchlist", Playlists)
     }
 
   }, [Playlists]);
@@ -154,9 +204,7 @@ function App() {
       .catch((error) => {
         console.log(error);
       });
-
   }, [user]);
-
   const signin = (token, username) => {
     setToken(token);
     setUser({ ...user, username: username });
@@ -169,6 +217,7 @@ function App() {
     setUser({});
     setSideBar(null);
     localStorage.setItem(LS_KEY, null);
+    putIn(setSecondaryList, SecondaryList, getRecentlyAdded);
   }
 
   const handleChange = (e) => {
@@ -183,9 +232,19 @@ function App() {
     else
       user.username ? setSideBar(<Profile signout={signout} user={user} />) : setSideBar(<Login signin={signin} />)
   }
-  const chooseShow = (show) => {
-    console.log(show.title + " show chosen");
-    setMiddleShow(show.title);
+
+  const hoverShow = (show, listID, index) => {
+    if (timer && Date.now() - timer > 500) {
+      let List = PrimaryList;
+      if (SecondaryList.id == listID) List = SecondaryList;
+
+      if (List == undefined || List.data == undefined) return;
+
+      setTimer(Date.now());
+      setHoveredShow({ title: show.title, index: index, listID: listID });
+    }
+    else
+      setHoveredShow({ title: show.title });
   }
 
   const chooseWatchlist = (watchlist) => {
@@ -222,35 +281,30 @@ function App() {
         <div class="row">
           <div class={`col-${Sidebar ? '8' : '12'}`}>
             <div class="row">
-              <h2 class="primary_list_title">
+              <h2 class="primary list_title">
                 {PrimaryList.title}
               </h2>
             </div>
-            <div class="row primary_list">
-
+            <div class="row primary_list list justify-content-md-center">
               {PrimaryList.html}
-
             </div>
             <div class="row">
-              <h2 class="primary_list_title">
+              <h2 class="secondary list_title">
                 {SecondaryList.title}
               </h2>
             </div>
-            <div class="row">
+            <div class="row secondary_list list justify-content-md-center">
               {SecondaryList.html}
             </div>
-          </div>
 
-          <div class="col-4">
-            <div class="row">
-              {Sidebar}
+            <div class="col-4">
+              <div class="row">
+                {Sidebar}
+              </div>
             </div>
           </div>
         </div>
       </body>
-
-
-
     </html>
   );
 }

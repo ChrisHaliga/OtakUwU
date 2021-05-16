@@ -9,6 +9,7 @@ export default function Login({signin}) {
     const [error, setError] = useState('');
 
     const usernameRef = useRef()
+    const emailRef = useRef()
     const passwordRef = useRef()
 
     useEffect(()=>{
@@ -17,12 +18,17 @@ export default function Login({signin}) {
 
     function onLogin(e){
         e.preventDefault();
+        if(!usernameRef.current.value){setError("Username is required"); return}
+        if(!passwordRef.current.value){setError("Password is required"); return}
         setUser({username: usernameRef.current.value, password:passwordRef.current.value, submit:'signin'})
         
     }
     function onRegister(e){
+        if(!usernameRef.current.value){setError("Username is required"); return}
+        if(!passwordRef.current.value){setError("Password is required"); return}
+        if(!emailRef.current.value){setError("Email is required"); return}
         e.preventDefault();
-        setUser({username: usernameRef.current.value, password:passwordRef.current.value, submit:'signup'})
+        setUser({username: usernameRef.current.value, email:emailRef.current.value, password:passwordRef.current.value, submit:'signup'})
     }
 
     function submit(){
@@ -30,7 +36,7 @@ export default function Login({signin}) {
         axios.post(`http://localhost:3001/users/${user.submit}`, {
             username:user.username, 
             password:user.password,
-            email:"c@haligamail.com"
+            email:user.email
         })
         .then(res => {
             if(res.data.token)
@@ -45,11 +51,16 @@ export default function Login({signin}) {
     return (
         <>
             <h3>{login? "Log in": "Register"}</h3>
-            <h2>{error}</h2>
+            <h2 className="error">{error}</h2>
             <form onSubmit={login ? onLogin : onRegister}>
                 <div className="form-group">
                     <label htmlFor="username">Username:</label>
                     <input type="text" placeholder="Enter a username" ref ={usernameRef} id="username" required/>
+
+                    {login?"":
+                        <><label htmlFor="email">Email:</label>
+                        <input type="text" placeholder="Enter a valid email address" ref={emailRef} id="email" required/></>
+                    }
 
                     <label htmlFor="password">Password:</label>
                     <input type="password" placeholder="Enter a password" ref={passwordRef} id="password" required/>
@@ -57,7 +68,7 @@ export default function Login({signin}) {
                     <button type="submit">{login?"Log in":"register"}</button>
                 </div>
             </form>
-            <a onClick={() => setLogin(!login)}>{login?"Register": "Login"}</a>
+            <a  onClick={() => setLogin(!login)}>{login?"Register": "Login"}</a>
         </>
     );
 }
