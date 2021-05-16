@@ -27,8 +27,8 @@ export default function Playlists({ list, show, token, changeWatchlist}) {
     console.log(list.id);
     axios.post("http://localhost:3001/watchlists/removeShow",
       {
-        title: show.title,
-        watchlist: list,
+        show_title: show.title,
+        id: list.id,
         token: token
       }).then(response => {
         console.log(response)
@@ -39,7 +39,7 @@ export default function Playlists({ list, show, token, changeWatchlist}) {
       })
   }
 
-  if (!(list.shows.includes(show._id))) {
+  if (!(list.shows.includes(show))) {
     return (
 
       <div class="playlists">
