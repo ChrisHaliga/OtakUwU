@@ -5,6 +5,7 @@ let User = require('../models/user.model');
 const {v4:uuidv4} = require( "uuid");
 const mongoose = require('mongoose');
 const { useReducer } = require('react');
+const { errors } = require('puppeteer');
 
 //get all watchlists 
 router.route('/').get((req, res) => {
@@ -22,8 +23,8 @@ router.route('/:username').get((req, res) => {
             if(user)
             {
                 Watchlist.find({"permissions.editors": user._id})
-                .populate({path: "shows", model: Show}).
-                exec(function (err, watchlists) {
+                .populate({path: "shows", model: Show})
+                .exec(function (err, watchlists) {
                 if (err) {res.json({Error: err})}
                 else {
                     res.json(watchlists)
@@ -131,27 +132,37 @@ router.route('/update/:id').post((req, res) => {
 //add a show to the watchlist
 router.route('/addShow').post((req, res) => {
     const token = req.body.token; //extra check to make sure user is logged in
+    console.log(token);
+    console.log(req.body.show_title);
+    console.log(req.body.id);
     if (token) {
+        console.log("has token")
     User.findOne({token: req.body.token})
     .then(user=>{
         if(user) 
         {
+            console.log("has user")
             Show.findOne({title:req.body.show_title})
             .then(show => {
                 Watchlist.findOne({id:req.body.id})
                 .then(watchlist => {
                         if(watchlist)
                         {
+                            console.log("has watchlist")
                             if(watchlist.shows)
                             {
+                                console.log("has shows")
                                 if(!watchlist.shows.includes(show._id))
                                 {
+                                    console.log("show is being added to watchlist")
                                     Watchlist.findOneAndUpdate({id:req.body.id, "permissions.editors": user._id}, {$push:{shows:show._id}})
                                     .then(res.json("Show added"))
                                     .catch(err=> res.json(err));
                                 }
                                 else 
                                 {
+                                    console.log("show is already in watchlist")
+
                                     res.json.send()
                                 }
                             }
