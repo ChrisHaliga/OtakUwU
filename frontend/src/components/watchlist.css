@@ -1,7 +1,7 @@
 .watchlist_card {
     margin: 1rem auto;
     position: relative; 
-    padding: 15px;
+    padding: 0 15px;
 }
 
 .watchlist_card_title {

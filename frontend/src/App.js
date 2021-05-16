@@ -253,7 +253,7 @@ function App() {
       <header>
         <nav>
           <h1 class="navbar-brand">
-            <a href="/">Otakuwu</a>
+            <a href="/">Otak<h1 id="uwu">uwu</h1></a>
           </h1>
           <form class="form-inline my-2 my-lg-0">
             <input class="form-control" type="search" placeholder="Whatcha lookin' for?" aria-label="Search" onChange={handleChange} value={searchString} onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }} />

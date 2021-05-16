@@ -13,8 +13,18 @@ nav{
 }
 
 .navbar-brand {
+    display: inline;
+    font-family: Arial, Helvetica, sans-serif;
     color: #fff;
     cursor: pointer;
+}
+
+.navbar-brand a{
+    color:white;
+}
+
+.navbar-brand a h1{
+    color:rgb(255, 0, 106)
 }
 
 .wrapper {
@@ -52,7 +62,8 @@ a {
     text-decoration: none;
 }
 .list_title{
-    color: #000000;
+    color: white;
+    text-shadow: 0 0 2 black
 }
 
 .list_title.secondary{
@@ -78,4 +89,10 @@ button:hover {
 
 .list{
     padding-top: 25px;
+}
+
+.secondary_list.list{
+    margin: 10px 10px;
+    padding: 0;
+    background-color: rgba(0, 0, 0, 0.75);
 }

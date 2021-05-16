@@ -45,5 +45,5 @@ const server = app.listen(port, () => {
 //scrape();
 //recoverInfo(467);
 //updateDatabase();
-saveFromList();
+//saveFromList();
 module.exports = server;
