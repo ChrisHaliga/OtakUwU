@@ -23,7 +23,6 @@ function App() {
   const [SecondaryList, setSecondaryList] = useState({ id: "secondarylist", listIndex: 3, displayType: "Cards3D" });
   const [Sidebar, setSideBar] = useState(null);
   const [hoveredShow, setHoveredShow] = useState({});
-  const [watchlistChanged, changeWatchlist] = useState(false);
 
 
 
@@ -77,7 +76,7 @@ function App() {
         if (type == "Shows") {
           return (
             <div>
-              <Show myClass={`${List.id} ${List.displayType} card_${Math.abs(i - index) > middle ? "x" : (i - index)} ${direction}`} parentID={List.id} hoverShow={hoverShow} listIndex={index} token={token} list={Playlists} show={entry} index={i} all_platforms={all_platforms} changeWatchlist={changeWatchlist}/>
+              <Show myClass={`${List.id} ${List.displayType} card_${Math.abs(i - index) > middle ? "x" : (i - index)} ${direction}`} parentID={List.id} hoverShow={hoverShow} listIndex={index} token={token} list={Playlists} show={entry} index={i} all_platforms={all_platforms}/>
             </div>
           )
         } else if (type == "Watchlist") {
@@ -200,7 +199,7 @@ function App() {
       .catch((error) => {
         console.log(error);
       });
-  }, [user, watchlistChanged]);
+  }, [user]);
   const signin = (token, username) => {
     setToken(token);
     setUser({ ...user, username: username });
@@ -292,13 +291,12 @@ function App() {
             <div class="row secondary_list list justify-content-md-center">
               {SecondaryList.html}
             </div>
-
+            </div>
             <div class="col-4">
               <div class="row">
                 {Sidebar}
               </div>
             </div>
-          </div>
         </div>
       </body>
   </>

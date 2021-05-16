@@ -1,7 +1,7 @@
 import React from 'react'
 import './show.css';
 import axios from "axios";
-export default function Playlists({ list, show, token, changeWatchlist}) {
+export default function Playlists({ list, show, token}) {
 
   const addShow = () => {
     console.log(show.title);
@@ -15,7 +15,6 @@ export default function Playlists({ list, show, token, changeWatchlist}) {
         token: token
       }).then(response => {
         console.log(response);
-        changeWatchlist(true);
       })
       .catch((error) => {
         console.log(error);
