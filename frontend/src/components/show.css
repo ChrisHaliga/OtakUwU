@@ -34,6 +34,7 @@
   bottom: 5px;
 }
 .platforms {
+  display: inline;
   float: left;
 }
 
@@ -119,4 +120,39 @@
   display: -webkit-box;
   -webkit-line-clamp: 6; /* number of lines to show */
   -webkit-box-orient: vertical;
+}
+
+.Cards3D.card_x{
+  display: none;
+}
+
+.Cards3D.card_-3{
+  width: 4rem;
+  transform: perspective(1000px) rotateY(-86deg) translateX(-510px) translateZ(-375px);
+}
+
+.Cards3D.card_-2{
+
+  transform: perspective(1000px) rotateY(-60deg) translateX(-100px) translateZ(-275px);
+}
+
+.Cards3D.card_-1{
+  transform: perspective(1000px) rotateY(-30deg) translateX(0px) translateZ(-75px);
+}
+
+.Cards3D.card_1{
+  transform: perspective(1000px) rotateY(30deg) translateX(0px) translateZ(-75px);
+}
+
+.Cards3D.card_2{
+  transform: perspective(1000px) rotateY(60deg) translateX(100px) translateZ(-275px);
+}
+
+.Cards3D.card_3{
+  width: 4rem;
+  transform: perspective(1000px) rotateY(86deg) translateX(310px) translateZ(-375px);
+}
+
+.Cards3D.card_-2, .Cards3D.card_-1, .Cards3D.card_0, .Cards3D.card_1, .Cards3D.card_2, .Cards3D.card_-3, .Cards3D.card_3{
+  display: block;
 }
