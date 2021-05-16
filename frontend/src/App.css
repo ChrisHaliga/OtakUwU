@@ -43,8 +43,12 @@ li, a, button {
     color: violet;
     text-decoration: none;
 }
-.primary_list_title {
+.list_title{
     color: #000000;
+}
+
+.list_title.secondary{
+    margin-top: 50px;
 }
 button {
     padding: 9px 25px;
@@ -62,4 +66,8 @@ button:hover {
 
 .content {
     padding: 150px 50px 0;
+}
+
+.list{
+    padding-top: 25px;
 }

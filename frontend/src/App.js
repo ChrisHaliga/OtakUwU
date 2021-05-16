@@ -91,6 +91,22 @@ function App() {
     })})
   }
 
+  function getRecentlyAdded(callback){
+    axios.post("http://localhost:3001/shows/recentlyadded")
+    .then(response=>{
+      callback(response.data, "Recently Added");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+
+  function putIn(setList, List, content, content_params=null){
+    content((data, title) => {
+      generateHTML(setList, List, 0, title, data);
+    }, content_params)
+  }
+
   useEffect(() => {
 
     axios.get("http://localhost:3001/platforms").then(response=>{ 
@@ -111,12 +127,7 @@ function App() {
       ) */
       
     }else{ //not signed in
-      axios.post("http://localhost:3001/shows/recentlyadded").then(response=>{
-        generateHTML(setSecondaryList, SecondaryList, 3, "Recently Added", response.data)
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      putIn(setSecondaryList, SecondaryList, getRecentlyAdded);
     }
   }, [List_init]);
 
@@ -212,6 +223,7 @@ function App() {
     setUser({});
     setSideBar(null);
     localStorage.setItem(LS_KEY, null);
+    putIn(setSecondaryList, SecondaryList, getRecentlyAdded);
   }
   
   const handleChange = (e) =>{
@@ -280,19 +292,19 @@ return (
         <div class="row">
         <div class={`col-${ Sidebar? '8': '12'}`}>
           <div class="row">
-            <h2 class="primary_list_title">
+            <h2 class="primary list_title">
               {PrimaryList.title}
             </h2>
           </div>
-          <div class="row primary_list justify-content-md-center">
+          <div class="row primary_list list justify-content-md-center">
               {PrimaryList.html}
           </div>
           <div class="row">
-            <h2 class="primary_list_title justify-content-md-center">
+            <h2 class="secondary list_title">
               {SecondaryList.title}
             </h2>
           </div>
-          <div class="row secondary_list">
+          <div class="row secondary_list list justify-content-md-center">
             {SecondaryList.html}
           </div>
         </div>
