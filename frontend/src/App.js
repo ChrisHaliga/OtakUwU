@@ -183,7 +183,7 @@ function App() {
 
   useEffect(() => {
     if (CurrentPlaylist) {
-      generateHTML(setPrimaryList, PrimaryList, `Shows in '${CurrentPlaylist.title}'`, CurrentPlaylist.shows);
+      generateHTML(setPrimaryList, PrimaryList, 0, `Shows in '${CurrentPlaylist.title}'`, CurrentPlaylist.shows);
     }
   
   }, [CurrentPlaylist]);
@@ -266,7 +266,7 @@ function App() {
 
 
 return (
-   <html>
+   <>
      <header>
       <nav>
         <h1 class="navbar-brand" href="#">Otakuwu</h1>
@@ -319,7 +319,7 @@ return (
   
 
 
-</html>
+</>
   );
 }
 
