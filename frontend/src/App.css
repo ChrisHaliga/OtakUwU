@@ -21,8 +21,16 @@ nav{
     padding: 10px;
 }
 
-li, a, button {
+/* li, a, button {
     color: #ffffff;
+} */
+
+a{
+    color: #ffffff;
+}
+a:hover{
+    color: violet;
+    text-decoration: none;
 }
 .image--cover {
     width: 50px;
@@ -36,7 +44,7 @@ li, a, button {
     display: inline-block;
     padding: 0px 20px;
 }
-.nav__links li a {
+a {
     transition: all 0.3s ease 0s;
 }
 .nav__links li a:hover {

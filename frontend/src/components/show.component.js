@@ -79,7 +79,7 @@ export default function Show({myClass, parentID, hoverShow, listIndex, token, li
 
           <div class="col-4 image ">
 
-            <img class="icon " src={(!show.icon || show.icon == "default" || !show.icon.includes("http")) ? process.env.PUBLIC_URL + "/imgs/not_found.gif" : show.icon}
+            <img class="icon" src={(!show.icon || show.icon == "default" || !show.icon.includes("http")) ? process.env.PUBLIC_URL + "/imgs/not_found.gif" : show.icon}
               alt={`Cover art for ${show.title}`} />
           </div>
 
