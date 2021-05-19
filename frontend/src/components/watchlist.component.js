@@ -1,7 +1,24 @@
 import React from 'react';
 import './watchlist.css';
-export default function Watchlist({ watchlist, chooseWatchlist }) {
+import axios from "axios";
+import { FaTrash } from 'react-icons/fa';
+export default function Watchlist({ watchlist, chooseWatchlist, token }) {
+
     let coverShow = watchlist.shows[0];
+    
+    const removeWatchlist = () => {
+        console.log(token);
+        axios.post(`http://localhost:3001/watchlists/${watchlist.id}`,
+        {
+          token:token
+        }).then(response=>{
+         console.log(response)
+          
+        }) 
+        .catch((error) => {
+          console.log(error);
+        })
+    }
     return (
         <div class="watchlist_card">
             <div class="watchlist_card_image_holder">
@@ -11,6 +28,9 @@ export default function Watchlist({ watchlist, chooseWatchlist }) {
                     <h5 class="watchlist_card_title">
                         {watchlist.title}
                     </h5>
+                     
+                   <FaTrash  size="25px" class="bottom-right" onClick={removeWatchlist}/>
+                  
                 </div>
             </div>
         </div>
