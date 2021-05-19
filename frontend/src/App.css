@@ -1,5 +1,9 @@
 html {
   scroll-padding-top: 25px;
+  overflow-y: hidden;
+  zoom: .9; 
+  -moz-transform: scale(.9); 
+  -moz-transform-origin: 0 0;
 }
 nav {
   display: flex;
@@ -66,8 +70,10 @@ a {
   text-decoration: none;
 }
 .list_title {
+  position: relative;
+  z-index: 10;
   color: white;
-  text-shadow: 0 0 2 black;
+  text-shadow: 1px 1px 10px black, 1px 1px 1px black;
 }
 
 .list_title.secondary {
@@ -87,17 +93,18 @@ button:hover {
 }
 
 .content {
-  padding: 150px 50px 0;
+  padding: 115px 40px 0;
 }
 
 .list {
-  padding-top: 25px;
+  padding-top: 10px;
+  overflow-x: scroll;
 }
 
-.secondary_list.list {
+.secondary_list.list.watchlist {
   margin: 10px 10px;
-  padding: 0;
   background-color: rgba(0, 0, 0, 0.75);
+  height: 100%;
 }
 
 .login_bck {
@@ -107,4 +114,16 @@ button:hover {
 
 .login_bck label {
   margin-left: 10px;
+}
+
+
+/* For hiding scrollbars */
+.list::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.list {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
