@@ -82,7 +82,7 @@ function App() {
         } else if (type == "Watchlist") {
           return (
             <div>
-              <Watchlist chooseWatchlist={chooseWatchlist} watchlist={entry} />
+              <Watchlist chooseWatchlist={chooseWatchlist} watchlist={entry} token={token}/>
             </div>
           )
         }

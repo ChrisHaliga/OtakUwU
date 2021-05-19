@@ -83,33 +83,35 @@ router.route('/:id').get((req, res) => {
 });
 
 //delete specific watchlist 
-router.route('/:id').delete((req, res) => {
+router.route('/:id').post((req, res) => {
     const token = req.body.token;
     if (token) {
+        console.log('inside token');
         User.findOne({token: req.body.token})
-        .then(user=>{
+        .then(user=>{ 
             if (user) {
-                var index = user.watchlists.indexOf(req.params.id);
-                //console.log(req.params.id);
-                //console.log(index);
-                //console.log(user);
-                if (index != -1) {    //if current user is the owner of this list
-                    Watchlist.findByIdAndDelete(req.params.id)
+                //console.log('inside user');
+                //var index = user.watchlists.indexOf(req.body._id);  //pass in _id in body and id in params
+                //if (index != -1) {    //if current user is the owner of this list
+
+                    Watchlist.findOneAndDelete({id: req.params.id})
                     .then((response) => {
                         if (response) {
-                            //res.json('Watchlist deleted.'); 
-                            user.watchlists.splice(index, 1);
-                            user.save().then(()=>res.json('Watchlist removed for user')).catch(err => res.status(400).json('Error: ' + err));
+                            console.log('inside response');
+                            console.log(response);
+                            res.json('Watchlist deleted.'); 
+                            //user.watchlists.splice(index, 1);
+                            //user.save().then(()=>res.json('Watchlist removed for user')).catch(err => res.status(400).json('Error: ' + err));
                         }
                         else {
                             return res.status(400).json({error: "Watchlist not found"});
                         } 
                     })
-                    .catch(err => res.status(400).json('User Save Error: ' + err));
-                }
+                    .catch(err => res.status(400).json(err));
+               /* }
                 else {
                     return res.status(400).json({error: "Cannot remove the watchlist if you are not the owner"});
-                } 
+                } */
             }
             else {
                 return res.status(400).json({error: "User not logged in"});    
