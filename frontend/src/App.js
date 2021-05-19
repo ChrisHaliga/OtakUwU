@@ -84,7 +84,7 @@ function App() {
         } else if (type == "Watchlist") {
           return (
             <div>
-              <Watchlist chooseWatchlist={chooseWatchlist} watchlist={entry} />
+              <Watchlist chooseWatchlist={chooseWatchlist} watchlist={entry} token={token}/>
             </div>
           )
         }
@@ -280,13 +280,13 @@ function App() {
       </header>
       <body class="content">
         <div class="row">
-          <div class={`col-${Sidebar ? '8' : '12'}`}>
+          <div class={`col-${Sidebar ? '9' : '12'}`}>
             <div class="row">
               <h2 class="primary list_title">
                 {PrimaryList.title}
               </h2>
             </div>
-            <div class="row primary_list list justify-content-md-center">
+            <div class="row flex-nowrap primary_list list justify-content-md-center">
               {PrimaryList.html}
             </div>
             <div class="row">
@@ -294,12 +294,12 @@ function App() {
                 {SecondaryList.title}
               </h2>
             </div>
-            <div class="row secondary_list list justify-content-md-center">
+            <div class={`row flex-nowrap secondary_list list justify-content-md-center ${SecondaryList.title == "Watchlist"?"watchlist":""}`}>
               {SecondaryList.html}
             </div>
             </div>
-            <div class="col-4">
-              <div class="row">
+            <div class="col-3">
+              <div class="sidebar row">
                 {Sidebar}
               </div>
             </div>
