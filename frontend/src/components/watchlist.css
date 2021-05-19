@@ -1,27 +1,36 @@
 .watchlist_card {
-    margin: 1rem auto;
-    position: relative; 
-    padding: 0 15px;
+  margin: 1rem auto;
+  position: relative;
+  padding: 0 15px;
 }
 
 .watchlist_card_title {
-    color: #ffffff;
-    z-index: 2;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  color: #ffffff;
+  z-index: 2;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 .watchlist_card_image_overlay {
-    background: #000000;
+  background: #000000;
 }
 
 .watchlist_card_image {
-    margin-left: 0;
-    width: 13rem;
-    height: 16.9rem;
-    opacity: 0.6;
+  margin-left: 0;
+  width: 13rem;
+  height: 16.9rem;
+  opacity: 0.6;
 }
 .watchlist_card_image:hover {
-    cursor: pointer;
+  cursor: pointer;
+}
+
+.bottom-right {
+  z-index: 2;
+  position: absolute;
+  bottom: 7%;
+  right: 17%;
+  transform: translate(90%, 85%);
+  color: white;
 }
