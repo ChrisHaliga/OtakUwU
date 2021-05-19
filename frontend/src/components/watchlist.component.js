@@ -11,6 +11,9 @@ export default function Watchlist({ watchlist, chooseWatchlist }) {
                     <h5 class="watchlist_card_title">
                         {watchlist.title}
                     </h5>
+                    <h5 class="watchlist_card_title2">
+                        {watchlist.title}
+                    </h5>
                 </div>
             </div>
         </div>

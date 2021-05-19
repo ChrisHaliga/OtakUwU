@@ -1,7 +1,7 @@
 import React from 'react'
 import './show.css';
 import axios from "axios";
-export default function Playlists({ list, show, token}) {
+export default function Playlists({ list, show, token, watchlistUpdated}) {
 
   const addShow = () => {
     console.log(show.title);
@@ -19,6 +19,8 @@ export default function Playlists({ list, show, token}) {
       .catch((error) => {
         console.log(error);
       })
+
+      watchlistUpdated = true;
   }
   const deleteShow = () => {
     console.log(show.title);

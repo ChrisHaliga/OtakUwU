@@ -9,7 +9,7 @@ import plus from './plus.png';
 
 //react functional components are stateless so they don't re render
 //unless a stateful parent component passes a prop to them
-export default function Show({myClass, parentID, hoverShow, listIndex, token, list, show, index, all_platforms }) {
+export default function Show({myClass, parentID, hoverShow, listIndex, token, list, show, index, all_platforms, watchlistUpdated}) {
 
   const [lists, setLists] = useState([]);
   const [name, setName] = useState(" ");
@@ -79,7 +79,7 @@ export default function Show({myClass, parentID, hoverShow, listIndex, token, li
           <button class="form-button" ><h6></h6></button>
         </div>
         {list? list.map(l => (
-         <Playlist list={l} show={show} token={token}/>
+         <Playlist list={l} show={show} token={token} watchlistUpdated={watchlistUpdated}/>
         )):''}
         {/* {lists} */}
       </div>

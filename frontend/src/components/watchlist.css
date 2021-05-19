@@ -25,3 +25,12 @@
 .watchlist_card_image:hover {
     cursor: pointer;
 }
+
+.watchlist_card_title2 {
+    color: #ffffff;
+    z-index: 2;
+    position: absolute;
+    bottom: 10%;
+    right: 20%;
+    transform: translate(90%, 80%);
+}
