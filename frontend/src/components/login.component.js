@@ -45,11 +45,20 @@ export default function Login({signin}) {
                 setError("Invalid username or password")
             
         })
-        .catch(err => setError(err.error));
+        .catch(err => {
+            if (user.submit == 'signin'){
+                setError("Invalid username or password")
+            }
+            else {
+                 setError("Username or email taken")
+            }
+            
+        });
     }
 
     return (
         <>
+            <div class="login_bck">
             <h3>{login? "Log in": "Register"}</h3>
             <h2 className="error">{error}</h2>
             <form onSubmit={login ? onLogin : onRegister}>
@@ -64,11 +73,12 @@ export default function Login({signin}) {
 
                     <label htmlFor="password">Password:</label>
                     <input type="password" placeholder="Enter a password" ref={passwordRef} id="password" required/>
-
-                    <button type="submit">{login?"Log in":"register"}</button>
+                    <label>{error? error: ""}</label>
+                    <button type="submit">{login?"Log in":"Register"}</button>
                 </div>
             </form>
             <a  onClick={() => setLogin(!login)}>{login?"Register": "Login"}</a>
+            </div>
         </>
     );
 }
