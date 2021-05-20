@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react'
 import axios from 'axios';
+import './login.css';
 
 
 export default function Login({signin}) {
@@ -59,25 +60,27 @@ export default function Login({signin}) {
     return (
         <>
             <div class="login_bck">
-            <h3>{login? "Log in": "Register"}</h3>
-            <h2 className="error">{error}</h2>
-            <form onSubmit={login ? onLogin : onRegister}>
-                <div className="form-group">
-                    <label htmlFor="username">Username:</label>
-                    <input type="text" placeholder="Enter a username" ref ={usernameRef} id="username" required/>
+                <h3>{login? "Log in": "Register"}</h3>
+                <h1 className="error">{error? error: ""}</h1>
+                <form onSubmit={login ? onLogin : onRegister}>
+                    <div className="form-group">
+                        <label htmlFor="username">Username:</label>
+                        <input type="text" placeholder="Enter a username" ref ={usernameRef} id="username" required/>
+                        <br/>
+                        {login?"":
+                            <><label htmlFor="email">Email:</label>
+                            <input type="text" placeholder="Enter a valid email address" ref={emailRef} id="email" required/>
+                            <br/></>
+                        
+                        }
 
-                    {login?"":
-                        <><label htmlFor="email">Email:</label>
-                        <input type="text" placeholder="Enter a valid email address" ref={emailRef} id="email" required/></>
-                    }
-
-                    <label htmlFor="password">Password:</label>
-                    <input type="password" placeholder="Enter a password" ref={passwordRef} id="password" required/>
-                    <label>{error? error: ""}</label>
-                    <button type="submit">{login?"Log in":"Register"}</button>
-                </div>
-            </form>
-            <a  onClick={() => setLogin(!login)}>{login?"Register": "Login"}</a>
+                        <label htmlFor="password">Password: </label>
+                        <input type="password" placeholder="Enter a password" ref={passwordRef} id="password" required/>
+                        <br/>
+                        <button type="submit">{login?"Log in":"Register"}</button>
+                    </div>
+                </form>
+                <a  className="switch" onClick={() => setLogin(!login)}>{login?"Register": "Login"}</a>
             </div>
         </>
     );
