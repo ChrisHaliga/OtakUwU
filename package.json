@@ -25,6 +25,7 @@
     "node-schedule": "^2.0.0",
     "puppeteer": "^7.1.0",
     "react": "^17.0.1",
+    "react-icons": "^4.2.0",
     "react-router-dom": "^5.2.0",
     "request": "^2.88.2",
     "request-promise": "^4.2.6"

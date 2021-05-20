@@ -61,7 +61,7 @@ function App() {
     if (displayType == 'Cards3D') {
       let i = 0
       for (i = 0; i < middle - index; i++) {
-        data = [data[data.length - 1]].concat(data.slice(0, -1));
+        data = [data[data.length - 1]].concat(data.slice(0, data.length -1));
       }
       index += i;
       for (i = 0; i < index + middle - (data.length - 1); i++) {
