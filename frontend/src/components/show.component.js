@@ -9,13 +9,15 @@ import plus from './plus.png';
 
 //react functional components are stateless so they don't re render
 //unless a stateful parent component passes a prop to them
-export default function Show({myClass, parentID, hoverShow, listIndex, token, list, show, index, all_platforms, watchlistUpdated}) {
+export default function Show({ myClass, parentID, hoverShow, listIndex, token, list, show, index, all_platforms, updateWatchlists }) {
 
   const [lists, setLists] = useState([]);
   const [name, setName] = useState(" ");
+
+
   // get all watchlists
   // useEffect(() => {
-      
+
   //   axios.get("http://localhost:3001/watchlists").then(response=>{ 
   //   setLists(response.data);
   //   setLists(response.data.map(list=> (
@@ -28,25 +30,25 @@ export default function Show({myClass, parentID, hoverShow, listIndex, token, li
 
   // },[]);
 
-  const handleKeyPress= (event) => {
+  const handleKeyPress = (event) => {
 
     if (event.key === 'Enter') {
       event.preventDefault();
       console.log(event.target.value);
       var str = event.target.value;
-      console.log(str+" "+token);
+      console.log(str + " " + token);
       axios.post("http://localhost:3001/watchlists/add",
         {
-          title: str
-          ,
-          token:token
-        }).then(response=>{
-         console.log(response)
-          
-        }) 
+          title: str,
+          token: token
+        }).then(response => {
+          console.log(response)
+          updateWatchlists();
+        })
         .catch((error) => {
           console.log(error);
         })
+      
 
       // setName(event.target.value);
       //
@@ -71,23 +73,23 @@ export default function Show({myClass, parentID, hoverShow, listIndex, token, li
 
         </div>
         <div class="row">
-          <input class="watch-form form-control mb-3 mr-2" type="text" placeholder="New List" onKeyPress={ handleKeyPress} ></input>
+          <input class="watch-form form-control mb-3 mr-2" type="text" placeholder="New List" onKeyPress={handleKeyPress} ></input>
           {/* <Form onChange = {handleChange} class = "watch-form">
       <Form.Control size="md" type="text" placeholder="New"   onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
       style={{ marginBottom:"3"}}/>
       </Form> */}
           <button class="form-button" ><h6></h6></button>
         </div>
-        {list? list.map(l => (
-         <Playlist list={l} show={show} token={token} watchlistUpdated={watchlistUpdated}/>
-        )):''}
+        {list ? list.map(l => (
+          <Playlist list={l} show={show} token={token} updateWatchlists={updateWatchlists} />
+        )) : ''}
         {/* {lists} */}
       </div>
 
     </Popover>
   );
 
-    const popover2 = (
+  const popover2 = (
     <Popover >
       <div>
         <h3>Login to add shows to your watchlists!</h3>
@@ -96,7 +98,7 @@ export default function Show({myClass, parentID, hoverShow, listIndex, token, li
   );
 
   const AddButton = () => (
-    <OverlayTrigger trigger="click" placement="right" overlay={token ? popover:popover2} >
+    <OverlayTrigger trigger="click" placement="right" overlay={token ? popover : popover2} >
       <Button variant="success" style={{ backgroundColor: "black", borderColor: "black" }}><img src={plus} style={{ width: "2rem", height: "2rem" }} /></Button>
     </OverlayTrigger>
   );
@@ -117,7 +119,7 @@ export default function Show({myClass, parentID, hoverShow, listIndex, token, li
 
             <div class="card-body info">
               <h5 class="card-title title" >{show.title}</h5>
-              <p class="card-text text" >{show.description?show.description:"No Description"}</p>
+              <p class="card-text text" >{show.description ? show.description : "No Description"}</p>
 
               <div class="row bottomElements ">
 

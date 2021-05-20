@@ -1,13 +1,14 @@
 import React from 'react'
 import './show.css';
 import axios from "axios";
-export default function Playlists({ list, show, token, watchlistUpdated}) {
-
+export default function Playlists({ list, show, token, updateWatchlists}) {
+  
   const addShow = () => {
     console.log(show.title);
     console.log(show);
     console.log(list.id);
     console.log(list.shows);
+    
     axios.post("http://localhost:3001/watchlists/addShow",
       {
         show_title: show.title,
@@ -15,13 +16,14 @@ export default function Playlists({ list, show, token, watchlistUpdated}) {
         token: token
       }).then(response => {
         console.log(response);
+        updateWatchlists();
       })
       .catch((error) => {
         console.log(error);
       })
-
-      watchlistUpdated = true;
   }
+
+  
   const deleteShow = () => {
     console.log(show.title);
     console.log(show);
@@ -33,11 +35,12 @@ export default function Playlists({ list, show, token, watchlistUpdated}) {
         token: token
       }).then(response => {
         console.log(response)
-
+        updateWatchlists();
       })
       .catch((error) => {
         console.log(error);
       })
+
   }
 
   if (!(list.shows.includes(show))) {

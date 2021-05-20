@@ -2,7 +2,7 @@ import React from 'react';
 import './watchlist.css';
 import axios from "axios";
 import { FaTrash } from 'react-icons/fa';
-export default function Watchlist({ watchlist, chooseWatchlist, token }) {
+export default function Watchlist({ watchlist, chooseWatchlist, token, updateWatchlists }) {
 
     let coverShow = watchlist.shows[0];
     
@@ -13,7 +13,7 @@ export default function Watchlist({ watchlist, chooseWatchlist, token }) {
           token:token
         }).then(response=>{
          console.log(response)
-          
+         updateWatchlists();
         }) 
         .catch((error) => {
           console.log(error);

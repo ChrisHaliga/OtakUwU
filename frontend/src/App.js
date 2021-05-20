@@ -23,7 +23,7 @@ function App() {
   const [SecondaryList, setSecondaryList] = useState({ id: "secondarylist", listIndex: 3, displayType: "Cards3D" });
   const [Sidebar, setSideBar] = useState(null);
   const [hoveredShow, setHoveredShow] = useState({});
-  const [watchlistUpdated, updateWatchlist] = useState({});
+  const [watchlistUpdated, setwatchlistUpdated] = useState({});
 
   const [all_platforms, setAllPlatforms] = useState([]);
   const [Shows, setShows] = useState([]);
@@ -77,24 +77,21 @@ function App() {
             <div>
               <Show myClass={`${List.id} ${List.displayType} card_${Math.abs(i - index) > middle ? "x" : (i - index)} ${direction}`} 
               parentID={List.id} hoverShow={hoverShow} listIndex={index} token={token} list={Playlists} show={entry} index={i} all_platforms={all_platforms}
-              updateWatchlist = {updateWatchlist}
+              updateWatchlists = {updateWatchlists}
               />
             </div>
           )
         } else if (type == "Watchlist") {
           return (
             <div>
-              <Watchlist chooseWatchlist={chooseWatchlist} watchlist={entry} token={token}/>
+              <Watchlist chooseWatchlist={chooseWatchlist} watchlist={entry} token={token} updateWatchlists={updateWatchlists}/>
             </div>
           )
         }
       })
     })
   }
-  // function updateWatchlist()
-  // {
-  //   watchlistUpdated = true;
-  // }
+
 
   function getRecentlyAdded(callback) {
     axios.post("http://localhost:3001/shows/recentlyadded")
@@ -148,7 +145,7 @@ function App() {
 
   useEffect(() => {
     if (List_init === false && PrimaryList && SecondaryList) setList_init(true);
-  }, [PrimaryList, SecondaryList, watchlistUpdated])
+  }, [PrimaryList, SecondaryList])
 
   //setting the Primary list in 3 ways
 
@@ -205,7 +202,7 @@ function App() {
       .catch((error) => {
         console.log(error);
       });
-  }, [user]);
+  }, [user, watchlistUpdated]);
   const signin = (token, username) => {
     setToken(token);
     setUser({ ...user, username: username });
@@ -246,6 +243,9 @@ function App() {
     }
     else
       setHoveredShow({ title: show.title });
+  }
+  const updateWatchlists = () => {
+    setwatchlistUpdated(true);
   }
 
   const chooseWatchlist = (watchlist) => {
