@@ -99,12 +99,13 @@ button:hover {
 .list {
   padding-top: 10px;
   overflow-x: scroll;
+  justify-content:start;
 }
 
 .secondary_list.list.watchlist {
-  margin: 10px 10px;
+  margin: 0 10px;
   background-color: rgba(0, 0, 0, 0.75);
-  height: 100%;
+  min-height: 50%;
 }
 
 .login_bck {

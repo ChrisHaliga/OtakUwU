@@ -111,12 +111,27 @@ exports.saveFromList = ()=>{
     for(platform of [crunchyroll, funimation]){
         fs.readFile(`Backend/scraper/lists/${platform.websiteName}.list`, "utf-8", (err, data) => {
             if(!err){
-                save(data.split("\n"), platform);
+                
+                save(data.split("\n").replace(/=(\r\n|\n|\r)/gm, "").split("\"").join("&quot;"), platform);
             }
             else
                 console.log(err)
         });
     }
+}
+
+exports.removeDups = ()=>{
+    Show.find()
+    .then(shows => {
+        Show.bulkWrite(shows.filter(s => s.title.includes("\r")).map(s =>{
+            return {deleteOne : {"filter": {"title": s.title} } }
+        }))
+        .then(ret => {
+            if(ret)
+                console.log(`Deleted Duplicates from database.`);
+        })
+    })
+    .catch(err => console.log(err));
 }
 
 const generateInfoPage = (page) => {

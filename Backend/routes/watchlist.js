@@ -82,47 +82,7 @@ router.route('/:id').get((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
-//delete specific watchlist 
-router.route('/:id').post((req, res) => {
-    const token = req.body.token;
-    if (token) {
-        console.log('inside token');
-        User.findOne({token: req.body.token})
-        .then(user=>{ 
-            if (user) {
-                //console.log('inside user');
-                //var index = user.watchlists.indexOf(req.body._id);  //pass in _id in body and id in params
-                //if (index != -1) {    //if current user is the owner of this list
 
-                    Watchlist.findOneAndDelete({id: req.params.id})
-                    .then((response) => {
-                        if (response) {
-                            console.log('inside response');
-                            console.log(response);
-                            res.json('Watchlist deleted.'); 
-                            //user.watchlists.splice(index, 1);
-                            //user.save().then(()=>res.json('Watchlist removed for user')).catch(err => res.status(400).json('Error: ' + err));
-                        }
-                        else {
-                            return res.status(400).json({error: "Watchlist not found"});
-                        } 
-                    })
-                    .catch(err => res.status(400).json(err));
-               /* }
-                else {
-                    return res.status(400).json({error: "Cannot remove the watchlist if you are not the owner"});
-                } */
-            }
-            else {
-                return res.status(400).json({error: "User not logged in"});    
-            }
-        })
-        .catch(err => res.json(err));
-    }
-    else {
-        return res.status(400).json({error: "User not logged in"}); 
-    }
-});
 
 //update a specific watchlist
 router.route('/update/:id').post((req, res) => {
@@ -138,7 +98,7 @@ router.route('/addShow').post((req, res) => {
     console.log(req.body.show_title);
     console.log(req.body.id);
     if (token) {
-        console.log("has token")
+        console.log("has token");
     User.findOne({token: req.body.token})
     .then(user=>{
         if(user) 
@@ -229,5 +189,45 @@ router.route('/removeShow').post((req, res) => {
         return res.status(400).json({error: "User not logged in"});
     }
 })
+//delete specific watchlist 
+router.route('/:id').post((req, res) => {
+    const token = req.body.token;
+    if (token) {
+        User.findOne({token: req.body.token})
+        .then(user=>{ 
+            if (user) {
+                console.log('inside user' + user.username);
+                //var index = user.watchlists.indexOf(req.body._id);  //pass in _id in body and id in params
+                //if (index != -1) {    //if current user is the owner of this list
+
+                    Watchlist.findOneAndDelete({id: req.params.id})
+                    .then((response) => {
+                        if (response) {
+                            console.log('inside response');
+                            console.log(response);
+                            res.json('Watchlist deleted.'); 
+                            //user.watchlists.splice(index, 1);
+                            //user.save().then(()=>res.json('Watchlist removed for user')).catch(err => res.status(400).json('Error: ' + err));
+                        }
+                        else {
+                            return res.status(400).json({error: "Watchlist not found"});
+                        } 
+                    })
+                    .catch(err => res.status(400).json(err));
+               /* }
+                else {
+                    return res.status(400).json({error: "Cannot remove the watchlist if you are not the owner"});
+                } */
+            }
+            else {
+                return res.status(400).json({error: "User not logged in"});    
+            }
+        })
+        .catch(err => res.json(err));
+    }
+    else {
+        return res.status(400).json({error: "User not logged in"}); 
+    }
+});
 
 module.exports = router;

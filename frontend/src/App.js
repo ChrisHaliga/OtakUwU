@@ -60,7 +60,7 @@ function App() {
     if (displayType == 'Cards3D') {
       let i = 0
       for (i = 0; i < middle - index; i++) {
-        data = [data[data.length - 1]].concat(data.slice(0, -1));
+        data = [data[data.length - 1]].concat(data.slice(0, data.length -1));
       }
       index += i;
       for (i = 0; i < index + middle - (data.length - 1); i++) {
@@ -164,7 +164,7 @@ function App() {
     if (SecondaryList.title && listType(SecondaryList.title) == "Shows")
       generateHTML(setSecondaryList, SecondaryList, si);
 
-  }, [Shows, hoveredShow,token]);
+  }, [Shows, hoveredShow, token]);
 
   useEffect(() => {
     //setPrimaryList(title:`${watchlist.name}`, data:Playlist)?
@@ -181,7 +181,7 @@ function App() {
       generateHTML(setPrimaryList, PrimaryList, 0, `Shows in ${CurrentPlaylist.title}`, CurrentPlaylist.shows);
     }
 
-  }, [CurrentPlaylist]);
+  }, [CurrentPlaylist, watchlistUpdated]);
 
   //3. by selecting friends?
 
@@ -192,7 +192,7 @@ function App() {
       generateHTML(setSecondaryList, SecondaryList, 0, "Watchlist", Playlists)
     }
 
-  }, [Playlists]);
+  }, [Playlists, watchlistUpdated]);
 
   useEffect(() => {
     axios.get(`http://localhost:3001/watchlists/${user.username}`).then(response => {

@@ -60,7 +60,7 @@ export default function Show({ myClass, parentID, hoverShow, listIndex, token, l
   const popover = (
     <Popover >
 
-      <div class="card watch-card scroll" >
+      <div class="card watch-card flex-nowrap">
 
         <div class="watch-top">
           <div class="watch-component-title mt-3">
@@ -72,12 +72,13 @@ export default function Show({ myClass, parentID, hoverShow, listIndex, token, l
           <h6 class="show-title">Add "{show.title}" to ...</h6>
 
         </div>
-        <div class="row">
-          <input class="watch-form form-control mb-3 mr-2" type="text" placeholder="New List" onKeyPress={handleKeyPress} ></input>
+        <div class="row flex-nowrap forms">
+          <input class="watch-form form-control mb-3 mr-2" type="text" placeholder="New List" onKeyPress={ handleKeyPress} ></input>
           {/* <Form onChange = {handleChange} class = "watch-form">
-      <Form.Control size="md" type="text" placeholder="New"   onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
-      style={{ marginBottom:"3"}}/>
-      </Form> */}
+            <Form.Control size="md" type="text" placeholder="New"   onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
+            style={{ marginBottom:"3"}}/>
+            </Form> */
+          }
           <button class="form-button" ><h6></h6></button>
         </div>
         {list ? list.map(l => (
