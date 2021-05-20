@@ -23,8 +23,7 @@ function App() {
   const [SecondaryList, setSecondaryList] = useState({ id: "secondarylist", listIndex: 3, displayType: "Cards3D" });
   const [Sidebar, setSideBar] = useState(null);
   const [hoveredShow, setHoveredShow] = useState({});
-
-
+  const [watchlistUpdated, setwatchlistUpdated] = useState({});
 
   const [all_platforms, setAllPlatforms] = useState([]);
   const [Shows, setShows] = useState([]);
@@ -76,19 +75,23 @@ function App() {
         if (type == "Shows") {
           return (
             <div>
-              <Show myClass={`${List.id} ${List.displayType} card_${Math.abs(i - index) > middle ? "x" : (i - index)} ${direction}`} parentID={List.id} hoverShow={hoverShow} listIndex={index} token={token} list={Playlists} show={entry} index={i} all_platforms={all_platforms}/>
+              <Show myClass={`${List.id} ${List.displayType} card_${Math.abs(i - index) > middle ? "x" : (i - index)} ${direction}`} 
+              parentID={List.id} hoverShow={hoverShow} listIndex={index} token={token} list={Playlists} show={entry} index={i} all_platforms={all_platforms}
+              updateWatchlists = {updateWatchlists}
+              />
             </div>
           )
         } else if (type == "Watchlist") {
           return (
             <div>
-              <Watchlist chooseWatchlist={chooseWatchlist} watchlist={entry} token={token}/>
+              <Watchlist chooseWatchlist={chooseWatchlist} watchlist={entry} token={token} updateWatchlists={updateWatchlists}/>
             </div>
           )
         }
       })
     })
   }
+
 
   function getRecentlyAdded(callback) {
     axios.post("http://localhost:3001/shows/recentlyadded")
@@ -161,7 +164,7 @@ function App() {
     if (SecondaryList.title && listType(SecondaryList.title) == "Shows")
       generateHTML(setSecondaryList, SecondaryList, si);
 
-  }, [Shows, hoveredShow,token]);
+  }, [Shows, hoveredShow, token]);
 
   useEffect(() => {
     //setPrimaryList(title:`${watchlist.name}`, data:Playlist)?
@@ -178,7 +181,7 @@ function App() {
       generateHTML(setPrimaryList, PrimaryList, 0, `Shows in ${CurrentPlaylist.title}`, CurrentPlaylist.shows);
     }
 
-  }, [CurrentPlaylist]);
+  }, [CurrentPlaylist, watchlistUpdated]);
 
   //3. by selecting friends?
 
@@ -189,7 +192,7 @@ function App() {
       generateHTML(setSecondaryList, SecondaryList, 0, "Watchlist", Playlists)
     }
 
-  }, [Playlists]);
+  }, [Playlists, watchlistUpdated]);
 
   useEffect(() => {
     axios.get(`http://localhost:3001/watchlists/${user.username}`).then(response => {
@@ -199,7 +202,7 @@ function App() {
       .catch((error) => {
         console.log(error);
       });
-  }, [user]);
+  }, [user, watchlistUpdated]);
   const signin = (token, username) => {
     setToken(token);
     setUser({ ...user, username: username });
@@ -240,6 +243,9 @@ function App() {
     }
     else
       setHoveredShow({ title: show.title });
+  }
+  const updateWatchlists = () => {
+    setwatchlistUpdated(true);
   }
 
   const chooseWatchlist = (watchlist) => {

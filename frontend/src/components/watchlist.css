@@ -26,11 +26,14 @@
   cursor: pointer;
 }
 
-.bottom-right {
+.delete-button {
   z-index: 2;
   position: absolute;
   bottom: 7%;
   right: 17%;
   transform: translate(90%, 85%);
   color: white;
+}
+.delete-button:hover {
+  cursor: pointer;
 }
