@@ -1,9 +1,14 @@
 import React from 'react'
 import './show.css';
 import axios from "axios";
+import { useState } from 'react';
+
 export default function Playlists({ list, show, token, updateWatchlists}) {
   
+  const [add, setadd] = useState(true)
+
   const addShow = () => {
+    setadd(!add);
     axios.post("http://localhost:3001/watchlists/addShow",
       {
         show_title: show.title,
@@ -20,6 +25,7 @@ export default function Playlists({ list, show, token, updateWatchlists}) {
 
   
   const deleteShow = () => {
+    setadd(!add);
     axios.post("http://localhost:3001/watchlists/removeShow",
       {
         show_title: show.title,
@@ -43,7 +49,7 @@ export default function Playlists({ list, show, token, updateWatchlists}) {
         <div class="row">
           <div class=" mt-2 ml-4">
             <div>
-              <button class="button" onClick={addShow} ><h4>+</h4></button>
+              <button class="button" onClick={add?addShow:deleteShow} ><h4>{add?"+":"-"}</h4></button>
             </div>
 
           </div>
@@ -65,7 +71,7 @@ export default function Playlists({ list, show, token, updateWatchlists}) {
         <div class="row">
           <div class=" mt-2 ml-4">
             <div>
-              <button class="remove-button" onClick={deleteShow} ><h4>-</h4></button>
+              <button class="remove-button" onClick={add?deleteShow:addShow} ><h4>{add?"-":"+"}</h4></button>
             </div>
 
           </div>
