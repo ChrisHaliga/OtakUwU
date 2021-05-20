@@ -17,7 +17,8 @@
   height: 16.9rem;
   position: absolute;
   text-align: "center";
-  padding-left: 3rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 .title {
   color: white;
@@ -31,7 +32,8 @@
 .bottomElements {
   position: absolute;
   width: 90%;
-  bottom: 5px;
+  bottom: 25px;
+  padding-bottom: 3px;
 }
 .platforms {
   display: inline;
@@ -39,7 +41,11 @@
 }
 
 .add {
-  float: right;
+  /* float: right; */
+  position: absolute;
+  /* width: 90%; */
+  bottom: 5px;
+  right: 15px;
 }
 
 
