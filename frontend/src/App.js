@@ -179,6 +179,7 @@ function App() {
   useEffect(() => {
     if (CurrentPlaylist) {
       generateHTML(setPrimaryList, PrimaryList, 0, `Shows in ${CurrentPlaylist.title}`, CurrentPlaylist.shows);
+      setwatchlistUpdated(false);
     }
 
   }, [CurrentPlaylist, watchlistUpdated]);
@@ -189,7 +190,8 @@ function App() {
   useEffect(() => {
     //take the search results and set primary list
     if (token) {
-      generateHTML(setSecondaryList, SecondaryList, 0, "Watchlist", Playlists)
+      generateHTML(setSecondaryList, SecondaryList, 0, "Watchlist", Playlists);
+      setwatchlistUpdated(false);
     }
 
   }, [Playlists, watchlistUpdated]);
@@ -202,6 +204,7 @@ function App() {
       .catch((error) => {
         console.log(error);
       });
+      setwatchlistUpdated(false);
   }, [user, watchlistUpdated]);
   const signin = (token, username) => {
     setToken(token);
