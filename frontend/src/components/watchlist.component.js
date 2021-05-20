@@ -29,7 +29,7 @@ export default function Watchlist({ watchlist, chooseWatchlist, token, updateWat
                         {watchlist.title}
                     </h5>
                      
-                   <FaTrash  size="25px" class="bottom-right" onClick={removeWatchlist}/>
+                   <FaTrash  size="25px" class="delete-button" onClick={removeWatchlist}/>
                   
                 </div>
             </div>
