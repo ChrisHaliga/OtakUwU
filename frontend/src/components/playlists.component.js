@@ -71,7 +71,7 @@ export default function Playlists({ list, show, token, updateWatchlists}) {
         <div class="row">
           <div class=" mt-2 ml-4">
             <div>
-              <button class="remove-button" onClick={add?deleteShow:addShow} ><h4>{add?"-":"+"}</h4></button>
+              <button class="button remove-button" onClick={add?deleteShow:addShow} ><h4>{add?"-":"+"}</h4></button>
             </div>
 
           </div>

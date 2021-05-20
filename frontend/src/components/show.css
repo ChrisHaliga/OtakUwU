@@ -53,6 +53,8 @@
 .watch-card {
   width: fit-content;
   height: 30rem;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 .watch-top {
   height: 18%;
@@ -112,6 +114,11 @@
   border-radius: 50%;
   border-color: #ffb5e2;
 }
+
+.remove-button {
+  background-color: #c98ac0;
+}
+
 .button:hover {
   background-color: magenta;
   transition: 0.3s;
