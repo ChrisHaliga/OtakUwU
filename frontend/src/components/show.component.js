@@ -48,7 +48,7 @@ export default function Show({ myClass, parentID, hoverShow, listIndex, token, l
         .catch((error) => {
           console.log(error);
         })
-      
+
 
       // setName(event.target.value);
       //
@@ -73,7 +73,7 @@ export default function Show({ myClass, parentID, hoverShow, listIndex, token, l
 
         </div>
         <div class="row flex-nowrap forms">
-          <input class="watch-form form-control mb-3 mr-2" type="text" placeholder="New List" onKeyPress={ handleKeyPress} ></input>
+          <input class="watch-form form-control mb-3 mr-2" type="text" placeholder="New List" onKeyPress={handleKeyPress} ></input>
           {/* <Form onChange = {handleChange} class = "watch-form">
             <Form.Control size="md" type="text" placeholder="New"   onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
             style={{ marginBottom:"3"}}/>
@@ -118,26 +118,23 @@ export default function Show({ myClass, parentID, hoverShow, listIndex, token, l
 
           <div class="col-8 ">
 
-            <div class="card-body info">
-              <h5 class="card-title title" >{show.title}</h5>
-              <p class="card-text text" >{show.description ? show.description : "No Description"}</p>
-
-              <div class="row bottomElements ">
-
-                <div class="platforms col-9">
-                  {
-                    all_platforms.filter(platform =>
-                      show.links.includes(platform._id)
-                    ).map(platform => <Platform platform={platform} />)
-                  }
-
+            <div class="card-body">
+              <div class="info">
+                <h5 class="row card-title title" >{show.title}</h5>
+                <p class="row card-text text" >{(show.description) ? show.description : "No description"}</p>
+                <div class="row bottomElements ">
+                  <div class="platforms">
+                    {
+                      all_platforms.filter(platform =>
+                        show.links.includes(platform._id)
+                      ).map(platform => <Platform platform={platform} />)
+                    }
+                  </div>
                 </div>
-                <div class="add col-3" >
-                  <AddButton />
-                </div>
-
               </div>
-
+              <div class="row add" >
+                <AddButton />
+              </div>
             </div>
 
 
